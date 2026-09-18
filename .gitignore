@@ -1,0 +1,12 @@
+node_modules/
+dist/
+screenshots/
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+.env
+.env.*
+!.env.example
+client-materials/private-materials/
+client-materials/reference/
+client-materials/public-materials/
