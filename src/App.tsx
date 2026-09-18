@@ -1,5 +1,6 @@
 import { FormEvent, ReactNode, useEffect, useRef, useState } from 'react'
 import { Link, NavLink, Route, Routes, useLocation } from 'react-router-dom'
+import brandLogo from './assets/brand/dulifei-logo.png'
 
 const assetModules = import.meta.glob('./assets/**/*.webp', {
   eager: true,
@@ -48,7 +49,7 @@ function Seo() {
 }
 
 function Mark() {
-  return <Link className="mark" to="/" aria-label="Dulifei home"><span>DU</span><strong>DULIFEI</strong></Link>
+  return <Link className="mark" to="/" aria-label="Dulifei home"><img src={brandLogo} alt="Dulifei London" /></Link>
 }
 
 function Header() {

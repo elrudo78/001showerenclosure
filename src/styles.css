@@ -8,6 +8,10 @@
 :where(a,button,input,select,textarea):focus-visible{outline:2px solid var(--focus,#4c8f7c);outline-offset:4px}
 
 /* Keep imagery overlays quiet and flat; the photography remains the primary visual. */
+.mark{gap:0;letter-spacing:normal}
+.mark img{width:auto;height:54px;object-fit:contain}
+.site-footer .mark img{filter:invert(1);opacity:.95}
+@media(max-width:480px){.mark img{height:46px}}
 .hero-shade{background:rgba(8,14,12,.52)}
 .category-card:after{background:rgba(0,0,0,.28)}
 @media(max-width:780px){.hero-shade{background:rgba(7,12,10,.55)}}
