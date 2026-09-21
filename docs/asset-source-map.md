@@ -29,6 +29,21 @@ All entries below are derived, optimized WebP copies. Original client files rema
 - `src/assets/products/product-19.webp` ← `client-materials/public-materials/产品图片/YR03-42/YR03 (3).png`
 - `src/assets/products/product-20.webp` ← `client-materials/public-materials/产品图片/新款60/高清新款60 (1).jpg`
 
+## Product Details
+
+- `src/assets/product-details/d15131/d15131-full.webp` ← `client-materials/public-materials/产品图片/D15131/D15131 (2).png`
+- `src/assets/product-details/d15131/d15131-handle-detail.webp` ← image-only crop from `client-materials/public-materials/产品图片/D15131/D15131 (1).png`
+- `src/assets/product-details/d15131/d15131-upper-detail.webp` ← image-only crop from `client-materials/public-materials/产品图片/D15131/D15131 (3).png`
+- `src/assets/product-details/d15131/d15131-lower-detail.webp` ← image-only crop from `client-materials/public-materials/产品图片/D15131/D15131 (3).png`
+- `src/assets/product-details/s41122/s41122-context.webp` ← `client-materials/public-materials/产品图片/S41122/S41122 (1).jpg`
+- `src/assets/product-details/s41122/s41122-installed-roller.webp` ← `client-materials/public-materials/产品图片/S41122/S41122 (2).jpg`
+- `src/assets/product-details/s41122/s41122-roller-detail.webp` ← `client-materials/public-materials/产品图片/S41122/S41122 (3).jpg`
+- `src/assets/product-details/s41122/s41122-installed-full.webp` ← `client-materials/public-materials/产品图片/S41122/S41122 (4).jpg`
+- `src/assets/product-details/s41522/s41522-installed-full.webp` ← `client-materials/public-materials/产品图片/S41522/S41522 (1).png`
+- `src/assets/product-details/s41522/s41522-context.webp` ← image-only crop from `client-materials/public-materials/产品图片/S41522/S41522 (2).jpg`
+- `src/assets/product-details/s41522/s41522-track-profile.webp` ← `client-materials/public-materials/产品图片/S41522/S41522 (1).jpg`
+- `src/assets/product-details/s41522/s41522-handle-detail.webp` ← `client-materials/public-materials/产品图片/S41522/S41522 (4).jpg`
+
 ## Factory
 
 - `src/assets/factory/factory-01.webp` ← `client-materials/public-materials/杜丽菲厂房图片/024A8746.JPG`

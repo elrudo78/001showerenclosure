@@ -1,0 +1,124 @@
+{
+  "products": [
+    {
+      "id": "straight-sliding-door",
+      "model": null,
+      "name": "Straight Sliding Shower Door",
+      "status": "NEEDS_CONFIRMATION",
+      "category": "Sliding Shower Doors",
+      "sourceGroup": "client-materials/public-materials/产品图片/新款60/",
+      "originalSource": "client-materials/public-materials/产品图片/新款60/高清新款60 (1).jpg",
+      "primaryDerivedAsset": "products/product-20.webp",
+      "detailUrl": null,
+      "featured": false
+    },
+    {
+      "id": "d15131",
+      "model": "D15131",
+      "name": "D15131 Corner Shower Enclosure",
+      "status": "CONFIRMED",
+      "category": "Corner Shower Enclosures",
+      "sourceGroup": "client-materials/public-materials/产品图片/D15131/",
+      "originalSource": "client-materials/public-materials/产品图片/D15131/D15131 (2).png",
+      "primaryDerivedAsset": "products/product-01.webp",
+      "detailUrl": "/products/corner-shower-enclosures/d15131-corner-shower-enclosure",
+      "featured": true
+    },
+    {
+      "id": "dd33-yd62-31",
+      "model": "DD33 / YD62-31",
+      "name": "DD33 / YD62-31 Corner Shower Enclosure",
+      "status": "NEEDS_CONFIRMATION",
+      "category": "Corner Shower Enclosures",
+      "sourceGroup": "client-materials/public-materials/产品图片/DD33（YD62-31）/",
+      "originalSource": "client-materials/public-materials/产品图片/DD33（YD62-31）/微信图片_20230421153449.jpg",
+      "primaryDerivedAsset": "products/product-03.webp",
+      "detailUrl": null,
+      "featured": false
+    },
+    {
+      "id": "ds19-s26132",
+      "model": "DS19 / S26132",
+      "name": "DS19 / S26132 Sliding Shower Door",
+      "status": "NEEDS_CONFIRMATION",
+      "category": "Sliding Shower Doors",
+      "sourceGroup": "client-materials/public-materials/产品图片/DS19（S26132）/",
+      "originalSource": "client-materials/public-materials/产品图片/DS19（S26132）/22.jpg",
+      "primaryDerivedAsset": "products/product-06.webp",
+      "detailUrl": null,
+      "featured": false
+    },
+    {
+      "id": "fixed-screen-family",
+      "model": null,
+      "name": "Fixed Shower Screen Family",
+      "status": "CONFIRMED",
+      "category": "Fixed Shower Screens",
+      "sourceGroup": "client-materials/public-materials/产品图片/DS20（单固玻）/",
+      "originalSource": "client-materials/public-materials/产品图片/DS20（单固玻）/单固玻 (6).jpg",
+      "primaryDerivedAsset": "products/product-07.webp",
+      "detailUrl": "/products/fixed-shower-screens/fixed-shower-screen-family",
+      "featured": false
+    },
+    {
+      "id": "s1908-22",
+      "model": "S1908-22",
+      "name": "S1908-22 Sliding Shower Door",
+      "status": "CONFIRMED",
+      "category": "Sliding Shower Doors",
+      "sourceGroup": "client-materials/public-materials/产品图片/S1908-22/",
+      "originalSource": "client-materials/public-materials/产品图片/S1908-22/S1908-22 (3).png",
+      "primaryDerivedAsset": "products/product-11.webp",
+      "detailUrl": "/products/sliding-shower-doors/s1908-22-sliding-shower-door",
+      "featured": true
+    },
+    {
+      "id": "s41122",
+      "model": "S41122",
+      "name": "S41122 Sliding Shower Door",
+      "status": "CONFIRMED",
+      "category": "Sliding Shower Doors",
+      "sourceGroup": "client-materials/public-materials/产品图片/S41122/",
+      "originalSource": "client-materials/public-materials/产品图片/S41122/S41122 (1).jpg",
+      "primaryDerivedAsset": "products/product-12.webp",
+      "detailUrl": "/products/sliding-shower-doors/s41122-sliding-shower-door",
+      "featured": true
+    },
+    {
+      "id": "s41522",
+      "model": "S41522",
+      "name": "S41522 Sliding Shower Door",
+      "status": "CONFIRMED",
+      "category": "Sliding Shower Doors",
+      "sourceGroup": "client-materials/public-materials/产品图片/S41522/",
+      "originalSource": "client-materials/public-materials/产品图片/S41522/S41522 (2).jpg",
+      "primaryDerivedAsset": "products/product-13.webp",
+      "detailUrl": "/products/sliding-shower-doors/s41522-sliding-shower-door",
+      "featured": true
+    },
+    {
+      "id": "s89022",
+      "model": "S89022",
+      "name": "S89022 Sliding Shower Door",
+      "status": "CONFIRMED",
+      "category": "Sliding Shower Doors",
+      "sourceGroup": "client-materials/public-materials/产品图片/S89022/",
+      "originalSource": "client-materials/public-materials/产品图片/S89022/89022 (1).png",
+      "primaryDerivedAsset": "products/product-15.webp",
+      "detailUrl": "/products/sliding-shower-doors/s89022-sliding-shower-door",
+      "featured": true
+    },
+    {
+      "id": "yr03-42",
+      "model": "YR03-42",
+      "name": "YR03-42 Quadrant Shower Enclosure",
+      "status": "CONFIRMED",
+      "category": "Corner Shower Enclosures",
+      "sourceGroup": "client-materials/public-materials/产品图片/YR03-42/",
+      "originalSource": "client-materials/public-materials/产品图片/YR03-42/YR03 (3).png",
+      "primaryDerivedAsset": "products/product-19.webp",
+      "detailUrl": "/products/corner-shower-enclosures/yr03-42-quadrant-shower-enclosure",
+      "featured": true
+    }
+  ]
+}

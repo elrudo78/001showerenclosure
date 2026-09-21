@@ -4,9 +4,12 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "predev": "npm run validate:products",
     "dev": "vite",
+    "prebuild": "npm run validate:products",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "validate:products": "node scripts/validate-product-catalog.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
