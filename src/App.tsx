@@ -78,6 +78,26 @@ function Seo() {
   return null
 }
 
+const revealSelector = '.section, .split-feature, .cert-band, .dark-section, .products-hero, .product-detail-overview, .category-card, .product-card, .products-category, .factory-gallery figure, .masonry-grid figure'
+
+function Reveal() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    const targets = Array.from(document.querySelectorAll<HTMLElement>(revealSelector))
+    targets.forEach(el => el.classList.add('reveal'))
+    const io = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue
+        entry.target.classList.add('is-visible')
+        io.unobserve(entry.target)
+      }
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' })
+    targets.forEach(el => io.observe(el))
+    return () => io.disconnect()
+  }, [pathname])
+  return null
+}
+
 function Mark() {
   return <Link className="mark" to="/" aria-label="Dulifei home"><img src={brandLogo} alt="Dulifei London" /></Link>
 }
@@ -144,7 +164,7 @@ function Footer() {
 
 function Arrow() { return <span aria-hidden="true">↗</span> }
 
-function Layout() { return <><Seo/><Header/><main><Routes>
+function Layout() { return <><Seo/><Reveal/><Header/><main><Routes>
   <Route path="/" element={<Home/>}/><Route path="/products" element={<Products/>}/><Route path="/products/:category/:product" element={<ProductDetail/>}/><Route path="/factory" element={<Factory/>}/><Route path="/projects" element={<Projects/>}/><Route path="/certifications" element={<Certifications/>}/><Route path="/about" element={<About/>}/><Route path="/contact" element={<Contact/>}/><Route path="*" element={<NotFound/>}/>
   </Routes></main><Footer/></> }
 
@@ -376,7 +396,7 @@ function ProductDetail() {
       <div><p className="eyebrow">OEM &amp; ODM</p><h2>A product-focused B2B conversation.</h2><p>Contact our team to discuss product configuration, sourcing requirements, and a suitable cooperation path.</p></div>
     </div></section>
 
-    <section className="section container product-detail-specifications"><p className="eyebrow">Specifications</p><div><h2>Product specifications</h2><p>Contact us for specifications.</p><Link className="text-link" to={quotePath}>Ask about {inquiryLabel} <Arrow/></Link></div></section>
+    <section className="section container product-detail-specifications"><p className="eyebrow">Specifications</p><div><h2>Product specifications</h2><p>Contact us for specifications.</p><Link className="text-link" to={quotePath}>Ask about {inquiryLabel} <Arrow/></Link><ul className="product-detail-spec-list">{['Custom configuration discussion', 'OEM & ODM cooperation', 'Documentation on request'].map(item => <li key={item}>{item}</li>)}</ul></div></section>
 
     <section className="section process-cta product-quote-cta"><div className="container"><p className="eyebrow light">Product inquiry</p><h2>Discuss {inquiryLabel} with our team.</h2><p>Tell us about your market, application, or project requirements so we can review the available product information with you.</p><Link className="button button-invert" to={quotePath}>Get a Quote <Arrow/></Link></div></section>
 
