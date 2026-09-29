@@ -197,7 +197,7 @@ function Home() {
     </div></div></section>
 
     <section className="section container"><SectionHead eyebrow="Selected products" title="Clean lines. Versatile formats." action={<Link className="text-link" to="/products">View all products <Arrow/></Link>}/><div className="product-grid featured">{catalogProducts.filter(product => product.featured).map(product => {
-      const content = <><div className="media"><Image src={productImage(product)} alt={`${product.name} by Dulifei`}/></div><h3>{product.name}</h3><p>Contact us for specifications.</p></>
+      const content = <><ProductMedia product={product}/><h3>{product.name}</h3><p>Contact us for specifications.</p></>
       return product.detailUrl ? <Link className="product-card products-product-link" to={product.detailUrl} key={product.id}>{content}</Link> : <article className="product-card" key={product.id}>{content}</article>
     })}</div></section>
 
@@ -316,6 +316,21 @@ const productDetails: Record<string, ProductDetailData> = {
   },
 }
 
+const swapEligibleProductIds = new Set(['s41122', 's41522', 'fixed-screen-family'])
+const productSecondaryImage: Record<string, string> = Object.fromEntries(
+  Object.values(productDetails)
+    .filter(detail => swapEligibleProductIds.has(detail.productId) && detail.gallery[1])
+    .map(detail => [detail.productId, detail.gallery[1].src])
+)
+
+function ProductMedia({ product }: { product: CatalogProduct }) {
+  const secondary = productSecondaryImage[product.id]
+  return <div className="media">
+    <Image src={productImage(product)} alt={`${product.name} by Dulifei`} />
+    {secondary && <img className="media-alt" src={secondary} alt="" aria-hidden="true" loading="lazy" />}
+  </div>
+}
+
 type PageHeroProps = { eyebrow: string; title: string; text: string; image?: string; variant?: 'products' | 'factory' | 'projects' }
 function PageHero({ eyebrow, title, text, image, variant }: PageHeroProps) {
   const classes = ['page-hero', image && 'has-image', variant && `page-hero--${variant}`].filter(Boolean).join(' ')
@@ -347,7 +362,7 @@ function Products() { return <>
   <section className="section products-portfolio container" id="product-portfolio">
     <div className="products-section-heading products-portfolio-heading"><div><p className="eyebrow">Selected portfolio</p><h2>Distinct products, clearly presented.</h2></div><p>Each card represents one identified product or family. Contact us for specifications.</p></div>
     <div className="product-grid products-all-grid">{confirmedProducts.map((product) => {
-      const content = <><div className="media"><Image src={productImage(product)} alt={`${product.name} by Dulifei`}/></div><p className="product-category-label">{product.category}</p><h3>{product.name}</h3><p>Contact us for specifications.</p></>
+      const content = <><ProductMedia product={product}/><p className="product-category-label">{product.category}</p><h3>{product.name}</h3><p>Contact us for specifications.</p></>
       return product.detailUrl ? <Link className="product-card products-product-card products-product-link" to={product.detailUrl} key={product.id}>{content}</Link> : <article className="product-card products-product-card" key={product.id}>{content}</article>
     })}</div>
   </section>
@@ -400,7 +415,7 @@ function ProductDetail() {
 
     <section className="section process-cta product-quote-cta"><div className="container"><p className="eyebrow light">Product inquiry</p><h2>Discuss {inquiryLabel} with our team.</h2><p>Tell us about your market, application, or project requirements so we can review the available product information with you.</p><Link className="button button-invert" to={quotePath}>Get a Quote <Arrow/></Link></div></section>
 
-    <section className="section container product-related"><SectionHead eyebrow="Related products" title="Continue exploring the range."/><div className="product-grid">{relatedProducts.map(item => <Link className="product-card products-product-card products-product-link" to={item.detailUrl!} key={item.id}><div className="media"><Image src={productImage(item)} alt={`${item.name} by Dulifei`}/></div><p className="product-category-label">{item.category}</p><h3>{item.name}</h3><span className="text-link">View Product <Arrow/></span></Link>)}</div></section>
+    <section className="section container product-related"><SectionHead eyebrow="Related products" title="Continue exploring the range."/><div className="product-grid">{relatedProducts.map(item => <Link className="product-card products-product-card products-product-link" to={item.detailUrl!} key={item.id}><ProductMedia product={item}/><p className="product-category-label">{item.category}</p><h3>{item.name}</h3><span className="text-link">View Product <Arrow/></span></Link>)}</div></section>
   </>
 }
 
