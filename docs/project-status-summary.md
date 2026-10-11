@@ -142,6 +142,22 @@ Upstream heads-up: the auto-reply goes to whatever address the visitor typed and
 - Extract to `client-materials/public-materials/`, which is git-ignored. Never commit the folder or the zip, and never place the zip itself inside the repo.
 - Zips made on Chinese Windows often store filenames in GBK. Extract with the matching encoding so paths stay identical to the ones in `docs/asset-source-map.md`.
 
+### 2026-10-11 session
+
+- Merged upstream (`d2f062b`); the build and validation pass. Live site confirmed to be running the upstream version (email form live; none of this branch's changes deployed).
+- Downloaded `public-materials` (805 files, counts match AGENTS.md) and `reference` (98 files) from the client's Drive into the git-ignored `client-materials/`. `private-materials` was removed by the user before sharing.
+- 805 public files = 644 unique (`图册/设计图` is an exact copy of `设计图`). 10 Sonnet agents reviewed all 562 non-duplicate items; results in `docs/asset-review/public-materials-review.csv` (personal details reduced to a `do_not_publish` flag).
+- Best unused material: the C01–C05 renders (2643–3840px, four finishes each). Do-not-publish: FANLY title-block drawings with customer/designer details, watermarked photos, third-party glass-supplier certificates (one 3C certificate expired 2023), and banners with unverified claims.
+- `reference` catalogs: the 2025 small catalog is Dulifei's own and prints specs for D15131, S41522, S68422, S26132 and YD63 (D15131 and S41522 hand-verified). The 2020 catalog is FANLY / Zhongshan Fuli, and D15131 appears in both. The transcription is kept git-ignored in `client-materials/reference/_notes/` pending approval, because this repository is public.
+- Design skills added under `.claude/skills/` (see its README).
+
+### Open questions for the client
+
+1. Is FANLY / Zhongshan Fuli part of Dulifei? Its name is on drawings, patent filings, the 2020 catalog, and the installation photos used on the live Projects page.
+2. Are C01–C05 current products, and what are their public names?
+3. May specs from the 2025 catalog be published, and is `S26132` (not `DS19`) the public code? Is "梵度60 / Fandu 60" the product in `新款60`?
+4. May the English installation guide (`reference/安装说明书.docx`) be offered as a download?
+
 ### Testing notes for future sessions
 
 - The site uses `scroll-behavior: smooth`, so repeated programmatic `scrollTo` in headless tests can skip reveal triggers and leave sections blank. Simulate real scrolling with `page.mouse.wheel` before full-page screenshots.
