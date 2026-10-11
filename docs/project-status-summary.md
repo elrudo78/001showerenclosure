@@ -94,7 +94,7 @@ These are explicitly flagged as unresolved in `docs/product-architecture-v2.md` 
 
 ## 9. Not yet done
 
-- No live contact-form backend/integration — form is decorative only.
+- ~~No live contact-form backend/integration — form is decorative only.~~ Solved upstream (Resend email via `server.mjs`); arrives with the fork sync. See §11.
 - No automated test suite (unit/e2e) — only the catalog-consistency script.
 - No `README.md` at the repo root.
 - V1's required QA artifacts (production build confirmation, responsive checks at 390/768/1440/1920, browser QA screenshots) aren't present as committed files in this checkout — unclear whether they were produced and discarded, or done in a prior session outside git tracking.
@@ -107,3 +107,42 @@ These are explicitly flagged as unresolved in `docs/product-architecture-v2.md` 
 - If more visual variety is wanted: curate additional assets from the remaining public-materials pool (`图册/`, `设计图/`, `广告条/`, more of `落地案例图片/` and `产品认证资料/`), following the existing derive-and-map pattern in `docs/asset-source-map.md`.
 - Wire up a real contact-form submission path (email service, form backend, or CRM handoff) — currently explicitly stubbed out.
 - Consider adding a root `README.md` and a minimal automated test/lint step for future contributors.
+
+## 11. Work log (fork branch `claude/kind-noether-o7pgbu`)
+
+Updated 2026-10-11. Fork `main` is untouched; all work below lives only on this branch.
+
+| Commit | What changed |
+|---|---|
+| `7b2fe96` | This summary document. |
+| `f7aa4c5` | Scroll-reveal fade/lift on sections and cards (`Reveal` in `App.tsx`, `.reveal` in CSS, disabled under reduced motion); cooperation strip filling the empty spec section on product pages; hover zoom on Factory/Projects gallery images. |
+| `a7e6159` | Slow "Ken Burns" zoom on all hero images; hover cross-fade to a second photo on product cards (`ProductMedia`) for S41122, S41522 and Fixed Shower Screen Family only; removed `product-02.webp` and `product-16.webp`. |
+
+### Findings
+
+- `product-02.webp` and `product-16.webp` were full, uncropped Chinese catalog spreads with untranslated marketing copy in the pixels. They were unused, but would have broken the English-only rule if reused, so they were deleted.
+- Eight more files in `src/assets/products/` are unreferenced: `product-04, 05, 08, 09, 10, 14, 17, 18`. `04` and `14` were checked and are clean product photos. Check the rest for embedded text before reusing any.
+- The hover swap is limited to products whose second gallery image is a full or contextual view. The other four products only have tight detail crops, which read poorly as a "second angle".
+
+### Upstream sync preview
+
+Upstream is `sherry313/01showerenclosure`. It has 5 commits on top of the shared base `df0a1ac`:
+
+- `ef423ca` mobile reading/touch refinements (sticky mobile header, spacing, form sizing)
+- `808b3b6`, `9b0de0e`, `72f1e18` contact form sends email through Resend via a new `server.mjs`, with a honeypot field, a 15s timeout and an auto-reply to the visitor
+- `a654bef` `server.mjs` serves the built site; `package.json` gains `"start": "node server.mjs"`
+
+A trial merge of upstream into this branch had no conflicts. Build and product validation passed, and `server.mjs` returned 200 for pages, 400 for incomplete inquiries, and 503 when email is not configured. The server needs `RESEND_API_KEY`, `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL` set on the host.
+
+Upstream heads-up: the auto-reply goes to whatever address the visitor typed and includes their typed name, with no rate limit. Someone could use the form to send messages to addresses they don't own. A rate limit, or dropping the name from the auto-reply, would close this.
+
+### Client materials intake plan
+
+- Only `public-materials/` is needed. Keep `private-materials/` (identity documents) out of any upload.
+- Extract to `client-materials/public-materials/`, which is git-ignored. Never commit the folder or the zip, and never place the zip itself inside the repo.
+- Zips made on Chinese Windows often store filenames in GBK. Extract with the matching encoding so paths stay identical to the ones in `docs/asset-source-map.md`.
+
+### Testing notes for future sessions
+
+- The site uses `scroll-behavior: smooth`, so repeated programmatic `scrollTo` in headless tests can skip reveal triggers and leave sections blank. Simulate real scrolling with `page.mouse.wheel` before full-page screenshots.
+- Headless Chromium in the cloud session needs the agent-proxy CA trusted (SPKI pin) to load the live site.
