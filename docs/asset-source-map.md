@@ -87,3 +87,14 @@ All entries below are derived, optimized WebP copies. Original client files rema
 - `src/assets/certifications/cert-ce.webp` ← page 1 of `client-materials/public-materials/产品认证资料/钢化玻璃CE报告.pdf`
 
 Certification previews are supplier/material documentation. They must not be presented as Dulifei corporate certifications, and current scope or applicability must be confirmed for each inquiry.
+
+## Finishes
+
+Same scene in four finishes, used by the Home finish switcher. The four originals share size (2643×2160) and composition; only the frame colour differs.
+
+- `src/assets/finishes/finish-gold.webp` ← `client-materials/public-materials/shower Enclosures/DLFEI -C01~C05产品效果图/C01-C05/C05完成效果/完成稿/焦点拉丝金.jpg`
+- `src/assets/finishes/finish-silver.webp` ← `…/C05完成效果/完成稿/焦点拉丝银.jpg`
+- `src/assets/finishes/finish-chrome.webp` ← `…/C05完成效果/完成稿/焦点镜光.jpg`
+- `src/assets/finishes/finish-black.webp` ← `…/C05完成效果/完成稿/焦点雅黑.jpg`
+
+No product name or model code is shown with these images until the client confirms the C01–C05 naming.

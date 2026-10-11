@@ -177,6 +177,33 @@ function Image({ src, alt, eager = false }: { src: string; alt: string; eager?: 
   return <img src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : 'auto'} />
 }
 
+const finishes = [
+  { key: 'gold', label: 'Brushed gold', src: asset('finishes/finish-gold.webp') },
+  { key: 'silver', label: 'Brushed silver', src: asset('finishes/finish-silver.webp') },
+  { key: 'chrome', label: 'Polished chrome', src: asset('finishes/finish-chrome.webp') },
+  { key: 'black', label: 'Matte black', src: asset('finishes/finish-black.webp') },
+] as const
+
+function FinishShowcase() {
+  const [active, setActive] = useState(0)
+  return <section className="section container finish-showcase">
+    <div className="finish-stage">
+      {finishes.map((finish, i) => <img key={finish.key} src={finish.src} loading="lazy" className={i === active ? 'is-active' : undefined}
+        alt={i === active ? `Sliding shower enclosure with a ${finish.label.toLowerCase()} frame` : ''} aria-hidden={i === active ? undefined : true}/>)}
+    </div>
+    <div className="finish-copy">
+      <p className="eyebrow">Finishes</p>
+      <h2>One enclosure, four finishes.</h2>
+      <p>The same sliding enclosure shown in four frame and hardware finishes. Finish availability varies by model, so ask us about the product you have in mind.</p>
+      <div className="finish-swatches" role="group" aria-label="Choose a finish">
+        {finishes.map((finish, i) => <button type="button" key={finish.key} aria-pressed={i === active} onClick={() => setActive(i)}>
+          <span className={`swatch swatch-${finish.key}`} aria-hidden="true"/>{finish.label}
+        </button>)}
+      </div>
+    </div>
+  </section>
+}
+
 function Home() {
   return <>
     <section className="hero">
@@ -200,6 +227,8 @@ function Home() {
       const content = <><ProductMedia product={product}/><h3>{product.name}</h3><p>Contact us for specifications.</p></>
       return product.detailUrl ? <Link className="product-card products-product-link" to={product.detailUrl} key={product.id}>{content}</Link> : <article className="product-card" key={product.id}>{content}</article>
     })}</div></section>
+
+    <FinishShowcase/>
 
     <section className="split-feature"><div className="split-image"><Image src={factoryImages[0]} alt="Dulifei shower enclosure production environment"/></div><div className="split-copy"><p className="eyebrow light">Manufacturing</p><h2>Made where product detail matters.</h2><p>Our manufacturing story is grounded in real production environments, practical workmanship, and attention to product quality.</p><Link className="button button-invert" to="/factory">Explore Our Factory <Arrow/></Link></div></section>
 
