@@ -2,6 +2,12 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-10-14: Every shared client file indexed; rules auto-load
+
+- The user asked that knowledge of all 987 shared items stays available as design context. Added complete indexes in `docs/asset-review/`: `public-materials-inventory.csv` (805 files: 562 reviewed, 82 near-identical, 161 exact copies), `reference-inventory.csv` (98 files; customer folder and file names removed), `catalog-pages-index.csv` (110 pages).
+- Added `docs/asset-review/MATERIALS-GUIDE.md`: what each folder is good for, product range and finishes, strongest picks per site section, gaps and do-not-publish rules.
+- `CLAUDE.md` now imports `AGENTS.md` and `docs/HANDOFF.md` so both load automatically every session (the new CLAUDE.md had replaced AGENTS.md as the auto-loaded file).
+
 ## 2026-10-14: Session memory moved into the repo
 
 - Added `CLAUDE.md` (auto-loaded each session), `docs/HANDOFF.md` (who's who, decisions, plan, materials, environment) and this log, so work no longer depends on chat history.

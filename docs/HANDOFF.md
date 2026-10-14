@@ -86,7 +86,8 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 - Source: a Google Drive folder the user shared in chat on 2026-10-11. **Never commit the link**: this repo is public and `reference` contains personal data. Ask the user for it if needed.
 - Local copies live in the git-ignored `client-materials/` and are lost when the cloud container resets. Re-download with `scripts/dev/drive_*.py` (see `scripts/dev/README.md`).
 - `public-materials`: 805 files = 644 unique (`图册/设计图` is an exact copy of `设计图`). Drive shows 987 because it also counts 84 folders; `private-materials` (4 files) was removed by the user.
-- Review of every file: `docs/asset-review/public-materials-review.csv` (score, best use, crop notes, do-not-publish flag).
+- **Start with `docs/asset-review/MATERIALS-GUIDE.md`**: what each folder is good for, the product range and finishes the material shows, the strongest picks per website section, and gaps.
+- Complete indexes, so every shared file is recorded even when the files are not on the machine: `public-materials-inventory.csv` (all 805, with copies), `public-materials-review.csv` (644 unique, reviewed), `reference-inventory.csv` (all 98, personal details removed), `catalog-pages-index.csv` (all 110 catalog pages), all in `docs/asset-review/`.
 - Best material: C01 to C05 renders (2643 to 3840 px, four finishes each), real installed photos (review ids P0394, P0382, P0413, P0408), factory photos.
 - Do not publish:
   - FANLY title-block drawings with customer, designer or company contact details;
