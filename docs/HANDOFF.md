@@ -39,6 +39,10 @@ Our branch = upstream `main` (merged at `d2f062b`) + our commits. None of our ch
 
 ## 5. Current state of our branch
 
+**New site:** `site/` (Astro). Build with `cd site && npm ci && npm run build`; checks with `npm run check:site` and `node scripts/browser-check.mjs <url> <out dir>` against `npx astro preview`. Netlify: base `site`, publish `site/dist`, or drag a zip of `site/dist` onto Netlify Drop.
+
+**Old app (team's, untouched until the switch):**
+
 On top of the team's site we added: scroll fade-ins, a filled spec strip on product pages, hover zoom on galleries, a slow hero zoom, a photo swap on hover for three products, and a four-finish switcher on the homepage (C05 renders). Plus design skills in `.claude/skills/`, the material review and catalog specs in `docs/asset-review/`, and the audit in `docs/audit/`.
 
 The user judged the current site unprofessional, so we will **rebuild rather than keep polishing**. Our additions above are throwaway; the reviews and specs carry over.
@@ -53,7 +57,9 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 - No phone, email or WhatsApp on the site; no analytics; no thank-you page.
 - Fair note: Lighthouse SEO, accessibility and best practices all score 100; content rules were followed well.
 
-## 7. The rebuild plan (waiting for the user's go)
+## 7. The rebuild plan (started 2026-10-14)
+
+**Status:** plan written (`docs/rebuild/PLAN.md`, which overrides the details below where they differ). Homepage built in `site/` and tested; waiting for the user's OK before the other pages. Product images come from the 2025 catalog's studio renders (see PLAN). Accent changed from brass to glass-edge green.
 
 **Pitch to the team:** "To do the SEO/GEO you asked for, the pages must be rebuilt so search and AI tools can read them. Same content, I'll handle it." Keep the audit as backup evidence.
 

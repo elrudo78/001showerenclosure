@@ -1,0 +1,231 @@
+---
+// Netlify Forms: the build output contains this static form, Netlify detects it and emails each inquiry.
+// Success goes to /thank-you/ so leads can be counted.
+interface Props {
+  product?: string
+}
+const { product = '' } = Astro.props
+
+const layouts = ['Sliding doors', 'Neo-angle corner', 'Pivot or hinged door', 'L or T shape', 'Panoramic sliding', 'Bathroom door', 'Not sure yet']
+---
+
+<section class="section inquiry" id="inquiry" aria-labelledby="inquiry-title">
+  <div class="wrap grid">
+    <div class="head">
+      <h2 id="inquiry-title">Tell us about your project</h2>
+      <p class="intro">
+        Send your sizes, the layout and the finish you have in mind, or just a question. Our sales team will reply by
+        email.
+      </p>
+    </div>
+
+    <form name="inquiry" method="POST" action="/thank-you/" data-netlify="true" netlify-honeypot="company_url" class="form" novalidate>
+      <input type="hidden" name="form-name" value="inquiry" />
+      <input type="hidden" name="product" value={product} />
+      <p class="trap" aria-hidden="true">
+        <label>Leave this empty <input name="company_url" tabindex="-1" autocomplete="off" /></label>
+      </p>
+
+      <div class="field">
+        <label for="f-name">Your name</label>
+        <input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="e-name" />
+        <p class="error" id="e-name" hidden>Enter your name.</p>
+      </div>
+
+      <div class="field">
+        <label for="f-email">Email</label>
+        <input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="e-email" />
+        <p class="error" id="e-email" hidden>Enter an email address like name@company.com.</p>
+      </div>
+
+      <div class="field">
+        <label for="f-company">Company <span class="optional">(optional)</span></label>
+        <input id="f-company" name="company" type="text" autocomplete="organization" />
+      </div>
+
+      <div class="field">
+        <label for="f-country">Country</label>
+        <input id="f-country" name="country" type="text" autocomplete="country-name" required aria-describedby="e-country" />
+        <p class="error" id="e-country" hidden>Enter the country the enclosures are for.</p>
+      </div>
+
+      <div class="field">
+        <label for="f-layout">Layout <span class="optional">(optional)</span></label>
+        <select id="f-layout" name="layout">
+          <option value="">Choose a layout</option>
+          {layouts.map((l) => <option>{l}</option>)}
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="f-sizes">Sizes <span class="optional">(optional)</span></label>
+        <input id="f-sizes" name="sizes" type="text" placeholder="For example 1400 × 2100 mm" />
+      </div>
+
+      <div class="field wide">
+        <label for="f-message">Message</label>
+        <textarea id="f-message" name="message" rows="5" required aria-describedby="e-message">{product ? `I would like a quote for ${product}.` : ''}</textarea>
+        <p class="error" id="e-message" hidden>Tell us briefly what you need.</p>
+      </div>
+
+      <div class="submit wide">
+        <button class="button" type="submit">Send inquiry</button>
+        <p class="note">We use your details only to answer this inquiry.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  // Check required fields before sending and point to the first problem.
+  const form = document.querySelector<HTMLFormElement>('form[name="inquiry"]')
+  if (form) {
+    const check = (input: HTMLInputElement | HTMLTextAreaElement) => {
+      const error = document.getElementById(input.getAttribute('aria-describedby') || '')
+      const ok = input.value.trim() !== '' && input.checkValidity()
+      input.setAttribute('aria-invalid', ok ? 'false' : 'true')
+      if (error) error.hidden = ok
+      return ok
+    }
+    const required = Array.from(form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]'))
+    required.forEach((input) => input.addEventListener('blur', () => input.value && check(input)))
+    form.addEventListener('submit', (event) => {
+      const bad = required.filter((input) => !check(input))
+      if (bad.length) {
+        event.preventDefault()
+        bad[0].focus()
+      }
+    })
+  }
+</script>
+
+<style>
+  .inquiry {
+    background: var(--ink);
+    color: var(--white);
+  }
+
+  .inquiry .intro {
+    color: #c9ccce;
+  }
+
+  .grid {
+    display: grid;
+    gap: var(--s-48);
+  }
+
+  .form {
+    display: grid;
+    gap: var(--s-24);
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-8);
+  }
+
+  label {
+    font-weight: 560;
+  }
+
+  .optional {
+    color: #a9adb0;
+    font-weight: 400;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: var(--s-12);
+    border: 1px solid #80858a;
+    border-radius: 0;
+    background: #2a2d31;
+    color: var(--white);
+    font: inherit;
+  }
+
+  select {
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, #c9ccce 50%), linear-gradient(135deg, #c9ccce 50%, transparent 50%);
+    background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%;
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+    padding-right: var(--s-48);
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  input::placeholder {
+    color: #9da2a6;
+  }
+
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #8fc7bc;
+    outline-offset: 2px;
+  }
+
+  [aria-invalid='true'] {
+    border-color: #f2a69b;
+  }
+
+  .error {
+    color: #f2a69b;
+    font-size: var(--t-14);
+  }
+
+  .trap {
+    position: absolute;
+    left: -9999px;
+  }
+
+  .submit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-16) var(--s-24);
+  }
+
+  .submit .button {
+    background: var(--white);
+    border-color: var(--white);
+    color: var(--ink);
+  }
+
+  .submit .button:hover {
+    background: #8fc7bc;
+    border-color: #8fc7bc;
+  }
+
+  .note {
+    color: #a9adb0;
+    font-size: var(--t-14);
+  }
+
+  .inquiry :focus-visible {
+    outline-color: #8fc7bc;
+  }
+
+  @media (min-width: 40rem) {
+    .form {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: var(--s-64);
+    }
+  }
+</style>

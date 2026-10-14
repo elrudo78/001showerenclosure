@@ -1,0 +1,20 @@
+{
+  "name": "dulifei-site",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check:site": "node scripts/check-built-site.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "5.2.8",
+    "astro": "7.3.5",
+    "sharp": "0.35.4"
+  }
+}

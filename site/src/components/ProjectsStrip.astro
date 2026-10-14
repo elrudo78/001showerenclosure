@@ -1,0 +1,94 @@
+---
+import { Picture } from 'astro:assets'
+import marble from '../assets/projects/sliding-black-marble.jpg'
+import neoGold from '../assets/projects/neo-angle-gold.jpg'
+import multi from '../assets/projects/multi-panel-black.jpg'
+import hingedGold from '../assets/projects/hinged-gold-marble.jpg'
+
+// Real installations from the client's files (P0394, P0424, P0371, P0366). Captions say only what each photo shows.
+const photos = [
+  { src: marble, alt: 'Sliding glass shower door with a black frame in a white marble-tiled shower', caption: 'Sliding door, black frame' },
+  { src: neoGold, alt: 'Neo-angle shower enclosure with a champagne gold frame against marble tiles', caption: 'Neo-angle enclosure, champagne gold' },
+  { src: multi, alt: 'Large bathroom with a black-framed glass enclosure of fixed panels and a hinged door', caption: 'Fixed panels and hinged door, black frame' },
+  { src: hingedGold, alt: 'Glass enclosure with a brushed gold frame and a hinged door in a marble bathroom', caption: 'Hinged door, brushed gold frame' },
+]
+---
+
+<section class="section projects" aria-labelledby="projects-title">
+  <div class="wrap">
+    <div class="head">
+      <h2 id="projects-title">Installed in real bathrooms</h2>
+      <a class="more" href="/projects/">More projects</a>
+    </div>
+
+    <ul class="photos">
+      {photos.map((p) => (
+        <li>
+          <figure>
+            <Picture
+              src={p.src}
+              formats={['avif', 'webp']}
+              widths={[360, 540, 720, 960]}
+              sizes="(min-width: 64rem) 24vw, 50vw"
+              alt={p.alt}
+              class="photo"
+            />
+            <figcaption>{p.caption}</figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .projects {
+    padding-top: 0;
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-16);
+    margin-bottom: var(--s-32);
+  }
+
+  .more {
+    font-weight: 560;
+  }
+
+  .photos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-24) var(--s-16);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  .photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  figcaption {
+    margin-top: var(--s-8);
+    color: var(--graphite);
+    font-size: var(--t-14);
+  }
+
+  @media (min-width: 64rem) {
+    .photos {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--s-24);
+    }
+  }
+</style>

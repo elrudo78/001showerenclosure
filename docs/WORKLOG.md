@@ -2,6 +2,16 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-10-14: Rebuild started: plan and homepage design
+
+- The user gave the go for the rebuild. Wrote `docs/rebuild/PLAN.md`: pages, product line-up, homepage content, design tokens, tests.
+- Found that every page of Dulifei's 2025 catalog is one 3477 x 2268 px image with a clean studio render of each of its 37 products on the same white background. These become the product images, so all product cards will match. Three full-room scenes (T98152, T93152, S88421) come from the same catalog.
+- Design change from the handoff: accent is the green of a toughened-glass edge (#2E6B60) instead of brushed brass on warm stone, which is the most common "luxury template" look. Font: Archivo, wide for headings, normal for text.
+- Built the homepage in a new `site/` folder (Astro 7.3.5, pinned): hero with "your width / your height" dimension lines and a four-finish switcher (pure CSS radios), layout line-up drawn like an elevation, "What you can specify" (catalog facts only), factory, installed projects, inquiry form (Netlify Forms, spam trap, thank-you page), 404.
+- `site/scripts/prepare_images.py` makes the image masters from the client files and writes `site/src/assets/SOURCES.md` (each image traced to its source).
+- Tests: `npm run check:site` (raw HTML: title, description, canonical, one h1, no Chinese, no em dashes, alt and sizes on every image) and `site/scripts/browser-check.mjs` (390/768/1440/1920 px, sideways scroll, broken images, small text, font loaded, console errors, finish switcher incl. arrow keys, phone menu, form errors, keyboard focus). All pass. Lighthouse mobile: 100/100/100/100, LCP 1.7 s (live site: 3.6 s).
+- Waiting on: the user's OK on the homepage design before building the other pages. Nav links to Products, Factory, Projects and Contact are not built yet.
+
 ## 2026-10-14: Every shared client file indexed; rules auto-load
 
 - The user asked that knowledge of all 987 shared items stays available as design context. Added complete indexes in `docs/asset-review/`: `public-materials-inventory.csv` (805 files: 562 reviewed, 82 near-identical, 161 exact copies), `reference-inventory.csv` (98 files; customer folder and file names removed), `catalog-pages-index.csv` (110 pages).

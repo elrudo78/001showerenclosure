@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro'
+import Hero from '../components/Hero.astro'
+import RangeLineup from '../components/RangeLineup.astro'
+import Specify from '../components/Specify.astro'
+import FactoryStrip from '../components/FactoryStrip.astro'
+import ProjectsStrip from '../components/ProjectsStrip.astro'
+import InquiryForm from '../components/InquiryForm.astro'
+
+const site = Astro.site?.href ?? '/'
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Dulifei',
+  alternateName: 'DLIFE',
+  url: site,
+  logo: new URL('/logo.png', site).href,
+  description: 'Manufacturer of made-to-measure glass shower enclosures and sliding shower doors in Zhongshan, Guangdong, China.',
+  address: { '@type': 'PostalAddress', addressLocality: 'Zhongshan', addressRegion: 'Guangdong', addressCountry: 'CN' },
+}
+---
+
+<Base
+  title="Made-to-measure shower enclosures from Zhongshan, China | Dulifei"
+  description="Dulifei makes glass shower enclosures and sliding doors to your sizes: sliding, neo-angle, pivot, L and T shapes, in matte black, gold, silver and chrome frames."
+  jsonLd={jsonLd}
+>
+  <Hero />
+  <RangeLineup />
+  <Specify />
+  <FactoryStrip />
+  <ProjectsStrip />
+  <InquiryForm />
+</Base>

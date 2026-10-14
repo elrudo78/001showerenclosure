@@ -1,0 +1,120 @@
+---
+import { Picture } from 'astro:assets'
+import scene from '../assets/catalog/scene-t98152.jpg'
+
+// Every line below is printed in Dulifei's 2025 catalog (docs/asset-review/dulifei-2025-catalog-specs.md).
+const options = [
+  { term: 'Layout', text: 'Straight, L-shape, T-shape or diamond (neo-angle), depending on the model.' },
+  {
+    term: 'Size',
+    text: 'Each model has a standard size and a custom range. The D15131 corner enclosure, for example, is 1100 × 1100 × 2300 mm as standard and can be made from 900 to 1200 mm on each side and up to 2800 mm high.',
+  },
+  { term: 'Glass', text: '8 mm or 10 mm clear glass, or 10 mm extra-clear glass. Bathroom doors use 4 + 4 mm laminated glass.' },
+  {
+    term: 'Frame finish',
+    text: 'Catalog finishes include mirror steel, 37° grey, brushed zirconium gold, Italian matte gold, rose gold, champagne gold and black titanium.',
+  },
+  { term: 'Door opening', text: 'Most pivot doors open both inwards and outwards. Some models open outwards only.' },
+  { term: 'Seal', text: 'A stainless steel magnetic strip on most models, or a rubber strip.' },
+  { term: 'Handle', text: 'Each model has its own standard handle, listed on its product page.' },
+]
+---
+
+<section class="section specify" aria-labelledby="specify-title">
+  <div class="wrap">
+    <Picture
+      src={scene}
+      formats={['avif', 'webp']}
+      widths={[640, 960, 1320, 1920, 2400]}
+      sizes="(min-width: 82.5rem) 1320px, 100vw"
+      alt="T-shaped shower enclosure with two pivot doors and a brushed gold frame in a white room"
+      class="scene"
+    />
+    <p class="scene-note">T98152, a T-shaped enclosure with two pivot doors, from the 2025 catalog.</p>
+
+    <div class="body">
+      <div class="head">
+        <h2 id="specify-title">What you can specify</h2>
+        <p class="intro">Send us these details with your sizes, and we will match them to a model or tell you what is possible.</p>
+      </div>
+
+      <dl class="options">
+        {options.map((o) => (
+          <div class="row">
+            <dt>{o.term}</dt>
+            <dd class="num">{o.text}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+</section>
+
+<style>
+  .specify {
+    background: var(--stone);
+  }
+
+  .scene {
+    width: 100%;
+    height: auto;
+  }
+
+  .scene-note {
+    margin-top: var(--s-12);
+    color: var(--graphite);
+    font-size: var(--t-14);
+  }
+
+  .body {
+    display: grid;
+    gap: var(--s-32);
+    margin-top: var(--s-64);
+  }
+
+  .head .intro {
+    margin-top: var(--s-16);
+  }
+
+  .options {
+    margin: 0;
+    border-top: 1px solid var(--ink);
+  }
+
+  .row {
+    display: grid;
+    gap: var(--s-4);
+    padding: var(--s-16) 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  dt {
+    font-weight: 560;
+  }
+
+  dd {
+    margin: 0;
+    color: var(--graphite);
+    max-width: 38em;
+  }
+
+  @media (min-width: 40rem) {
+    .row {
+      grid-template-columns: 10rem minmax(0, 1fr);
+      gap: var(--s-24);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .body {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: start;
+      gap: var(--s-64);
+    }
+
+    .head {
+      position: sticky;
+      top: var(--s-32);
+    }
+  }
+</style>

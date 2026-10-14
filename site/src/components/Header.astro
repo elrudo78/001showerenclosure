@@ -1,0 +1,175 @@
+---
+import { Image } from 'astro:assets'
+import logo from '../assets/brand-logo.png'
+
+const links = [
+  { href: '/products/', label: 'Products' },
+  { href: '/factory/', label: 'Factory' },
+  { href: '/projects/', label: 'Projects' },
+  { href: '/contact/', label: 'Contact' },
+]
+const path = Astro.url.pathname
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label="Dulifei home">
+      <Image src={logo} alt="DLIFE" width={150} height={36} densities={[1, 2]} loading="eager" class="logo" />
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <ul>
+        {links.map((l) => (
+          <li>
+            <a href={l.href} aria-current={path.startsWith(l.href) ? 'page' : undefined}>{l.label}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <a class="button quote" href="/#inquiry">Request a quote</a>
+
+    <button class="menu-button" type="button" popovertarget="menu" aria-label="Open menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8h18M3 16h18" stroke="currentColor" stroke-width="1.5" /></svg>
+    </button>
+  </div>
+
+  <div id="menu" class="menu" popover>
+    <div class="menu-top">
+      <span class="menu-title">Menu</span>
+      <button class="menu-button" type="button" popovertarget="menu" popovertargetaction="hide" aria-label="Close menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.5" /></svg>
+      </button>
+    </div>
+    <ul>
+      {links.map((l) => (
+        <li><a href={l.href}>{l.label}</a></li>
+      ))}
+    </ul>
+    <a class="button" href="/#inquiry">Request a quote</a>
+  </div>
+</header>
+
+<script>
+  // Links to a spot on the same page (the inquiry form) should close the menu too.
+  const menu = document.getElementById('menu')
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => menu.hidePopover()))
+</script>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--line);
+    background: var(--white);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: var(--s-32);
+    min-height: 4.5rem;
+  }
+
+  .brand {
+    display: block;
+    margin-right: auto;
+  }
+
+  .logo {
+    width: 8.5rem;
+    height: auto;
+  }
+
+  .nav ul {
+    display: flex;
+    gap: var(--s-32);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav a {
+    text-decoration: none;
+    padding-block: var(--s-8);
+  }
+
+  .nav a[aria-current='page'] {
+    text-decoration: underline;
+  }
+
+  .quote {
+    min-height: 2.75rem;
+  }
+
+  .menu-button {
+    display: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: none;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .menu {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: var(--s-16) var(--gutter) var(--s-32);
+    border: 0;
+    background: var(--white);
+    color: var(--ink);
+  }
+
+  .menu:popover-open {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .menu-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 2.75rem;
+  }
+
+  .menu-top .menu-button {
+    display: inline-flex;
+  }
+
+  .menu-title {
+    color: var(--graphite);
+  }
+
+  .menu ul {
+    margin: var(--s-32) 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .menu li a {
+    display: block;
+    padding: var(--s-12) 0;
+    border-bottom: 1px solid var(--line);
+    font-size: var(--t-26);
+    font-stretch: var(--wide);
+    font-weight: 560;
+    text-decoration: none;
+  }
+
+  @media (max-width: 56rem) {
+    .nav,
+    .quote {
+      display: none;
+    }
+
+    .bar > .menu-button {
+      display: inline-flex;
+      margin-right: calc(var(--s-8) * -1);
+    }
+  }
+</style>

@@ -1,0 +1,80 @@
+---
+import { Image } from 'astro:assets'
+import logo from '../assets/brand-logo.png'
+
+const year = new Date().getFullYear()
+---
+
+<footer class="site-footer">
+  <div class="wrap grid">
+    <div class="brand">
+      <Image src={logo} alt="DLIFE" width={150} height={36} densities={[1, 2]} class="logo" />
+      <p>Glass shower enclosures and sliding doors, made to order in Zhongshan, Guangdong, China.</p>
+    </div>
+
+    <nav aria-label="Footer">
+      <ul>
+        <li><a href="/products/">Products</a></li>
+        <li><a href="/factory/">Factory</a></li>
+        <li><a href="/projects/">Projects</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+    </nav>
+
+    <p class="legal">© {year} Dulifei</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: var(--s-48);
+    border-top: 1px solid var(--line);
+    font-size: var(--t-14);
+  }
+
+  .grid {
+    display: grid;
+    gap: var(--s-32);
+  }
+
+  .logo {
+    width: 7rem;
+    height: auto;
+    margin-bottom: var(--s-16);
+  }
+
+  .brand p {
+    max-width: 28em;
+    color: var(--graphite);
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-8) var(--s-24);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: inline-block;
+    padding-block: var(--s-8);
+  }
+
+  .legal {
+    color: var(--graphite);
+  }
+
+  @media (min-width: 64rem) {
+    .grid {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 5fr) minmax(0, 2fr);
+      align-items: start;
+      gap: var(--s-64);
+    }
+
+    .legal {
+      text-align: right;
+    }
+  }
+</style>
