@@ -1,5 +1,7 @@
 # Project Status Summary — Dulifei Shower Enclosures B2B Website
 
+> Historical record (2026-09-27 to 2026-10-11). For the current state, decisions and plan, read `docs/HANDOFF.md`; for the step-by-step history, `docs/WORKLOG.md`.
+
 Compiled after reading every tracked file in the repository (`AGENTS.md`, `CODEX_MASTER_PROMPT.md`, `docs/`, `src/`, `scripts/`, config files, and git history) to establish a shared starting point before further contribution.
 
 ## 1. What this project is
