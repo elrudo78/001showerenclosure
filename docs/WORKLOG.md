@@ -8,7 +8,7 @@ Newest first. After each meaningful step, add an entry: date, what changed and w
 - Copied the audit into `docs/audit/website-audit-2026-10-12.md` with its three screenshots.
 - Moved the Dulifei 2025 catalog specs into `docs/asset-review/dulifei-2025-catalog-specs.md` (team cleared product details on 2026-10-12). Fixed a bug in the earlier export that cut off each finish list after "mirror steel".
 - Committed the helper scripts to `scripts/dev/` with a README (Drive download, review prep, catalog rendering, audits, screenshots).
-- Waiting on: the user's go for the rebuild (plan in HANDOFF section 7).
+- Commit `8daf71e`. Waiting on: the user's go for the rebuild (plan in HANDOFF section 7).
 
 ## 2026-10-12: Audit of the live site; team answers
 
