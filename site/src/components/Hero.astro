@@ -5,7 +5,7 @@ import gold from '../assets/hero/finish-gold.jpg'
 import silver from '../assets/hero/finish-silver.jpg'
 import chrome from '../assets/hero/finish-chrome.jpg'
 
-// Same render in four frame finishes (client files P0139, P0136, P0137, P0138).
+// The DLFC05 sliding enclosure in four frame finishes (client files P0139, P0136, P0137, P0138).
 const finishes = [
   { id: 'black', label: 'Matte black', src: black },
   { id: 'gold', label: 'Brushed gold', src: gold },
@@ -46,7 +46,7 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`
             formats={['avif', 'webp']}
             widths={widths}
             sizes={sizes}
-            alt={`Sliding glass shower enclosure with a ${f.label.toLowerCase()} frame in a white bathroom`}
+            alt={`DLFC05 sliding glass shower enclosure with a ${f.label.toLowerCase()} frame in a white bathroom`}
             loading={i === 0 ? 'eager' : 'lazy'}
             fetchpriority={i === 0 ? 'high' : undefined}
             class={`shot shot-${f.id}`}

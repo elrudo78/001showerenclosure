@@ -1,5 +1,5 @@
 import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs'
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', proxy: { server: process.env.HTTPS_PROXY },
+const browser = await chromium.launch({ proxy: { server: process.env.HTTPS_PROXY },
   args: ['--ignore-certificate-errors-spki-list=' + process.env.SPKI_PIN] })
 const page = await browser.newPage()
 await page.goto('https://lively-frangipane-4d8b8a.netlify.app/', { waitUntil: 'networkidle' })

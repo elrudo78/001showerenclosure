@@ -2,6 +2,14 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-10-30: Client answers; hosting and email options
+
+- The user passed on the client's answers (received by the team on or after 2026-10-15). Saved with a translation in `docs/client-answers-2026-10.md`; HANDOFF section 3 and CLAUDE.md now point to it. Changes: Fuli and Dulifei are not to be linked; C01 to C05 become DLFC01 to DLFC05; catalog specs may be shown; use S26132 and YD62-31; part of the English installation manual may be offered as a download.
+- Homepage: the three project photos from the Fuli folder (P0394, P0371, P0366) replaced with P0419, P0361, P0422 (P0424 kept); P0425 prepared as a spare. Hero alt text names DLFC05.
+- Installation manual checked: it is an OCR scan of another brand's installation guide, carrying that brand's name, CE declaration and website, plus a personal name in the file properties. Not publishable as it is; raised with the user (details in chat, not in this public repo).
+- The user re-shared the Drive link (not committed). All 903 files re-downloaded into `client-materials/`. Fixed: listing paths must not start with `./`.
+- The user asked for guidance on hosting (unsure about Netlify vs Hostinger and others) and on a simple, robust inquiry email setup. Options compared in chat; waiting for the user's choice.
+
 ## 2026-10-30: Back after a break; status check
 
 - The user was away for a few weeks and asked for a full recap of the project, which was given in chat.

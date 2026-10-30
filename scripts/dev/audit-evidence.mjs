@@ -1,6 +1,6 @@
 import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs'
 const BASE = 'https://01showerenclosure-production.up.railway.app', out = process.argv[2]
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', proxy: { server: process.env.HTTPS_PROXY },
+const browser = await chromium.launch({ proxy: { server: process.env.HTTPS_PROXY },
   args: ['--ignore-certificate-errors-spki-list=' + process.env.SPKI_PIN] })
 async function open(path, w = 1440, h = 900) {
   const page = await browser.newPage({ viewport: { width: w, height: h } })

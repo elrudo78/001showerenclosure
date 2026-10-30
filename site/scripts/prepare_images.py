@@ -59,13 +59,13 @@ from_review('P0351', 'factory/profile-racks.jpg', (0.12, 0.10, 1, 0.92))
 from_review('P0348', 'factory/packing-line.jpg')
 from_review('P0345', 'factory/cartons.jpg')
 
-# Installed projects, cropped as the review notes say.
-from_review('P0394', 'projects/sliding-black-marble.jpg', (0.12, 0, 1, 1))
-from_review('P0382', 'projects/sliding-black-showroom.jpg')
+# Installed projects, cropped as the review notes say. Nothing from 落地案例图片/中山福立产品落地案例图:
+# the client asked not to link Fuli and Dulifei (docs/client-answers-2026-10.md).
+from_review('P0419', 'projects/pivot-black-bathtub.jpg')
 from_review('P0424', 'projects/neo-angle-gold.jpg', (0, 0, 0.82, 1))
-from_review('P0371', 'projects/multi-panel-black.jpg')
-from_review('P0366', 'projects/hinged-gold-marble.jpg')
-from_review('P0408', 'projects/sliding-black-niche.jpg', (0.12, 0, 1, 1))
+from_review('P0361', 'projects/corner-black.jpg')
+from_review('P0422', 'projects/sliding-bronze.jpg')
+from_review('P0425', 'projects/neo-angle-chrome.jpg')
 
 # Dulifei 2025 catalog: every page is one 3477 x 2268 image.
 catalog = pymupdf.open(glob.glob(CATALOG_GLOB)[0])

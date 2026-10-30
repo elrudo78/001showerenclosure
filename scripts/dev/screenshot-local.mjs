@@ -3,7 +3,7 @@ import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs'
 const url = process.argv[2]
 const outPrefix = process.argv[3]
 
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' })
+const browser = await chromium.launch()
 try {
   for (const [label, width, height] of [['desktop', 1440, 900], ['mobile', 390, 844]]) {
     const page = await browser.newPage({ viewport: { width, height } })

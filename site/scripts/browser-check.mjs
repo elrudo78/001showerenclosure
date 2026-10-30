@@ -4,7 +4,7 @@ import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs'
 
 const url = process.argv[2] || 'http://localhost:4321/'
 const out = process.argv[3] || '/tmp'
-const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' })
+const browser = await chromium.launch()
 let problems = 0
 const report = (ok, msg) => {
   if (!ok) problems++

@@ -1,6 +1,6 @@
 # Handoff: Dulifei website (read this first)
 
-Last updated: 2026-10-14. Keep this file current; log every step in `docs/WORKLOG.md`.
+Last updated: 2026-10-30. Keep this file current; log every step in `docs/WORKLOG.md`.
 
 ## 1. Who's who
 
@@ -15,13 +15,16 @@ A rebuild the team can show in its portfolio: good-looking, simple but solid bac
 
 ## 3. Team decisions and answers (2026-10-12)
 
+**Client answers arrived later (on or after 2026-10-15) and win where they differ: see `docs/client-answers-2026-10.md`.** In short: do NOT link Fuli and Dulifei (no Fuli photos or mentions until the client allows it); C01 to C05 are named DLFC01 to DLFC05; catalog specs may be shown; use model codes S26132 and YD62-31; part of the English installation manual MAY be offered as a download (overrides the team's "no manuals" below).
+
+
 - All products are on sale. Product names are our choice.
 - Model numbers are just internal codes, not specifications. The company is mainly custom-order.
 - Product details and specs may be shown on the website.
-- **Do not put installation manuals on the website.**
+- ~~Do not put installation manuals on the website.~~ Overridden by the client: part of the English manual may be offered as a download.
 - Purpose of the site: display and traffic, so visitors leave their contact details and the sales team follows up. It is not a shop.
 - SEO and GEO matter most to the team. They asked the user to "do SEO on the website we sent you", i.e. the current site.
-- FANLY / Zhongshan Fuli (福立): treat as associated with Dulifei; photos can be used either way. No formal client answer was received.
+- ~~FANLY / Zhongshan Fuli (福立): treat as associated with Dulifei.~~ Overridden by the client: do not associate.
 
 These override `AGENTS.md` where they conflict (for example, catalog specs from the `reference` folder may now be used). All other `AGENTS.md` rules still apply: English only, no invented facts, never publish `private-materials`.
 
@@ -62,6 +65,8 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 **Status:** plan written (`docs/rebuild/PLAN.md`, which overrides the details below where they differ). Homepage built in `site/` and tested; waiting for the user's OK before the other pages. Product images come from the 2025 catalog's studio renders (see PLAN). Accent changed from brass to glass-edge green.
 
 **Pitch to the team:** "To do the SEO/GEO you asked for, the pages must be rebuilt so search and AI tools can read them. Same content, I'll handle it." Keep the audit as backup evidence.
+
+**Under review (2026-10-30):** the user wants a simpler, more robust inquiry email setup than the team's Railway + Resend server, and is unsure about Netlify for hosting. Options and a recommendation are being discussed; nothing is decided yet. Netlify's free plan is now credit-based: 300 credits a month, a hard stop when used up, about 15 GB of traffic if nothing else is used.
 
 **Stack (simple, free to run):**
 - Astro static site: every page is complete HTML before any JavaScript.
