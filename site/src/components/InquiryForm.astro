@@ -1,12 +1,16 @@
 ---
-// Netlify Forms: the build output contains this static form, Netlify detects it and emails each inquiry.
-// Success goes to /thank-you/ so leads can be counted.
+// Inquiries go to the Cloudflare Worker (worker/index.js): spam check, email address check, saved to the
+// database, then one email to the sales team. The visitor sees the result on the page.
+// Without JavaScript the form still posts and the Worker answers with /thank-you/ or an error page.
 interface Props {
   product?: string
 }
 const { product = '' } = Astro.props
 
+// Turnstile's official test key (always passes) until the real one is set at build time.
+const sitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY || '1x00000000000000000000AA'
 const layouts = ['Sliding doors', 'Neo-angle corner', 'Pivot or hinged door', 'L or T shape', 'Panoramic sliding', 'Bathroom door', 'Not sure yet']
+const page = Astro.url.pathname
 ---
 
 <section class="section inquiry" id="inquiry" aria-labelledby="inquiry-title">
@@ -19,82 +23,217 @@ const layouts = ['Sliding doors', 'Neo-angle corner', 'Pivot or hinged door', 'L
       </p>
     </div>
 
-    <form name="inquiry" method="POST" action="/thank-you/" data-netlify="true" netlify-honeypot="company_url" class="form" novalidate>
-      <input type="hidden" name="form-name" value="inquiry" />
-      <input type="hidden" name="product" value={product} />
-      <p class="trap" aria-hidden="true">
-        <label>Leave this empty <input name="company_url" tabindex="-1" autocomplete="off" /></label>
-      </p>
+    <div class="panel">
+      <form name="inquiry" method="POST" action="/api/inquiry" class="form" novalidate>
+        <input type="hidden" name="product" value={product} />
+        <input type="hidden" name="page" value={page} />
+        <p class="trap" aria-hidden="true">
+          <label>Leave this empty <input name="company_url" tabindex="-1" autocomplete="off" /></label>
+        </p>
 
-      <div class="field">
-        <label for="f-name">Your name</label>
-        <input id="f-name" name="name" type="text" autocomplete="name" required aria-describedby="e-name" />
-        <p class="error" id="e-name" hidden>Enter your name.</p>
-      </div>
+        <div class="field">
+          <label for="f-name">Your name</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="100" aria-describedby="e-name" />
+          <p class="error" id="e-name" hidden>Enter your name.</p>
+        </div>
 
-      <div class="field">
-        <label for="f-email">Email</label>
-        <input id="f-email" name="email" type="email" autocomplete="email" required aria-describedby="e-email" />
-        <p class="error" id="e-email" hidden>Enter an email address like name@company.com.</p>
-      </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="254" aria-describedby="e-email" />
+          <p class="error" id="e-email" hidden>Enter an email address like name@company.com.</p>
+        </div>
 
-      <div class="field">
-        <label for="f-company">Company <span class="optional">(optional)</span></label>
-        <input id="f-company" name="company" type="text" autocomplete="organization" />
-      </div>
+        <div class="field">
+          <label for="f-company">Company <span class="optional">(optional)</span></label>
+          <input id="f-company" name="company" type="text" autocomplete="organization" maxlength="150" />
+        </div>
 
-      <div class="field">
-        <label for="f-country">Country</label>
-        <input id="f-country" name="country" type="text" autocomplete="country-name" required aria-describedby="e-country" />
-        <p class="error" id="e-country" hidden>Enter the country the enclosures are for.</p>
-      </div>
+        <div class="field">
+          <label for="f-country">Country</label>
+          <input id="f-country" name="country" type="text" autocomplete="country-name" required maxlength="80" aria-describedby="e-country" />
+          <p class="error" id="e-country" hidden>Enter the country the enclosures are for.</p>
+        </div>
 
-      <div class="field">
-        <label for="f-layout">Layout <span class="optional">(optional)</span></label>
-        <select id="f-layout" name="layout">
-          <option value="">Choose a layout</option>
-          {layouts.map((l) => <option>{l}</option>)}
-        </select>
-      </div>
+        <div class="field">
+          <label for="f-layout">Layout <span class="optional">(optional)</span></label>
+          <select id="f-layout" name="layout">
+            <option value="">Choose a layout</option>
+            {layouts.map((l) => <option>{l}</option>)}
+          </select>
+        </div>
 
-      <div class="field">
-        <label for="f-sizes">Sizes <span class="optional">(optional)</span></label>
-        <input id="f-sizes" name="sizes" type="text" placeholder="For example 1400 × 2100 mm" />
-      </div>
+        <div class="field">
+          <label for="f-sizes">Sizes <span class="optional">(optional)</span></label>
+          <input id="f-sizes" name="sizes" type="text" maxlength="200" placeholder="For example 1400 × 2100 mm" />
+        </div>
 
-      <div class="field wide">
-        <label for="f-message">Message</label>
-        <textarea id="f-message" name="message" rows="5" required aria-describedby="e-message">{product ? `I would like a quote for ${product}.` : ''}</textarea>
-        <p class="error" id="e-message" hidden>Tell us briefly what you need.</p>
-      </div>
+        <div class="field wide">
+          <label for="f-message">Message</label>
+          <textarea id="f-message" name="message" rows="5" required maxlength="5000" aria-describedby="e-message">{product ? `I would like a quote for ${product}.` : ''}</textarea>
+          <p class="error" id="e-message" hidden>Tell us briefly what you need.</p>
+        </div>
 
-      <div class="submit wide">
-        <button class="button" type="submit">Send inquiry</button>
-        <p class="note">We use your details only to answer this inquiry.</p>
+        <div class="wide turnstile" data-sitekey={sitekey}></div>
+
+        <p class="alert wide" id="form-alert" role="alert" hidden></p>
+
+        <div class="submit wide">
+          <button class="button" type="submit">Send inquiry</button>
+          <p class="note">We use your details only to answer this inquiry.</p>
+        </div>
+      </form>
+
+      <div class="done" hidden>
+        <svg class="tick" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true">
+          <circle cx="24" cy="24" r="22" pathLength="1" />
+          <path d="M14 24.5l7 7 13-14" pathLength="1" />
+        </svg>
+        <h3 class="done-title" tabindex="-1">Thank you, your inquiry is in</h3>
+        <p class="done-text">
+          We have saved it and passed it to our sales team, who will reply to <strong class="done-email"></strong>.
+          Your reference number is <strong class="done-id"></strong>.
+        </p>
+        <button class="button quiet again" type="button">Send another inquiry</button>
       </div>
-    </form>
+    </div>
   </div>
 </section>
 
 <script>
-  // Check required fields before sending and point to the first problem.
+  type Field = HTMLInputElement | HTMLTextAreaElement
+  type TurnstileApi = {
+    render: (el: HTMLElement, opts: Record<string, unknown>) => string
+    reset: (id?: string) => void
+    getResponse: (id?: string) => string | undefined
+  }
+
   const form = document.querySelector<HTMLFormElement>('form[name="inquiry"]')
-  if (form) {
-    const check = (input: HTMLInputElement | HTMLTextAreaElement) => {
-      const error = document.getElementById(input.getAttribute('aria-describedby') || '')
-      const ok = input.value.trim() !== '' && input.checkValidity()
-      input.setAttribute('aria-invalid', ok ? 'false' : 'true')
-      if (error) error.hidden = ok
+  const panel = form?.closest<HTMLElement>('.panel')
+  if (form && panel) {
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!
+    const alertBox = form.querySelector<HTMLElement>('#form-alert')!
+    const done = panel.querySelector<HTMLElement>('.done')!
+    const slot = form.querySelector<HTMLElement>('.turnstile')!
+    const required = Array.from(form.querySelectorAll<Field>('[required]'))
+    const defaults = new Map(required.map((f) => [f.name, document.getElementById(f.getAttribute('aria-describedby') || '')?.textContent || '']))
+
+    const showError = (field: Field, message?: string) => {
+      const error = document.getElementById(field.getAttribute('aria-describedby') || '')
+      field.setAttribute('aria-invalid', message === undefined ? 'false' : 'true')
+      if (!error) return
+      error.hidden = message === undefined
+      error.textContent = message || defaults.get(field.name) || ''
+    }
+    const check = (field: Field) => {
+      const ok = field.value.trim() !== '' && field.checkValidity()
+      showError(field, ok ? undefined : '')
       return ok
     }
-    const required = Array.from(form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]'))
-    required.forEach((input) => input.addEventListener('blur', () => input.value && check(input)))
-    form.addEventListener('submit', (event) => {
-      const bad = required.filter((input) => !check(input))
-      if (bad.length) {
-        event.preventDefault()
-        bad[0].focus()
+    required.forEach((f) => f.addEventListener('blur', () => f.value && check(f)))
+    required.forEach((f) => f.addEventListener('input', () => f.getAttribute('aria-invalid') === 'true' && check(f)))
+
+    // Spam check: load Cloudflare Turnstile only when someone gets near the form, so the page stays fast.
+    let widget: string | undefined
+    let tokenWaiters: Array<(t: string) => void> = []
+    const loadTurnstile = () => {
+      if (slot.dataset.loaded) return
+      slot.dataset.loaded = '1'
+      const w = window as unknown as { onTurnstileReady?: () => void; turnstile?: TurnstileApi }
+      w.onTurnstileReady = () => {
+        widget = w.turnstile!.render(slot, {
+          sitekey: slot.dataset.sitekey,
+          theme: 'dark',
+          appearance: 'interaction-only',
+          callback: (t: string) => {
+            tokenWaiters.forEach((r) => r(t))
+            tokenWaiters = []
+          },
+        })
       }
+      const s = document.createElement('script')
+      s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileReady'
+      s.async = true
+      document.head.append(s)
+    }
+    new IntersectionObserver((entries, obs) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        loadTurnstile()
+        obs.disconnect()
+      }
+    }, { rootMargin: '600px' }).observe(form)
+    form.addEventListener('focusin', loadTurnstile, { once: true })
+
+    const token = () => {
+      const t = (window as unknown as { turnstile?: TurnstileApi }).turnstile?.getResponse(widget)
+      if (t) return Promise.resolve(t)
+      return new Promise<string>((resolve) => {
+        tokenWaiters.push(resolve)
+        setTimeout(() => resolve(''), 8000)
+      })
+    }
+
+    const setBusy = (busy: boolean) => {
+      button.disabled = busy
+      button.textContent = busy ? 'Sending' : 'Send inquiry'
+      form.setAttribute('aria-busy', String(busy))
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault()
+      alertBox.hidden = true
+      const bad = required.filter((f) => !check(f))
+      if (bad.length) {
+        bad[0].focus()
+        return
+      }
+      setBusy(true)
+      try {
+        loadTurnstile()
+        const body = new FormData(form)
+        body.set('cf-turnstile-response', await token())
+        const res = await fetch(form.action, { method: 'POST', body, headers: { accept: 'application/json' } })
+        const out = await res.json().catch(() => ({ ok: false, errors: {} }))
+        if (out.ok) {
+          done.querySelector('.done-email')!.textContent = String(out.email || body.get('email'))
+          done.querySelector('.done-id')!.textContent = `#${out.id}`
+          form.hidden = true
+          done.hidden = false
+          done.querySelector<HTMLElement>('.done-title')!.focus()
+          window.dispatchEvent(new CustomEvent('inquiry:sent', { detail: { id: out.id } }))
+          return
+        }
+        const errors: Record<string, string> = out.errors || {}
+        let first: HTMLElement | null = null
+        for (const [name, message] of Object.entries(errors)) {
+          const field = form.elements.namedItem(name) as Field | null
+          if (field && 'setAttribute' in field) {
+            showError(field, message)
+            first ||= field
+          } else {
+            alertBox.textContent = message
+            alertBox.hidden = false
+          }
+        }
+        if (!Object.keys(errors).length) {
+          alertBox.textContent = 'Your inquiry was not sent. Please check your connection and try again.'
+          alertBox.hidden = false
+        }
+        first?.focus()
+      } catch {
+        alertBox.textContent = 'Your inquiry was not sent. Please check your connection and try again.'
+        alertBox.hidden = false
+      } finally {
+        setBusy(false)
+        if (widget) (window as unknown as { turnstile?: TurnstileApi }).turnstile?.reset(widget)
+      }
+    })
+
+    done.querySelector('.again')!.addEventListener('click', () => {
+      form.reset()
+      required.forEach((f) => showError(f))
+      done.hidden = true
+      form.hidden = false
+      form.querySelector<HTMLElement>('#f-name')!.focus()
     })
   }
 </script>
@@ -183,6 +322,91 @@ const layouts = ['Sliding doors', 'Neo-angle corner', 'Pivot or hinged door', 'L
   .trap {
     position: absolute;
     left: -9999px;
+  }
+
+  .form[hidden] {
+    display: none;
+  }
+
+  .turnstile:empty {
+    display: none;
+  }
+
+  .alert {
+    padding: var(--s-12) var(--s-16);
+    border-left: 3px solid #f2a69b;
+    background: #2a2d31;
+    color: #f2a69b;
+  }
+
+  .submit .button:disabled {
+    opacity: 0.7;
+    cursor: progress;
+  }
+
+  .done {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s-16);
+    padding-top: var(--s-8);
+  }
+
+  .done[hidden] {
+    display: none;
+  }
+
+  .tick {
+    fill: none;
+    stroke: #8fc7bc;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .tick circle,
+  .tick path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: tick 600ms ease-out forwards;
+  }
+
+  .tick path {
+    animation-delay: 350ms;
+  }
+
+  @keyframes tick {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .done-title {
+    font-size: var(--t-26);
+    outline: none;
+  }
+
+  .done-text {
+    max-width: 34em;
+    color: #c9ccce;
+  }
+
+  .done-text strong {
+    color: var(--white);
+    font-weight: 560;
+    overflow-wrap: anywhere;
+  }
+
+  .done .again {
+    margin-top: var(--s-8);
+    border-color: #c9ccce;
+    color: var(--white);
+  }
+
+  .done .again:hover {
+    background: var(--white);
+    border-color: var(--white);
+    color: var(--ink);
   }
 
   .submit {

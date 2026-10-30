@@ -61,6 +61,8 @@ for (const file of pages.sort()) {
   }
 }
 
+if (pages.some((f) => readFileSync(f, 'utf8').includes('1x00000000000000000000AA')))
+  console.log('\nNote: the spam check uses Turnstile\'s test key. Set PUBLIC_TURNSTILE_SITEKEY before the live build.')
 if (missingLinks.size) console.log(`\nLinks to pages not built yet: ${[...missingLinks].sort().join(', ')}`)
 console.log(failures ? `\n${failures} problem(s)` : '\nAll checks passed')
 process.exit(failures ? 1 : 0)

@@ -2,6 +2,15 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-10-30: Cloudflare inquiry system built and tested
+
+- Decisions (user): Cloudflare for hosting and inquiries; one email per inquiry (to sales only), with an on-page success panel instead of an email to the buyer; refuse addresses that cannot be used, with a clear message; manual stays off the site; finish within a few days.
+- Scanned the team's live site: 18 project photos, 12 from the Fuli folder, never names Fuli or FANLY. User's rule: do the same (photos allowed, names never). Recorded with the original question list in `docs/client-answers-2026-10.md`.
+- Built `site/worker/` (Cloudflare Worker): Turnstile check, email checks (format, typo hint, 8,883 throwaway domains, DNS mail check that lets inquiries through if DNS does not answer), D1 save, rate limit 5 per 10 minutes per visitor, branded HTML email to sales via Resend after the reply, result stored per inquiry. `site/migrations/0001_inquiries.sql`, `site/wrangler.jsonc` (Wrangler 4.149.0 pinned), `site/DEPLOY.md`.
+- Form rewritten: posts to `/api/inquiry`, errors under the right field, form-level alerts, success panel with reference number, works without JavaScript (303 to /thank-you/). Turnstile loads only near the form.
+- Tests: 9 unit tests (`npm test`); real DNS check (gmail, outlook, qq, 163 accepted; example.com and a made-up domain refused); local Worker with curl (valid, typo, throwaway, no-mail domain, bad format, spam trap, no-JS post, rate limit); `scripts/form-check.mjs` in a real browser at 1440 and 390 px; existing HTML and browser checks pass.
+- Next: the user sets up Cloudflare and Resend access (`site/DEPLOY.md`), then deploy a preview; meanwhile build the remaining pages.
+
 ## 2026-10-30: Client answers; hosting and email options
 
 - The user passed on the client's answers (received by the team on or after 2026-10-15). Saved with a translation in `docs/client-answers-2026-10.md`; HANDOFF section 3 and CLAUDE.md now point to it. Changes: Fuli and Dulifei are not to be linked; C01 to C05 become DLFC01 to DLFC05; catalog specs may be shown; use S26132 and YD62-31; part of the English installation manual may be offered as a download.

@@ -2,7 +2,14 @@
 
 The user passed these on 2026-10-30. They came from **the client** (Dulifei), unlike the 2026-10-12 answers in `docs/HANDOFF.md` section 3, which came from the team. Where they differ, the client's answers win.
 
-Some lines below look like our original questions copied back without a reply. The user has the original question list; until we compare, those lines are marked "unclear".
+Our original questions (sent by the team):
+
+1. Are FANLY (Zhongshan Fuli Sanitary Ware) and Dulifei the same company or sister brands? Can we show Fuli's installation photos and products on the website as Dulifei's?
+2. Are C01 to C05 (folder `DLFEI -C01~C05产品效果图`) current products? What names should we use for them on the website?
+3. Can we show the product specifications from your 2025 catalog (glass thickness, sizes, finishes) on the website, and are they still correct? Also: should we use S26132 or DS19, and DD33 or YD62-31? Is the "新款60" sliding door the same product as "梵度60" in the catalog?
+4. Can we offer the English installation guide (`安装说明书.docx`) as a download on the website?
+
+Comparing the two confirms that 3a ("still correct?") and 3d ("新款60 = 梵度60?") are our questions copied back without an answer, and 3b and 3c are answers.
 
 ## Original text
 
@@ -30,3 +37,10 @@ Some lines below look like our original questions copied back without a reply. T
 | 3c | Model number should be YD62-31 (the folder `DD33（YD62-31）`). | Probably an answer | Use YD62-31, not DD33. |
 | 3d | Is the "new 60" sliding door the same product as "Fandu 60" in the catalog? | Unclear (looks like our question) | Keep them separate until answered. |
 | 4 | We can put part of the English installation manual (`安装说明书.docx`) on the website for overseas customers to download. | Clear on permission; "part of" is not defined | Reverses the team's "no manuals". Before publishing: read the manual, remove any personal or company contact details, ask which parts are meant, and publish as a PDF. |
+
+## The user's decisions (2026-10-30)
+
+- **Fuli photos:** the team's live site shows 18 installation photos, 12 of them from the Fuli folder, and never names Fuli or FANLY. The user decided to do the same: Fuli-folder photos may be used, but the names Fuli and FANLY never appear on the site. (The homepage currently uses none; the Projects page may.)
+- **Installation manual:** not on the site. The file is a scan of another brand's guide.
+- **3a and 3d** stay unanswered: catalog specs are used as printed; 新款60 and Fandu 60 stay separate.
+- **Timeline:** finish in a few days.

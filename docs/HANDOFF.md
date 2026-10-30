@@ -15,16 +15,16 @@ A rebuild the team can show in its portfolio: good-looking, simple but solid bac
 
 ## 3. Team decisions and answers (2026-10-12)
 
-**Client answers arrived later (on or after 2026-10-15) and win where they differ: see `docs/client-answers-2026-10.md`.** In short: do NOT link Fuli and Dulifei (no Fuli photos or mentions until the client allows it); C01 to C05 are named DLFC01 to DLFC05; catalog specs may be shown; use model codes S26132 and YD62-31; part of the English installation manual MAY be offered as a download (overrides the team's "no manuals" below).
+**Client answers arrived later (on or after 2026-10-15) and win where they differ: see `docs/client-answers-2026-10.md`.** In short: do NOT link Fuli and Dulifei (never name Fuli or FANLY; the user decided Fuli-folder photos may be used, as the team's live site does); C01 to C05 are named DLFC01 to DLFC05; catalog specs may be shown; use model codes S26132 and YD62-31; the installation manual stays off the site (user's decision: it is a scan of another brand's guide).
 
 
 - All products are on sale. Product names are our choice.
 - Model numbers are just internal codes, not specifications. The company is mainly custom-order.
 - Product details and specs may be shown on the website.
-- ~~Do not put installation manuals on the website.~~ Overridden by the client: part of the English manual may be offered as a download.
+- Do not put installation manuals on the website (the client allowed it, but the user decided against it on 2026-10-30).
 - Purpose of the site: display and traffic, so visitors leave their contact details and the sales team follows up. It is not a shop.
 - SEO and GEO matter most to the team. They asked the user to "do SEO on the website we sent you", i.e. the current site.
-- ~~FANLY / Zhongshan Fuli (福立): treat as associated with Dulifei.~~ Overridden by the client: do not associate.
+- ~~FANLY / Zhongshan Fuli (福立): treat as associated with Dulifei.~~ Overridden by the client: do not associate. Fuli-folder photos are still allowed (user's decision), the names never.
 
 These override `AGENTS.md` where they conflict (for example, catalog specs from the `reference` folder may now be used). All other `AGENTS.md` rules still apply: English only, no invented facts, never publish `private-materials`.
 
@@ -42,7 +42,7 @@ Our branch = upstream `main` (merged at `d2f062b`) + our commits. None of our ch
 
 ## 5. Current state of our branch
 
-**New site:** `site/` (Astro). Build with `cd site && npm ci && npm run build`; checks with `npm run check:site` and `node scripts/browser-check.mjs <url> <out dir>` against `npx astro preview`. Netlify: base `site`, publish `site/dist`, or drag a zip of `site/dist` onto Netlify Drop.
+**New site:** `site/` (Astro + Cloudflare Worker). Build with `cd site && npm ci && npm run build`. Checks: `npm test` (inquiry checks), `npm run check:site` (raw HTML), `node scripts/browser-check.mjs <url> <out dir>` and `node scripts/form-check.mjs <url> <out dir>` against `npm run worker:dev`. Going live: `site/DEPLOY.md`.
 
 **Old app (team's, untouched until the switch):**
 
@@ -66,15 +66,16 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 
 **Pitch to the team:** "To do the SEO/GEO you asked for, the pages must be rebuilt so search and AI tools can read them. Same content, I'll handle it." Keep the audit as backup evidence.
 
-**Under review (2026-10-30):** the user wants a simpler, more robust inquiry email setup than the team's Railway + Resend server, and is unsure about Netlify for hosting. Options and a recommendation are being discussed; nothing is decided yet. Netlify's free plan is now credit-based: 300 credits a month, a hard stop when used up, about 15 GB of traffic if nothing else is used.
+**Decided (2026-10-30): Cloudflare for hosting and inquiries; Netlify is dropped.** Setup and steps: `site/DEPLOY.md`.
 
 **Stack (simple, free to run):**
 - Astro static site: every page is complete HTML before any JavaScript.
-- Netlify hosting (client's own domain later). No Railway, no server to maintain.
-- Contact form: custom-designed by us. Netlify Forms delivers each inquiry to the sales team by email and keeps a lead list, with spam filtering, free up to 100 a month. An auto-reply via a small Netlify Function + Resend is optional, later.
-- Google Search Console plus free analytics (GA4 or Cloudflare Web Analytics), and a thank-you page so leads can be counted.
-- JavaScript only where it helps: mobile menu, finish switcher, gallery, form checks.
+- One Cloudflare Worker serves the pages and handles `POST /api/inquiry` (`site/worker/`).
+- Inquiries: Turnstile spam check, email address checks (format, typo hint, throwaway domains, domain can receive mail), saved to a D1 database, then ONE email to the sales team via Resend. No email to the buyer: the page shows a thank-you panel with a reference number instead (user's decision).
+- Testing with the user's own old inbox until the client's domain and sales address are known.
+- Google Search Console plus free analytics (Cloudflare Web Analytics or GA4) after launch.
 - Pinned dependency versions.
+- Deadline: the user wants the project finished within a few days.
 
 **Pages (kept few):** Home, Products overview, one page per product, Factory and Quality, Projects, Contact. About folds into Home and Factory.
 
@@ -85,7 +86,7 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 2. Homepage design, for the user's OK before anything else.
 3. Build all pages, in a new folder on the work branch; the current site stays untouched until the switch.
 4. Test rigorously: 390, 768, 1440 and 1920 px; keyboard; contrast; Lighthouse; raw-HTML word count per page; no Chinese text; no em dashes; links; form.
-5. Netlify preview link for the user.
+5. Cloudflare preview link (workers.dev) for the user.
 6. Team OK.
 7. Go live.
 8. SEO and GEO: Search Console, sitemap, Organization and Product structured data, llms.txt, per-product content.
@@ -107,7 +108,7 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
   - third-party glass-supplier certificates (one 3C certificate expired 2023);
   - banners with unverified claims (factory size, staff count, "leading manufacturer").
 - Specs: `docs/asset-review/dulifei-2025-catalog-specs.md`, 37 products from Dulifei's own 2025 catalog. D15131 and S41522 were hand-verified; check other figures against the page before publishing.
-- Other catalogs in `reference`: 2020 catalog = FANLY; 酷小白 = GUXBAI (another brand); 美国市场大吊轮款 and 财业五金 = supplier catalogs. The English installation manual exists but must not go on the site.
+- Other catalogs in `reference`: 2020 catalog = FANLY; 酷小白 = GUXBAI (another brand); 美国市场大吊轮款 and 财业五金 = supplier catalogs. The English installation manual is a scan of another brand's guide and must not go on the site.
 
 ## 9. Working environment notes
 

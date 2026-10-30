@@ -1,0 +1,33 @@
+// Cloudflare Worker: the built site in dist/ plus the inquiry handler in worker/index.js.
+// Secrets (set with `npx wrangler secret put NAME`, never in this file):
+//   RESEND_API_KEY    email sending
+//   SALES_EMAIL       where inquiries go (comma-separated for several)
+//   TURNSTILE_SECRET  spam check, pairs with PUBLIC_TURNSTILE_SITEKEY at build time
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "dulifei-website",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash",
+    "run_worker_first": ["/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "dulifei-inquiries",
+      // Replace with the id printed by `npx wrangler d1 create dulifei-inquiries`.
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    // Until the client's domain is verified in Resend, only Resend's test sender works.
+    "FROM_EMAIL": "Dulifei website <onboarding@resend.dev>",
+    "SITE_URL": ""
+  },
+  "observability": { "enabled": true }
+}
