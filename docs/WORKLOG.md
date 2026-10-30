@@ -2,6 +2,13 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-10-30: Back after a break; status check
+
+- The user was away for a few weeks and asked for a full recap of the project, which was given in chat.
+- Checked: the team's repo has no new commits since 2026-09-29 (`a654bef`); the live Railway site and the old Netlify preview both still load.
+- The cloud machine was reset: `client-materials/`, `site/node_modules` and the preview files are gone. The repo still has every index and the homepage images. Rebuilding the product pages needs the Drive link again (ask the user; never commit it).
+- Still waiting on: the user's OK on the homepage (commit `9f863c9`), then team inputs (contact details, domain, hosting, analytics).
+
 ## 2026-10-14: Rebuild started: plan and homepage design
 
 - The user gave the go for the rebuild. Wrote `docs/rebuild/PLAN.md`: pages, product line-up, homepage content, design tokens, tests.
