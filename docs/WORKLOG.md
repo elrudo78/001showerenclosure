@@ -2,6 +2,11 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-02: Preview zip for Netlify; content plan
+
+- Built a preview zip of `site/dist` (55 pages, noindex header added to the copy only) for the user to drag onto Netlify Drop. The inquiry form does not work there (it needs the Cloudflare Worker); everything else does.
+- Added "Getting found faster" and a 14-topic content plan to `docs/rebuild/SEO-GEO-TRACKING.md`, plus the list of what only the client can supply.
+
 ## 2026-11-02: All pages built; SEO, GEO and tracking groundwork
 
 - The user asked whether to use their old Cloudflare account. Advice: a new project-only email and accounts, so the whole bundle can be handed to the client (recorded in `site/DEPLOY.md`).
