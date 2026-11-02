@@ -1,0 +1,64 @@
+---
+import { Picture } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
+
+interface Props {
+  photos: { src: ImageMetadata; alt: string; caption: string }[]
+  ratio?: string
+  columns?: 2 | 3 | 4
+}
+const { photos, ratio = '4 / 5', columns = 3 } = Astro.props
+---
+
+<ul class={`photos cols-${columns}`} style={`--ratio:${ratio}`}>
+  {photos.map((p) => (
+    <li>
+      <figure>
+        <Picture src={p.src} formats={['avif', 'webp']} widths={[360, 540, 720, 1080]} sizes={`(min-width: 64rem) ${Math.round(100 / columns)}vw, 50vw`} alt={p.alt} class="img" />
+        <figcaption>{p.caption}</figcaption>
+      </figure>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .photos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-32) var(--s-16);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  figure {
+    margin: 0;
+  }
+
+  .img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--ratio);
+    object-fit: cover;
+  }
+
+  figcaption {
+    margin-top: var(--s-8);
+    color: var(--graphite);
+    font-size: var(--t-14);
+  }
+
+  @media (min-width: 64rem) {
+    .photos {
+      gap: var(--s-48) var(--s-24);
+    }
+
+    .cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+</style>

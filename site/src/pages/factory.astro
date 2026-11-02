@@ -1,0 +1,141 @@
+---
+import { Picture } from 'astro:assets'
+import Base from '../layouts/Base.astro'
+import Breadcrumbs from '../components/Breadcrumbs.astro'
+import PhotoGrid from '../components/PhotoGrid.astro'
+import InquiryForm from '../components/InquiryForm.astro'
+import { breadcrumbLd } from '../data/site'
+import glassEdges from '../assets/factory/glass-edges.jpg'
+import glassCorner from '../assets/factory/glass-corner.jpg'
+import glassRacks from '../assets/factory/glass-racks.jpg'
+import glassTrolleys from '../assets/factory/glass-trolleys.jpg'
+import profileRacks from '../assets/factory/profile-racks.jpg'
+import frameProfiles from '../assets/factory/frame-profiles.jpg'
+import partsRack from '../assets/factory/parts-rack.jpg'
+import packingLine from '../assets/factory/packing-line.jpg'
+import foam from '../assets/factory/foam-packaging.jpg'
+import cartons from '../assets/factory/cartons.jpg'
+
+// Captions describe only what each photo shows (client files, review ids in site/src/assets/SOURCES.md).
+const sections = [
+  {
+    id: 'glass',
+    title: 'Glass',
+    text: 'Clear and tinted glass panels are stored upright, on racks and on trolleys.',
+    photos: [
+      { src: glassCorner, alt: 'Close-up of polished glass panel edges and a corner with spacer blocks', caption: 'Polished glass edges' },
+      { src: glassRacks, alt: 'Glass sheets standing on racks under a steel frame in the glass store', caption: 'Glass store' },
+      { src: glassTrolleys, alt: 'Clear and dark glass panels stacked on trolley racks', caption: 'Clear and tinted panels on trolleys' },
+    ],
+  },
+  {
+    id: 'profiles',
+    title: 'Aluminium profiles and hardware',
+    text: 'Frames are made from aluminium profiles, stored on cantilever racks. Fittings and profile pieces are sorted into a wall of open racks.',
+    photos: [
+      { src: profileRacks, alt: 'Yellow cantilever racks holding raw aluminium profiles', caption: 'Aluminium profile store' },
+      { src: frameProfiles, alt: 'Close-up of dark grey aluminium frame profile corners with screws', caption: 'Frame profile corners' },
+      { src: partsRack, alt: 'Large wooden pigeonhole rack holding hardware parts and profile pieces', caption: 'Parts and fittings' },
+    ],
+  },
+  {
+    id: 'packing',
+    title: 'Packing for shipping',
+    text: 'Enclosures are packed with foam into cartons, which are strapped on the packing line.',
+    photos: [
+      { src: packingLine, alt: 'Packing line with a roller conveyor, a strapping machine and a pallet truck', caption: 'Packing line' },
+      { src: foam, alt: 'Stacks of wrapped white foam packaging blocks on a high rack', caption: 'Foam packaging' },
+      { src: cartons, alt: 'Strapped cartons of finished enclosures standing against a wall', caption: 'Packed and ready to ship' },
+    ],
+  },
+]
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Factory', href: '/factory/' },
+]
+---
+
+<Base
+  title="Our shower enclosure factory in Zhongshan, China | Dulifei"
+  description="Inside the Dulifei factory in Zhongshan, Guangdong: glass storage, aluminium profiles and hardware, and the packing line where made-to-measure shower enclosures are boxed for shipping."
+  jsonLd={breadcrumbLd(crumbs, Astro.site)}
+  image={glassEdges}
+  imageAlt="Glass panels seen edge on"
+>
+  <Breadcrumbs items={crumbs} />
+  <section class="wrap top">
+    <h1>Our factory in Zhongshan</h1>
+    <p class="lead">
+      Dulifei makes shower enclosures to order in Zhongshan, Guangdong, in southern China. These photos show where the
+      glass, aluminium profiles and fittings are kept, and how finished enclosures are packed.
+    </p>
+  </section>
+
+  <figure class="wrap hero-photo">
+    <Picture src={glassEdges} formats={['avif', 'webp']} widths={[640, 960, 1320, 1920, 2400]} sizes="(min-width: 82.5rem) 1320px, 100vw" alt="Glass panels stacked on edge, showing the green tint of the glass edges" loading="eager" fetchpriority="high" class="hero-img" />
+    <figcaption>Glass panels, seen edge on.</figcaption>
+  </figure>
+
+  {
+    sections.map((s) => (
+      <section class="wrap part" aria-labelledby={`h-${s.id}`}>
+        <div class="part-head">
+          <h2 id={`h-${s.id}`}>{s.title}</h2>
+          <p class="intro">{s.text}</p>
+        </div>
+        <PhotoGrid photos={s.photos} ratio="3 / 2" columns={s.photos.length === 4 ? 4 : 3} />
+      </section>
+    ))
+  }
+
+  <InquiryForm title="Send us your project" />
+</Base>
+
+<style>
+  .top {
+    padding-block: var(--s-32) var(--s-48);
+  }
+
+  .top .lead {
+    margin-top: var(--s-24);
+  }
+
+  .hero-photo {
+    margin-block: 0 var(--section);
+  }
+
+  .hero-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 21 / 9;
+    object-fit: cover;
+  }
+
+  .hero-photo figcaption {
+    margin-top: var(--s-8);
+    color: var(--graphite);
+    font-size: var(--t-14);
+  }
+
+  .part {
+    padding-bottom: var(--section);
+  }
+
+  .part-head {
+    display: grid;
+    gap: var(--s-16);
+    margin-bottom: var(--s-32);
+  }
+
+  .part-head .intro {
+    margin: 0;
+  }
+
+  @media (min-width: 64rem) {
+    .part-head {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: end;
+      gap: var(--s-64);
+    }
+  }
+</style>

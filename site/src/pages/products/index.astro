@@ -1,0 +1,129 @@
+---
+import Base from '../../layouts/Base.astro'
+import Breadcrumbs from '../../components/Breadcrumbs.astro'
+import ProductGrid from '../../components/ProductGrid.astro'
+import InquiryForm from '../../components/InquiryForm.astro'
+import { layouts, layoutUrl, productsIn, products, productUrl } from '../../data/catalog'
+import { breadcrumbLd } from '../../data/site'
+
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Products', href: '/products/' },
+]
+const jsonLd = [
+  breadcrumbLd(crumbs, Astro.site),
+  {
+    '@type': 'CollectionPage',
+    name: 'Shower enclosures and sliding doors',
+    url: new URL('/products/', Astro.site).href,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: products.length,
+      itemListElement: products.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.name, url: new URL(productUrl(p), Astro.site).href })),
+    },
+  },
+]
+---
+
+<Base
+  title="Shower enclosures and sliding doors, made to measure | Dulifei"
+  description={`The full Dulifei range: ${products.length} sliding doors, neo-angle and L or T enclosures, pivot screens and panoramic systems, each with printed specifications and a made-to-measure size range.`}
+  jsonLd={jsonLd}
+>
+  <Breadcrumbs items={crumbs} />
+  <section class="wrap intro-block">
+    <h1>Shower enclosures and sliding doors</h1>
+    <p class="lead">
+      {products.length} models, grouped by layout. Every model has a standard size and a range it can be made to, so
+      send us your measurements with the model you like.
+    </p>
+    <nav class="jump" aria-label="Layouts">
+      <ul>
+        {layouts.map((l) => (
+          <li>
+            <a href={`#${l.slug}`}>{l.short}</a> <span class="num">{productsIn(l.id).length}</span>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </section>
+
+  {
+    layouts.map((l) => (
+      <section class="wrap group" id={l.slug} aria-labelledby={`h-${l.slug}`}>
+        <div class="group-head">
+          <h2 id={`h-${l.slug}`}>
+            <a href={layoutUrl(l)}>{l.name}</a>
+          </h2>
+          <p class="intro">{l.intro}</p>
+        </div>
+        <ProductGrid products={productsIn(l.id)} />
+      </section>
+    ))
+  }
+
+  <InquiryForm />
+</Base>
+
+<style>
+  .intro-block {
+    padding-block: var(--s-32) var(--s-48);
+  }
+
+  .intro-block .lead {
+    margin-top: var(--s-24);
+  }
+
+  .jump ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-8) var(--s-24);
+    margin: var(--s-32) 0 0;
+    padding: var(--s-16) 0 0;
+    border-top: 1px solid var(--line);
+    list-style: none;
+  }
+
+  .jump a {
+    display: inline-block;
+    padding-block: var(--s-8);
+    font-weight: 560;
+  }
+
+  .jump span {
+    color: var(--graphite);
+    font-size: var(--t-14);
+  }
+
+  .group {
+    padding-block: var(--s-48) var(--section);
+    scroll-margin-top: var(--s-16);
+  }
+
+  .group-head {
+    display: grid;
+    gap: var(--s-16);
+    margin-bottom: var(--s-48);
+  }
+
+  .group-head .intro {
+    margin: 0;
+  }
+
+  .group-head h2 a {
+    text-decoration: none;
+  }
+
+  .group-head h2 a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+
+  @media (min-width: 64rem) {
+    .group-head {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: end;
+      gap: var(--s-64);
+    }
+  }
+</style>

@@ -1,0 +1,115 @@
+---
+import Base from '../layouts/Base.astro'
+import Breadcrumbs from '../components/Breadcrumbs.astro'
+import InquiryForm from '../components/InquiryForm.astro'
+import { breadcrumbLd } from '../data/site'
+import { faq } from '../data/faq'
+
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Contact', href: '/contact/' },
+]
+const jsonLd = [
+  breadcrumbLd(crumbs, Astro.site),
+  {
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+]
+---
+
+<Base
+  title="Request a quote for made-to-measure shower enclosures | Dulifei"
+  description="Send your sizes, layout and frame finish to Dulifei's sales team for a quote on glass shower enclosures and sliding doors. Answers to common questions about sizes, glass and finishes."
+  jsonLd={jsonLd}
+>
+  <Breadcrumbs items={crumbs} />
+  <section class="wrap top">
+    <h1>Request a quote</h1>
+    <p class="lead">Tell us what you need and our sales team will reply by email. The more you send, the faster the quote.</p>
+    <ul class="send num">
+      <li>The opening: width and height in mm</li>
+      <li>The layout, or a model code from our range</li>
+      <li>The frame finish and glass you have in mind</li>
+      <li>How many enclosures, and the country they are for</li>
+    </ul>
+  </section>
+
+  <InquiryForm title="Your inquiry" />
+
+  <section class="wrap faq" aria-labelledby="faq-title">
+    <h2 id="faq-title">Questions buyers ask</h2>
+    <div class="list">
+      {faq.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .top {
+    padding-block: var(--s-32) var(--s-64);
+  }
+
+  .top .lead {
+    margin-top: var(--s-24);
+  }
+
+  .send {
+    display: grid;
+    gap: var(--s-8);
+    margin: var(--s-24) 0 0;
+    padding-left: 1.2em;
+    color: var(--graphite);
+    max-width: 36em;
+  }
+
+  .faq {
+    padding-block: var(--section);
+  }
+
+  .list {
+    margin-top: var(--s-32);
+    border-top: 1px solid var(--ink);
+    max-width: 52rem;
+  }
+
+  details {
+    border-bottom: 1px solid var(--line);
+  }
+
+  summary {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s-16);
+    padding: var(--s-16) 0;
+    font-weight: 560;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  summary::after {
+    content: '+';
+    color: var(--glass);
+    font-size: var(--t-21);
+    line-height: 1;
+  }
+
+  details[open] summary::after {
+    content: '−';
+  }
+
+  details p {
+    padding-bottom: var(--s-16);
+    color: var(--graphite);
+    max-width: 40em;
+  }
+</style>

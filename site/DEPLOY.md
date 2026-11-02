@@ -22,8 +22,10 @@ The site runs as one Cloudflare Worker: the built pages in `dist/` plus the inqu
 
 ### 1. Accounts (the user)
 
+Use one new email address made only for this project (for example a new Gmail), not a personal one. Sign up for everything with it: Cloudflare, Resend, Google Search Console, Bing Webmaster Tools. At handover the client either receives that whole login, or is invited to the Cloudflare account as Super Administrator and then removes us. Nothing personal is mixed in.
+
 - Cloudflare account (free).
-- Resend account (free), **signed up with the inbox that should receive test inquiries**. Until a domain is verified in Resend, its test sender can only deliver to that one address.
+- Resend account (free). Until a domain is verified in Resend, its test sender can only deliver to the address the Resend account was created with, so test inquiries arrive in the project inbox.
 
 ### 2. Access for Claude (recommended)
 
@@ -55,6 +57,20 @@ npx wrangler deploy
 - Add the domain to Cloudflare and attach it to the Worker (Settings > Domains & Routes).
 - Add the domain to the Turnstile widget's hostnames.
 - Verify the domain in Resend, set `FROM_EMAIL` in `wrangler.jsonc` to an address on it, and change `SALES_EMAIL` to the sales team's inbox. Mainland China note: use an inbox the team can open there (not Gmail).
+
+## Build settings
+
+Set these when building for the web (Cloudflare build variables, or in front of `npm run build`):
+
+| Variable | What it does |
+| --- | --- |
+| `SITE_URL` | The public address. Canonical links, the sitemap and `llms.txt` use it. Required. |
+| `PUBLIC_TURNSTILE_SITEKEY` | The spam check's site key. Without it the test key is used. Required. |
+| `PUBLIC_CF_ANALYTICS_TOKEN` | Cloudflare Web Analytics, if not switched on in the dashboard. Optional. |
+| `PUBLIC_GOOGLE_SITE_VERIFICATION` | Google Search Console check, if not verified through DNS. Optional. |
+| `PUBLIC_BING_SITE_VERIFICATION` | Bing Webmaster Tools check. Optional. |
+
+`npm run check:site` warns when the build still points at localhost or uses the test spam key.
 
 ## Local testing
 

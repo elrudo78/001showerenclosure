@@ -5,14 +5,15 @@ import neoAngle from '../assets/catalog/d15131.png'
 import pivot from '../assets/catalog/s93021.png'
 import lShape from '../assets/catalog/l99131.png'
 import panoramic from '../assets/catalog/s890.png'
+import { productsIn } from '../data/catalog'
 
-// Counts are the products in Dulifei's 2025 catalog, grouped by layout (docs/rebuild/PLAN.md).
+// Counts come from the product list (src/data/catalog.ts).
 const layouts = [
-  { href: '/products/sliding-shower-doors/', name: 'Sliding doors', count: 15, img: sliding, alt: 'Line render of a three-panel sliding shower door with a black frame' },
-  { href: '/products/neo-angle-shower-enclosures/', name: 'Neo-angle corners', count: 11, img: neoAngle, alt: 'Line render of a five-sided neo-angle corner shower enclosure with a pivot door' },
-  { href: '/products/pivot-shower-doors/', name: 'Pivot and hinged doors', count: 4, img: pivot, alt: 'Line render of a straight shower screen with a hinged glass door and a fixed panel' },
-  { href: '/products/l-and-t-shape-enclosures/', name: 'L and T shapes', count: 4, img: lShape, alt: 'Line render of an L-shaped shower enclosure with a pivot door' },
-  { href: '/products/panoramic-sliding-systems/', name: 'Panoramic sliding', count: 2, img: panoramic, alt: 'Line render of a four-panel panoramic sliding door with a top track' },
+  { href: '/products/sliding-shower-doors/', name: 'Sliding doors', count: productsIn('sliding').length, img: sliding, alt: 'Line render of a three-panel sliding shower door with a black frame' },
+  { href: '/products/neo-angle-shower-enclosures/', name: 'Neo-angle corners', count: productsIn('neo-angle').length, img: neoAngle, alt: 'Line render of a five-sided neo-angle corner shower enclosure with a pivot door' },
+  { href: '/products/pivot-shower-doors/', name: 'Pivot and hinged doors', count: productsIn('pivot').length, img: pivot, alt: 'Line render of a straight shower screen with a hinged glass door and a fixed panel' },
+  { href: '/products/l-and-t-shape-enclosures/', name: 'L and T shapes', count: productsIn('l-t').length, img: lShape, alt: 'Line render of an L-shaped shower enclosure with a pivot door' },
+  { href: '/products/panoramic-sliding-systems/', name: 'Panoramic sliding', count: productsIn('panoramic').length, img: panoramic, alt: 'Line render of a four-panel panoramic sliding door with a top track' },
 ]
 ---
 

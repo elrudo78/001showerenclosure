@@ -7,16 +7,11 @@ import FactoryStrip from '../components/FactoryStrip.astro'
 import ProjectsStrip from '../components/ProjectsStrip.astro'
 import InquiryForm from '../components/InquiryForm.astro'
 
-const site = Astro.site?.href ?? '/'
 const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'Dulifei',
-  alternateName: 'DLIFE',
-  url: site,
-  logo: new URL('/logo.png', site).href,
-  description: 'Manufacturer of made-to-measure glass shower enclosures and sliding shower doors in Zhongshan, Guangdong, China.',
-  address: { '@type': 'PostalAddress', addressLocality: 'Zhongshan', addressRegion: 'Guangdong', addressCountry: 'CN' },
+  '@type': 'WebSite',
+  name: 'Dulifei Shower Enclosures',
+  url: new URL('/', Astro.site).href,
+  publisher: { '@id': new URL('/#organization', Astro.site).href },
 }
 ---
 

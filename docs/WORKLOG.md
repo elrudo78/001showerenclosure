@@ -2,6 +2,15 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-02: All pages built; SEO, GEO and tracking groundwork
+
+- The user asked whether to use their old Cloudflare account. Advice: a new project-only email and accounts, so the whole bundle can be handed to the client (recorded in `site/DEPLOY.md`).
+- Re-read all 37 product spec blocks from the 2025 catalog page images and wrote `site/src/data/catalog.ts` from them. The earlier transcription had errors (T93152 size 2400 × 1100 × 2300 mm and width 1000 to 1300 mm). "Swarovski crystal" handles are listed as "Crystal handle" (brand not verifiable); YS09's unclear handle name is left out.
+- New pages: `/products/`, 6 layout pages with comparison tables, 42 product pages (spec table, room photos where they exist, related models, inquiry form with the product filled in, DLFC pages with a finish switcher), `/factory/`, `/projects/` (19 photos, including Fuli-folder photos as decided; the name never appears), `/contact/` with 7 FAQs.
+- SEO and GEO: Organization on every page, Product, BreadcrumbList, ItemList and FAQPage data; share images; `sitemap.xml`, `robots.txt`, `llms.txt`, `llms-full.txt`; 301s from the old site's URLs; real 404s. Optional build settings for Cloudflare Web Analytics and Google/Bing verification. Plan in `docs/rebuild/SEO-GEO-TRACKING.md`.
+- Images: `prepare_images.py` now also makes DLFC scenes, product room photos, factory and project sets, page 14 renders and 4:5 card crops.
+- Tests: `check:site` passes on 55 pages (300 to 850 words each in raw HTML); browser checks 193 passed (9 page types at 390, 768, 1440, 1920 px); form check and 9 unit tests pass; Lighthouse mobile 98 to 100 performance and 100 accessibility, best practices and SEO on 7 page types.
+
 ## 2026-10-30: Cloudflare inquiry system built and tested
 
 - Decisions (user): Cloudflare for hosting and inquiries; one email per inquiry (to sales only), with an on-page success panel instead of an email to the buyer; refuse addresses that cannot be used, with a clear message; manual stays off the site; finish within a few days.

@@ -1,0 +1,75 @@
+---
+import { Image } from 'astro:assets'
+import { productUrl, type Product } from '../data/catalog'
+
+interface Props {
+  product: Product
+  headingLevel?: 'h2' | 'h3'
+}
+const { product, headingLevel = 'h3' } = Astro.props
+const Heading = headingLevel
+const line = product.specs ? `Standard ${product.specs.standard}` : 'Made to your sizes, four frame finishes'
+---
+
+<a class="card" href={productUrl(product)}>
+  <span class:list={['frame', { photo: product.imageIsPhoto }]}>
+    <Image
+      src={product.image}
+      alt=""
+      widths={[280, 420, 560]}
+      sizes="(min-width: 64rem) 22vw, (min-width: 40rem) 30vw, 46vw"
+      class="img"
+    />
+  </span>
+  <Heading class="name">{product.name}</Heading>
+  <span class="line num">{line}</span>
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-4);
+    height: 100%;
+    text-decoration: none;
+  }
+
+  .frame {
+    display: block;
+    aspect-ratio: 4 / 5;
+    margin-bottom: var(--s-8);
+    border-bottom: 1px solid var(--ink);
+    overflow: hidden;
+    background: var(--white);
+  }
+
+  .img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .photo .img {
+    object-fit: cover;
+  }
+
+  .name {
+    font-size: var(--t-17);
+    font-weight: 560;
+    font-stretch: var(--wide);
+    line-height: 1.3;
+    letter-spacing: 0;
+  }
+
+  .line {
+    color: var(--graphite);
+    font-size: var(--t-14);
+  }
+
+  .card:hover .name,
+  .card:focus-visible .name {
+    color: var(--glass);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>

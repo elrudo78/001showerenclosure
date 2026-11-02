@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro'
+import Breadcrumbs from '../components/Breadcrumbs.astro'
+import PhotoGrid from '../components/PhotoGrid.astro'
+import InquiryForm from '../components/InquiryForm.astro'
+import { breadcrumbLd } from '../data/site'
+import type { ImageMetadata } from 'astro'
+
+const files = import.meta.glob<{ default: ImageMetadata }>('../assets/projects/*.jpg', { eager: true })
+const pic = (name: string) => files[`../assets/projects/${name}.jpg`].default
+
+// Captions say only what each photo shows: the layout and the frame finish.
+const photos = [
+  ['sliding-black-showroom', 'Sliding door and fixed panels with a black frame against a dark wall', 'Sliding door and fixed panels, black frame'],
+  ['pivot-black-bathtub', 'Glass enclosure with a slim black frame and a pivot door beside a freestanding bathtub', 'Pivot door, black frame'],
+  ['neo-angle-gold', 'Neo-angle shower enclosure with a champagne gold frame against marble tiles', 'Neo-angle enclosure, champagne gold'],
+  ['hinged-gold-marble', 'Glass enclosure with a brushed gold frame and a hinged door in a marble bathroom', 'Hinged door, brushed gold frame'],
+  ['sliding-black-marble', 'Sliding glass shower door with a black frame in a white marble-tiled shower', 'Sliding door, black frame'],
+  ['multi-panel-black', 'Large bathroom with a black-framed glass enclosure of fixed panels and a hinged door', 'Fixed panels and hinged door, black frame'],
+  ['curved-black', 'Curved corner shower enclosure with a black frame and two sliding doors', 'Curved corner enclosure, black frame'],
+  ['double-hinged-black-marble', 'Marble bathroom with a black-framed glass enclosure and double hinged doors', 'Double hinged doors, black frame'],
+  ['corner-black', 'Corner glass shower enclosure with a thin black frame and a hinged door in a white bathroom', 'Corner enclosure, black frame'],
+  ['hinged-champagne', 'Shower enclosure with a slim champagne gold frame, a hinged door and fixed panels', 'Hinged door, champagne gold frame'],
+  ['glass-wall-black', 'Thin-framed glass wall with fixed panels and a sliding door', 'Glass wall with sliding door, black frame'],
+  ['corner-gold-dark', 'Brushed gold corner enclosure in a dark bathroom', 'Corner enclosure, brushed gold'],
+  ['walk-in-black', 'Single fixed glass panel with a thin black frame in a walk-in shower', 'Walk-in panel, black frame'],
+  ['sliding-black-niche', 'Two-panel sliding shower door with a dark frame and towel bar handles', 'Two-panel sliding door, black frame'],
+  ['neo-angle-chrome', 'Neo-angle shower enclosure with a polished chrome frame and pivot door', 'Neo-angle enclosure, polished chrome'],
+  ['corner-rain-glass', 'Corner shower enclosure with textured rain-pattern glass', 'Corner enclosure, textured glass'],
+  ['sliding-bronze', 'Two-panel sliding shower door with a bronze-grey frame and towel bar handles', 'Sliding door, bronze-grey frame'],
+  ['corner-chrome', 'Rectangular corner shower enclosure with a polished chrome frame', 'Corner enclosure, polished chrome'],
+  ['marble-chrome', 'Large marble shower behind a chrome-framed glass enclosure', 'Large enclosure, polished chrome'],
+].map(([name, alt, caption]) => ({ src: pic(name), alt, caption }))
+
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Projects', href: '/projects/' },
+]
+---
+
+<Base
+  title="Installed glass shower enclosures: project photos | Dulifei"
+  description="Photos of Dulifei shower enclosures installed: sliding doors, neo-angle and corner enclosures, pivot and hinged doors, in black, gold and chrome frames."
+  jsonLd={breadcrumbLd(crumbs, Astro.site)}
+  image={photos[0].src}
+  imageAlt={photos[0].alt}
+>
+  <Breadcrumbs items={crumbs} />
+  <section class="wrap top">
+    <h1>Installed shower enclosures</h1>
+    <p class="lead">
+      Real photos of our enclosures in bathrooms and showrooms, from sliding doors to neo-angle corners.
+    </p>
+  </section>
+
+  <section class="wrap gallery" aria-label="Project photos">
+    <PhotoGrid photos={photos} />
+  </section>
+
+  <InquiryForm title="Planning a project?" />
+</Base>
+
+<style>
+  .top {
+    padding-block: var(--s-32) var(--s-48);
+  }
+
+  .top .lead {
+    margin-top: var(--s-24);
+  }
+
+  .gallery {
+    padding-bottom: var(--section);
+  }
+</style>

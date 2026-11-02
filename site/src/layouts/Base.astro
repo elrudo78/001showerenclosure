@@ -3,16 +3,30 @@ import '../styles/global.css'
 import archivo from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url'
 import Header from '../components/Header.astro'
 import Footer from '../components/Footer.astro'
+import { getImage } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
+import defaultShare from '../assets/hero/finish-black.jpg'
+import { organizationLd } from '../data/site'
 
 interface Props {
   title: string
   description: string
-  jsonLd?: object
+  jsonLd?: object | object[]
+  image?: ImageMetadata
+  imageAlt?: string
   noindex?: boolean
 }
 
-const { title, description, jsonLd, noindex = false } = Astro.props
+const { title, description, jsonLd, image = defaultShare, imageAlt = 'DLFC05 sliding shower enclosure with a matte black frame', noindex = false } = Astro.props
 const canonical = new URL(Astro.url.pathname, Astro.site).href
+const share = await getImage({ src: image, width: 1200, format: 'jpg' })
+const shareUrl = new URL(share.src, Astro.site).href
+// Every page carries the Organization; pages add their own items (Product, BreadcrumbList, FAQPage...).
+const graph = { '@context': 'https://schema.org', '@graph': [organizationLd(Astro.site), ...(jsonLd ? [jsonLd].flat() : [])] }
+// Optional services, switched on at build time (see site/DEPLOY.md).
+const analyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN
+const googleVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION
+const bingVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION
 const fontFace = `@font-face{font-family:'Archivo';font-style:normal;font-display:swap;font-weight:100 900;font-stretch:62% 125%;src:url(${archivo}) format('woff2-variations'),url(${archivo}) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}`
 ---
 
@@ -34,7 +48,13 @@ const fontFace = `@font-face{font-family:'Archivo';font-style:normal;font-displa
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    <meta property="og:image" content={shareUrl} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    {googleVerification && <meta name="google-site-verification" content={googleVerification} />}
+    {bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="Site summary for AI tools" />
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} />
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
@@ -43,5 +63,10 @@ const fontFace = `@font-face{font-family:'Archivo';font-style:normal;font-displa
       <slot />
     </main>
     <Footer />
+    {
+      analyticsToken && (
+        <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: analyticsToken })} />
+      )
+    }
   </body>
 </html>

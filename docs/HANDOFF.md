@@ -62,7 +62,7 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 
 ## 7. The rebuild plan (started 2026-10-14)
 
-**Status:** plan written (`docs/rebuild/PLAN.md`, which overrides the details below where they differ). Homepage built in `site/` and tested; waiting for the user's OK before the other pages. Product images come from the 2025 catalog's studio renders (see PLAN). Accent changed from brass to glass-edge green.
+**Status (2026-11-02):** all pages built and tested in `site/`: home, products overview, 6 layout pages, 42 product pages (37 from the 2025 catalog with specs re-checked against the printed pages, plus DLFC01 to DLFC05), Factory, Projects, Contact with FAQ, thank-you, 404. SEO and GEO base built in (see `docs/rebuild/SEO-GEO-TRACKING.md`). Next: the user creates the project accounts (`site/DEPLOY.md`) so we can deploy a preview; the user shows it to the team and asks about the domain and inbox.
 
 **Pitch to the team:** "To do the SEO/GEO you asked for, the pages must be rebuilt so search and AI tools can read them. Same content, I'll handle it." Keep the audit as backup evidence.
 
@@ -107,7 +107,7 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
   - photos with identifiable faces or licence plates;
   - third-party glass-supplier certificates (one 3C certificate expired 2023);
   - banners with unverified claims (factory size, staff count, "leading manufacturer").
-- Specs: `docs/asset-review/dulifei-2025-catalog-specs.md`, 37 products from Dulifei's own 2025 catalog. D15131 and S41522 were hand-verified; check other figures against the page before publishing.
+- Specs: the site's source of truth is `site/src/data/catalog.ts`, every figure re-read from the printed catalog pages on 2026-11-02. The older agent transcription in `docs/asset-review/dulifei-2025-catalog-specs.md` had errors (for example T93152's size and width range); do not use it for publishing.
 - Other catalogs in `reference`: 2020 catalog = FANLY; 酷小白 = GUXBAI (another brand); 美国市场大吊轮款 and 财业五金 = supplier catalogs. The English installation manual is a scan of another brand's guide and must not go on the site.
 
 ## 9. Working environment notes

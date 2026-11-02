@@ -4,8 +4,10 @@
 // Without JavaScript the form still posts and the Worker answers with /thank-you/ or an error page.
 interface Props {
   product?: string
+  layout?: string
+  title?: string
 }
-const { product = '' } = Astro.props
+const { product = '', layout = '', title = 'Tell us about your project' } = Astro.props
 
 // Turnstile's official test key (always passes) until the real one is set at build time.
 const sitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY || '1x00000000000000000000AA'
@@ -16,7 +18,7 @@ const page = Astro.url.pathname
 <section class="section inquiry" id="inquiry" aria-labelledby="inquiry-title">
   <div class="wrap grid">
     <div class="head">
-      <h2 id="inquiry-title">Tell us about your project</h2>
+      <h2 id="inquiry-title">{title}</h2>
       <p class="intro">
         Send your sizes, the layout and the finish you have in mind, or just a question. Our sales team will reply by
         email.
@@ -58,7 +60,7 @@ const page = Astro.url.pathname
           <label for="f-layout">Layout <span class="optional">(optional)</span></label>
           <select id="f-layout" name="layout">
             <option value="">Choose a layout</option>
-            {layouts.map((l) => <option>{l}</option>)}
+            {layouts.map((l) => <option selected={l === layout}>{l}</option>)}
           </select>
         </div>
 

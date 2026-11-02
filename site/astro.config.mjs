@@ -1,9 +1,9 @@
 // @ts-check
 import { defineConfig } from 'astro/config'
 
-// Netlify sets URL during its builds; locally the site runs on the dev server.
+// SITE_URL is the public address (workers.dev preview, later the client's domain); see DEPLOY.md.
 export default defineConfig({
-  site: process.env.URL || 'http://localhost:4321',
+  site: process.env.SITE_URL || 'http://localhost:4321',
   trailingSlash: 'always',
   build: { format: 'directory', inlineStylesheets: 'always' },
   compressHTML: true,

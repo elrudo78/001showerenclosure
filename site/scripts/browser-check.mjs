@@ -4,7 +4,10 @@ import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs'
 
 const url = process.argv[2] || 'http://localhost:4321/'
 const out = process.argv[3] || '/tmp'
-const browser = await chromium.launch()
+// Turnstile loads from Cloudflare; in the cloud session that needs the agent proxy (HTTPS_PROXY, SPKI_PIN).
+const proxy = process.env.HTTPS_PROXY ? { server: process.env.HTTPS_PROXY, bypass: '127.0.0.1,localhost' } : undefined
+const args = process.env.SPKI_PIN ? [`--ignore-certificate-errors-spki-list=${process.env.SPKI_PIN}`] : []
+const browser = await chromium.launch({ proxy, args })
 let problems = 0
 const report = (ok, msg) => {
   if (!ok) problems++
@@ -23,12 +26,26 @@ const scrollThrough = async (page) => {
   await page.waitForTimeout(500)
 }
 
+// One page of each kind.
+const paths = [
+  '',
+  'products/',
+  'products/sliding-shower-doors/',
+  'products/neo-angle-shower-enclosures/d15131/',
+  'products/sliding-shower-doors/dlfc02/',
+  'products/l-and-t-shape-enclosures/t98152/',
+  'factory/',
+  'projects/',
+  'contact/',
+]
+for (const path of paths)
 for (const width of [390, 768, 1440, 1920]) {
   const page = await browser.newPage({ viewport: { width, height: 900 } })
   const errors = []
-  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
+  page.on('console', (m) => m.type() === 'error' && !/challenges\.cloudflare\.com|turnstile/i.test(m.text()) && errors.push(m.text()))
   page.on('pageerror', (e) => errors.push(String(e)))
-  await page.goto(url, { waitUntil: 'networkidle' })
+  // The spam check keeps a connection open, so wait for load rather than network idle.
+  await page.goto(url + path, { waitUntil: 'load' })
   await scrollThrough(page)
   const r = await page.evaluate(() => {
     const overflow = document.documentElement.scrollWidth - window.innerWidth
@@ -42,14 +59,17 @@ for (const width of [390, 768, 1440, 1920]) {
     const loaded = [...document.fonts].filter((f) => f.status === 'loaded').map((f) => f.family)
     return { overflow, broken, tiny, font, loaded }
   })
-  report(r.overflow <= 0, `${width}px: no sideways scroll (${r.overflow}px)`)
-  report(r.broken.length === 0, `${width}px: no broken images ${r.broken.join(' ')}`)
-  report(r.tiny === 0, `${width}px: no text under 12px (${r.tiny})`)
-  report(r.loaded.includes('Archivo'), `${width}px: Archivo font loaded (${r.loaded.join(', ')})`)
-  report(errors.length === 0, `${width}px: no console errors ${errors.join(' | ')}`)
-  await page.evaluate(() => window.scrollTo(0, 0))
-  await page.waitForTimeout(300)
-  await page.screenshot({ path: `${out}/home-${width}.png`, fullPage: true })
+  const at = `/${path} ${width}px`
+  report(r.overflow <= 0, `${at}: no sideways scroll (${r.overflow}px)`)
+  report(r.broken.length === 0, `${at}: no broken images ${r.broken.join(' ')}`)
+  report(r.tiny === 0, `${at}: no text under 12px (${r.tiny})`)
+  report(r.loaded.includes('Archivo'), `${at}: Archivo font loaded`)
+  report(errors.length === 0, `${at}: no console errors ${errors.join(' | ')}`)
+  if (width === 390 || width === 1440) {
+    await page.evaluate(() => window.scrollTo(0, 0))
+    await page.waitForTimeout(300)
+    await page.screenshot({ path: `${out}/${(path || 'home').replace(/\/$/, '').replace(/\//g, '_')}-${width}.png`, fullPage: true })
+  }
   await page.close()
 }
 

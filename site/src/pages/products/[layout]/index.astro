@@ -1,0 +1,136 @@
+---
+import Base from '../../../layouts/Base.astro'
+import Breadcrumbs from '../../../components/Breadcrumbs.astro'
+import ProductGrid from '../../../components/ProductGrid.astro'
+import InquiryForm from '../../../components/InquiryForm.astro'
+import { formLayout, layouts, layoutUrl, productsIn, productUrl, type Layout } from '../../../data/catalog'
+import { breadcrumbLd } from '../../../data/site'
+
+export function getStaticPaths() {
+  return layouts.map((layout) => ({ params: { layout: layout.slug }, props: { layout } }))
+}
+
+const { layout } = Astro.props as { layout: Layout }
+const items = productsIn(layout.id)
+const withSpecs = items.filter((p) => p.specs)
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Products', href: '/products/' },
+  { name: layout.name, href: layoutUrl(layout) },
+]
+const jsonLd = [
+  breadcrumbLd(crumbs, Astro.site),
+  {
+    '@type': 'CollectionPage',
+    name: layout.title,
+    url: new URL(layoutUrl(layout), Astro.site).href,
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: items.length,
+      itemListElement: items.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.name, url: new URL(productUrl(p), Astro.site).href })),
+    },
+  },
+]
+---
+
+<Base title={`${layout.title} | Dulifei`} description={layout.description} jsonLd={jsonLd} image={items[0].image} imageAlt={items[0].name}>
+  <Breadcrumbs items={crumbs} />
+  <section class="wrap top">
+    <h1>{layout.title}</h1>
+    <p class="lead">{layout.intro}</p>
+  </section>
+
+  <section class="wrap models" aria-labelledby="models-title">
+    <h2 id="models-title" class="visually-hidden">Models</h2>
+    <ProductGrid products={items} />
+  </section>
+
+  {
+    withSpecs.length > 1 && (
+      <section class="wrap compare" aria-labelledby="compare-title">
+        <h2 id="compare-title">Compare the models</h2>
+        <p class="intro">Standard sizes and made-to-measure ranges as printed in our 2025 catalog.</p>
+        <div class="scroll" role="region" aria-labelledby="compare-title" tabindex="0">
+          <table class="num">
+            <thead>
+              <tr>
+                <th scope="col">Model</th>
+                <th scope="col">Door</th>
+                <th scope="col">Glass</th>
+                <th scope="col">Standard size</th>
+                <th scope="col">Made to measure</th>
+              </tr>
+            </thead>
+            <tbody>
+              {withSpecs.map((p) => (
+                <tr>
+                  <th scope="row">
+                    <a href={productUrl(p)}>{p.code}</a>
+                  </th>
+                  <td>{p.specs!.door}</td>
+                  <td>{p.specs!.glass}</td>
+                  <td>{p.specs!.standard}</td>
+                  <td>{p.specs!.custom}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    )
+  }
+
+  <InquiryForm layout={formLayout[layout.id]} title={`Ask about ${layout.name.toLowerCase()}`} />
+</Base>
+
+<style>
+  .top {
+    padding-block: var(--s-32) var(--s-48);
+  }
+
+  .top .lead {
+    margin-top: var(--s-24);
+  }
+
+  .models {
+    padding-bottom: var(--section);
+  }
+
+  .compare {
+    padding-bottom: var(--section);
+  }
+
+  .scroll {
+    margin-top: var(--s-32);
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    min-width: 46rem;
+    border-collapse: collapse;
+    font-size: var(--t-14);
+  }
+
+  th,
+  td {
+    padding: var(--s-12) var(--s-16) var(--s-12) 0;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  thead th {
+    border-bottom: 1px solid var(--ink);
+    font-weight: 560;
+  }
+
+  tbody th {
+    font-weight: 560;
+    white-space: nowrap;
+  }
+
+  td {
+    color: var(--graphite);
+  }
+</style>

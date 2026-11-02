@@ -52,7 +52,7 @@ for (const file of pages.sort()) {
   if (/[㐀-鿿豈-﫿]/.test(html)) fail(page, 'Chinese characters in HTML')
   if (/—/.test(body)) fail(page, 'em dash in text')
   for (const img of html.match(/<img\b[^>]*>/g) || []) {
-    if (!/\balt="[^"]*"/.test(img)) fail(page, `image without alt: ${img.slice(0, 80)}`)
+    if (!/\balt(="[^"]*"|[\s>\/])/.test(img)) fail(page, `image without alt: ${img.slice(0, 80)}`)
     if (!/\bwidth="\d+"/.test(img) || !/\bheight="\d+"/.test(img)) fail(page, `image without width/height: ${img.slice(0, 80)}`)
   }
   for (const [, href] of html.matchAll(/<a\b[^>]*href="([^"]+)"/g)) {
@@ -61,6 +61,8 @@ for (const file of pages.sort()) {
   }
 }
 
+if (pages.some((f) => readFileSync(f, 'utf8').includes('href="http://localhost')))
+  console.log('\nNote: canonical links point to localhost. Set SITE_URL for any build that goes online.')
 if (pages.some((f) => readFileSync(f, 'utf8').includes('1x00000000000000000000AA')))
   console.log('\nNote: the spam check uses Turnstile\'s test key. Set PUBLIC_TURNSTILE_SITEKEY before the live build.')
 if (missingLinks.size) console.log(`\nLinks to pages not built yet: ${[...missingLinks].sort().join(', ')}`)

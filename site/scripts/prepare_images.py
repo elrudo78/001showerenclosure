@@ -59,13 +59,70 @@ from_review('P0351', 'factory/profile-racks.jpg', (0.12, 0.10, 1, 0.92))
 from_review('P0348', 'factory/packing-line.jpg')
 from_review('P0345', 'factory/cartons.jpg')
 
-# Installed projects, cropped as the review notes say. Nothing from 落地案例图片/中山福立产品落地案例图:
-# the client asked not to link Fuli and Dulifei (docs/client-answers-2026-10.md).
+# Installed projects, cropped as the review notes say. Photos from 落地案例图片/中山福立产品落地案例图 are allowed
+# (user's decision 2026-10-30, as on the team's live site); the names Fuli and FANLY never appear on the site.
 from_review('P0419', 'projects/pivot-black-bathtub.jpg')
 from_review('P0424', 'projects/neo-angle-gold.jpg', (0, 0, 0.82, 1))
 from_review('P0361', 'projects/corner-black.jpg')
 from_review('P0422', 'projects/sliding-bronze.jpg')
 from_review('P0425', 'projects/neo-angle-chrome.jpg')
+from_review('P0382', 'projects/sliding-black-showroom.jpg')
+from_review('P0394', 'projects/sliding-black-marble.jpg', (0.12, 0, 1, 1))
+from_review('P0371', 'projects/multi-panel-black.jpg')
+from_review('P0366', 'projects/hinged-gold-marble.jpg')
+from_review('P0408', 'projects/sliding-black-niche.jpg', (0.12, 0, 1, 1))
+from_review('P0385', 'projects/hinged-champagne.jpg', (0.18, 0, 1, 1))
+from_review('P0387', 'projects/corner-gold-dark.jpg', (0, 0, 1, 0.92))
+from_review('P0395', 'projects/double-hinged-black-marble.jpg')
+from_review('P0380', 'projects/glass-wall-black.jpg')
+from_review('P0413', 'projects/walk-in-black.jpg', (0, 0, 0.75, 1))
+from_review('P0407', 'projects/corner-rain-glass.jpg')
+from_review('P0374', 'projects/curved-black.jpg', (0, 0, 0.9, 0.94))
+from_review('P0377', 'projects/corner-chrome.jpg')
+from_review('P0399', 'projects/marble-chrome.jpg')
+
+# Factory page: glass, profiles and packing. No faces; banners cropped as the review notes say.
+from_review('P0327', 'factory/glass-corner.jpg')
+from_review('P0355', 'factory/glass-racks.jpg')
+from_review('P0356', 'factory/glass-trolleys.jpg')
+from_review('P0358', 'factory/frame-profiles.jpg')
+from_review('P0360', 'factory/parts-rack.jpg', (0, 0.2, 1, 1))
+from_review('P0341', 'factory/foam-packaging.jpg')
+
+# Room photos for product pages.
+from_review('P0253', 'products/d15131-room.jpg')
+from_review('P0305', 'products/yd63-room-black.jpg')
+from_review('P0304', 'products/yd63-room-gold.jpg', (0, 0, 1, 0.9))
+
+
+def trim_white(im, pad=0.0, edge=40):
+    # Ignore a thin dark line along the outer edge of some catalog exports.
+    im = im.crop((edge, edge, im.width - edge, im.height - edge))
+    grey = im.convert('L').point(lambda v: 255 if v < 245 else 0)
+    l, t, r, b = grey.getbbox()
+    px, py = round((r - l) * pad), round((b - t) * pad)
+    return im.crop((max(0, l - px), max(0, t - py), min(im.width, r + px), min(im.height, b + py)))
+
+
+src = review['P0275']['source_path']
+save(trim_white(ImageOps.exif_transpose(Image.open(os.path.join(PUBLIC, src)))), 'products/s26132-room.jpg', f'P0275: public-materials/{src}')
+
+# DLFC01 to DLFC05 (the client's C01 to C05 renders), one scene per finish. DLFC05 reuses the hero images.
+DLFC = os.path.join(PUBLIC, 'shower Enclosures', 'DLFEI -C01~C05产品效果图', 'C01-C05')
+dlfc = {
+    'dlfc01': {'black': 'C01最终效果/雅黑-主图.jpg', 'gold': 'C01最终效果/拉丝金-主图.jpg', 'silver': 'C01最终效果/拉丝银-主图.jpg', 'chrome': 'C01最终效果/镜光-主图.png'},
+    'dlfc02': {'black': 'C02完成效果/Enscape_2025-02-27-13-44-52.png', 'gold': 'C02完成效果/Enscape_2025-02-27-11-20-37.png',
+               'silver': 'C02完成效果/Enscape_2025-02-27-13-42-10.png', 'chrome': 'C02完成效果/Enscape_2025-02-27-13-43-55.png'},
+    'dlfc03': {'black': 'C03完成效果/雅黑.png', 'gold': 'C03完成效果/拉丝金.jpg', 'silver': 'C03完成效果/拉丝银.jpg', 'chrome': 'C03完成效果/镜光.jpg'},
+    'dlfc04': {'black': 'C04最终效果/雅黑.jpg', 'gold': 'C04最终效果/拉丝金.jpg', 'silver': 'C04最终效果/拉丝银.jpg', 'chrome': 'C04最终效果/镜光.jpg'},
+}
+for code, files in dlfc.items():
+    for finish, rel in files.items():
+        im = Image.open(os.path.join(DLFC, rel))
+        if code == 'dlfc02' and im.width != 3840:
+            im = im.resize((3840, round(im.height * 3840 / im.width)), Image.LANCZOS).crop((0, 0, 3840, 2160))
+        save(im, f'dlfc/{code}-{finish}.jpg', f'public-materials/shower Enclosures/DLFEI -C01~C05产品效果图/C01-C05/{rel}')
+
 
 # Dulifei 2025 catalog: every page is one 3477 x 2268 image.
 catalog = pymupdf.open(glob.glob(CATALOG_GLOB)[0])
@@ -87,6 +144,11 @@ for page, code, box in [(3, 't98152', (150, 150, 3320, 1745)), (7, 't93152', (15
                         (9, 's88421', (150, 150, 3095, 1785))]:
     save(catalog_page(page).crop(box), f'catalog/scene-{code}.jpg', f'2025 catalog page {page}: reference/2025年小图册-高端市场.pdf')
 
+# 4:5 product-card crops of those scenes, centred on the enclosure (page coordinates).
+for page, code, box in [(3, 't98152', (300, 150, 1576, 1745)), (7, 't93152', (210, 150, 1486, 1745)),
+                        (9, 's88421', (281, 150, 1589, 1785))]:
+    save(catalog_page(page).crop(box), f'catalog/card-{code}.jpg', f'2025 catalog page {page}: reference/2025年小图册-高端市场.pdf')
+
 # Studio renders: four products per page, top-left, top-right, bottom-left, bottom-right.
 pages = {
     4: 'S98231 L99131 L15431 S12231', 5: 'D15331 D12531 DR D15231', 6: 'D15131 YD63 DB HD',
@@ -97,21 +159,32 @@ regions = [(60, 60, 1080, 1110), (1760, 60, 2820, 1110), (220, 1150, 1080, 2130)
 # Pale grey box behind each render becomes pure white, so renders sit on the page with no edge.
 whiten = [255 if v >= 244 else v for v in range(256)] * 3
 
+
+
+def studio(im, region, code, page):
+    x0, y0, x1, y1 = region
+    bb = im.convert('L').crop(region).point(lambda v: 255 if v < 225 else 0).getbbox()
+    l, t, r, b = bb[0] + x0, bb[1] + y0, bb[2] + x0, bb[3] + y0
+    crop = im.crop((l, t, r, b)).point(whiten)
+    # Same canvas for every product: 4:5, render height 88% of the canvas, centred, bottom-aligned.
+    canvas_h = round((b - t) / 0.88)
+    canvas = Image.new('RGB', (round(canvas_h * 0.8), canvas_h), 'white')
+    if crop.width > canvas.width * 0.92:
+        scale = canvas.width * 0.92 / crop.width
+        crop = crop.resize((round(crop.width * scale), round(crop.height * scale)), Image.LANCZOS)
+    canvas.paste(crop, ((canvas.width - crop.width) // 2, canvas.height - crop.height - round(canvas_h * 0.06)))
+    save(canvas, f'catalog/{code.lower()}.png', f'2025 catalog page {page}: reference/2025年小图册-高端市场.pdf')
+
+
 for page, codes in pages.items():
     im = catalog_page(page)
-    grey = im.convert('L')
-    for code, (x0, y0, x1, y1) in zip(codes.split(), regions):
-        bb = grey.crop((x0, y0, x1, y1)).point(lambda v: 255 if v < 225 else 0).getbbox()
-        l, t, r, b = bb[0] + x0, bb[1] + y0, bb[2] + x0, bb[3] + y0
-        crop = im.crop((l, t, r, b)).point(whiten)
-        # Same canvas for every product: 4:5, render height 88% of the canvas, centred, bottom-aligned.
-        canvas_h = round((b - t) / 0.88)
-        canvas = Image.new('RGB', (round(canvas_h * 0.8), canvas_h), 'white')
-        if crop.width > canvas.width * 0.92:
-            scale = canvas.width * 0.92 / crop.width
-            crop = crop.resize((round(crop.width * scale), round(crop.height * scale)), Image.LANCZOS)
-        canvas.paste(crop, ((canvas.width - crop.width) // 2, canvas.height - crop.height - round(canvas_h * 0.06)))
-        save(canvas, f'catalog/{code.lower()}.png', f'2025 catalog page {page}: reference/2025年小图册-高端市场.pdf')
+    for code, region in zip(codes.split(), regions):
+        studio(im, region, code, page)
+
+# Page 14 has two products on the left half: a single-track panoramic door and a bathroom door.
+p14 = catalog_page(14)
+studio(p14, (220, 150, 1000, 1100), 'SINGLETRACK', 14)
+studio(p14, (220, 1150, 1000, 2130), 'BATHROOMDOOR', 14)
 
 with open(os.path.join(OUT, 'SOURCES.md'), 'w') as f:
     f.write('# Image sources\n\nGenerated by `site/scripts/prepare_images.py`. Review ids are in '
