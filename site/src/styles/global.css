@@ -158,40 +158,80 @@ a:hover {
   font-variant-numeric: tabular-nums;
 }
 
+/* Buttons: on hover the darker colour (--fill) rises from the bottom. Set --bg, --fill, --text, --text-hover to restyle. */
 .button {
+  --bg: var(--glass);
+  --fill: var(--forest);
+  --text: var(--white);
+  --text-hover: var(--white);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 3rem;
   padding: 0 var(--s-24);
-  border: 1px solid var(--glass);
+  border: 1px solid var(--bg);
   border-radius: var(--radius);
-  background: var(--glass);
-  color: var(--white);
+  background-color: var(--bg);
+  background-image: linear-gradient(var(--fill), var(--fill));
+  background-repeat: no-repeat;
+  background-position: 50% 100%;
+  background-size: 100% 0%;
+  color: var(--text);
   font: inherit;
   font-weight: 560;
   font-size: var(--t-17);
   text-decoration: none;
   cursor: pointer;
-  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+  transition:
+    background-size 280ms cubic-bezier(0.3, 0.7, 0.2, 1),
+    border-color 280ms ease,
+    color 200ms ease,
+    translate 120ms ease;
 }
 
 .button:hover {
-  background: var(--forest);
-  border-color: var(--forest);
-  color: var(--white);
+  background-size: 100% 100%;
+  border-color: var(--fill);
+  color: var(--text-hover);
+}
+
+.button:active {
+  translate: 0 1px;
 }
 
 .button.quiet {
-  background: transparent;
+  --bg: transparent;
+  --fill: var(--ink);
+  --text: var(--ink);
   border-color: var(--ink);
-  color: var(--ink);
 }
 
-.button.quiet:hover {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--white);
+/* Room for the sticky header, so sticky side columns are not hidden under it. */
+:root {
+  --header-space: 0px;
+}
+
+:root:has(.site-header:not(.is-hidden)) {
+  --header-space: 4.5rem;
+}
+
+/* Page changes fade across instead of flashing white; product pictures move from the card to the product page.
+   Browsers without support just load the page normally. Off for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+::view-transition-group(*) {
+  animation-duration: 320ms;
+  animation-timing-function: cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+::view-transition-old(.product-pic),
+::view-transition-new(.product-pic) {
+  height: 100%;
+  object-fit: cover;
 }
 
 .visually-hidden {

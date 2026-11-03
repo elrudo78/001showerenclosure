@@ -87,7 +87,7 @@ Decisions with the theme: sage-tinted page (not Sage Garden's beige #F8F7F4, whi
 
 **Spacing.** 4, 8, 12, 16, 24, 32, 48, 64, 96, 128 px. Content width 1320 px, 16 px side margin on phones, 32 px on desktop. Text left-aligned.
 
-**One standout element.** The dimension lines: they draw once when the page loads and repeat as a quiet motif (product pages show real catalog ranges on the same lines). Everything else stays still. Motion only answers a click (finish switch) and is off for people who ask for reduced motion.
+**One standout element.** The dimension lines: they draw once when the page loads and repeat as a quiet motif (product pages show real catalog ranges on the same lines). Other motion is small and only answers the visitor: linked pictures grow 4% on hover, buttons fill from the bottom, pages fade across with the product picture moving into place, the header slides away on scroll down and back on scroll up. All of it is off for people who ask for reduced motion (2026-11-03).
 
 **Avoid.** All-caps labels, a label above every heading, arrows on every link, fade-in on every section, identical rounded cards with soft shadows, em dashes, generic copy.
 

@@ -2,6 +2,14 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-03: Subtle effects
+
+- The user chose effects 1, 3, 5, 6 and 7. Dropped by the user: the DLFC-only black-to-gold card swap (would look odd on 5 of 42 products) and a photo viewer for project and factory photos (they are not links and look fine as they are).
+- Built, all CSS except a 20-line scroll script: (1) linked pictures grow 4% on hover (product cards, homepage layout drawings; drawings grow upwards from the floor line; hover devices only); project and factory photos are not links, so they do not zoom. (3) Page changes fade across (cross-document View Transitions); the product picture moves from its card into place on the product page; the header stays put; off for reduced motion; browsers without support load normally. (5) Hero measuring lines already drew in on load; no change. (6) Header sticks, slides away on scroll down, returns on scroll up or keyboard focus; sticky columns move down to make room. (7) Buttons fill from the bottom on hover, plus a 1px press.
+- Fixed an older bug found by the new test: "More ..." on product pages could list the same model twice in small layouts.
+- Files: `global.css`, `Header.astro`, `ProductCard.astro`, `RangeLineup.astro`, `FinishGallery.astro`, `Specify.astro`, `InquiryForm.astro`, product page. New test `site/scripts/effects-check.mjs` (header, hover, button fill, transitions run, no duplicate transition names on all 53 sitemap pages, reduced motion, touch).
+- Tests: `check:site` passed; 9 unit tests; 193 browser checks; form check; effects check; Lighthouse home 99/100/100/100, D15131 and products 100 all round, CLS 0.
+
 ## 2026-11-03: Sage theme applied; tools decision; next steps recorded
 
 - The user asked about adding subtle effects and using 21st.dev (paid plan, API key). Agreed: no paid tools, no React components; libraries are inspiration only and effects are rebuilt in plain CSS. The 21st.dev key the user pasted in chat was not used or saved; advised to replace it.

@@ -42,7 +42,7 @@ Our branch = upstream `main` (merged at `d2f062b`) + our commits. None of our ch
 
 ## 5. Current state of our branch
 
-**New site:** `site/` (Astro + Cloudflare Worker). Build with `cd site && npm ci && npm run build`. Checks: `npm test` (inquiry checks), `npm run check:site` (raw HTML), `node scripts/browser-check.mjs <url> <out dir>` and `node scripts/form-check.mjs <url> <out dir>` against `npm run worker:dev`. Going live: `site/DEPLOY.md`.
+**New site:** `site/` (Astro + Cloudflare Worker). Build with `cd site && npm ci && npm run build`. Checks: `npm test` (inquiry checks), `npm run check:site` (raw HTML), `node scripts/browser-check.mjs <url> <out dir>` and `node scripts/form-check.mjs <url> <out dir>` and `node scripts/effects-check.mjs <url>` against `npm run worker:dev`. Going live: `site/DEPLOY.md`.
 
 **Old app (team's, untouched until the switch):**
 
@@ -77,10 +77,11 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 - Pinned dependency versions.
 - Deadline: the user wants the project finished within a few days.
 
+**Effects (done 2026-11-03):** hover zoom on linked pictures, smooth page changes with the product picture moving into place, hero lines drawing in, header that hides on scroll down and returns on scroll up, buttons that fill on hover. Dropped by the user: DLFC-only card finish swap, photo viewer. Test: `node scripts/effects-check.mjs <url>`.
+
 **Next, agreed but not started (in this order):**
-1. Subtle effects. The user liked all six; Claude's picks to build first: (1) gentle image zoom on hover for product cards, layout drawings, project and factory photos, with the name turning sage; (2) DLFC cards switch from black to gold on hover; (3) smooth page changes (cross-document View Transitions, no JavaScript); (4) click a project or factory photo to see it large, with arrows and Esc. Optional: (5) sticky header, (6) soft button fill. All CSS-first, off for reduced motion, re-test speed after.
-2. Guides and articles (14 topics in `docs/rebuild/SEO-GEO-TRACKING.md`): postponed by the user until the site work is done. Also offered: IndexNow for Bing.
-3. Deploy to Cloudflare once the user has the project accounts (`site/DEPLOY.md`).
+1. Guides and articles (14 topics in `docs/rebuild/SEO-GEO-TRACKING.md`): postponed by the user until the site work is done. Also offered: IndexNow for Bing.
+2. Deploy to Cloudflare once the user has the project accounts (`site/DEPLOY.md`).
 
 **Tools decision (2026-11-03):** no paid component libraries and no React. 21st.dev, shadcn, Magic UI, Aceternity, React Bits and similar are React + Tailwind; using them would slow the site and look templated. They are used only as inspiration: the user sends a link, Claude rebuilds the effect in plain CSS. No smooth-scroll hijacking (Lenis) and no fade-in-on-scroll everywhere (AOS). The user pasted a 21st.dev API key in chat on 2026-11-03: it was not used or saved anywhere; the user was advised to replace it and, if ever needed, add it as the environment variable `API_KEY_21ST`.
 

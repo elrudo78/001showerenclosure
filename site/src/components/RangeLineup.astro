@@ -82,6 +82,14 @@ const layouts = [
     width: 100%;
     height: auto;
     mix-blend-mode: multiply;
+    transform-origin: 50% 100%; /* grows upwards, still standing on the floor line */
+    transition: scale 500ms cubic-bezier(0.3, 0.7, 0.2, 1);
+  }
+
+  @media (hover: hover) {
+    .lineup a:hover .render {
+      scale: 1.04;
+    }
   }
 
   .label {

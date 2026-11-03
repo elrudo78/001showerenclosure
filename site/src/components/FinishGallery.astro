@@ -6,13 +6,15 @@ import type { ImageMetadata } from 'astro'
 interface Props {
   name: string
   items: { finish: string; src: ImageMetadata }[]
+  /** Matches the product card, so the picture moves from the card into place on page change. */
+  transitionName?: string
 }
-const { name, items } = Astro.props
+const { name, items, transitionName } = Astro.props
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, '-')
 ---
 
 <figure class="gallery">
-  <div class="stage" style={`aspect-ratio:${items[0].src.width} / ${items[0].src.height}`}>
+  <div class="stage" style={`aspect-ratio:${items[0].src.width} / ${items[0].src.height}${transitionName ? `;view-transition-name:${transitionName}` : ''}`}>
     {items.map((it, i) => (
       <Picture
         src={it.src}
@@ -52,6 +54,7 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, '-')
     position: relative;
     overflow: hidden;
     background: var(--stone);
+    view-transition-class: product-pic;
   }
 
   .stage :global(.pic),

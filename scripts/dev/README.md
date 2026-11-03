@@ -41,7 +41,7 @@ The proxy port and CA change when the session restarts, so always read them from
 - `audit-evidence.mjs`: element screenshots used in `docs/audit/`.
 - `screenshot-local.mjs <url> <prefix>`: desktop and mobile full-page screenshots of a local server.
 
-Lighthouse: install into a scratch folder (`npm install lighthouse@12`) and run with `CHROME_PATH=/opt/pw-browsers/chromium-*/chrome-linux/chrome` and `--chrome-flags="--headless=new --no-sandbox --proxy-server=$HTTPS_PROXY --ignore-certificate-errors-spki-list=$SPKI_PIN"`.
+Lighthouse: install into a scratch folder (`npm install lighthouse@12`) and run with `CHROME_PATH=/opt/pw-browsers/chromium-*/chrome-linux*/chrome` and `--chrome-flags="--headless=new --no-sandbox --proxy-server=$HTTPS_PROXY --ignore-certificate-errors-spki-list=$SPKI_PIN"`.
 
 ## Gotchas
 

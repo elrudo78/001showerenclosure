@@ -419,14 +419,10 @@ const page = Astro.url.pathname
   }
 
   .submit .button {
-    background: var(--white);
-    border-color: var(--white);
-    color: var(--ink);
-  }
-
-  .submit .button:hover {
-    background: #c2d1be;
-    border-color: #c2d1be;
+    --bg: var(--white);
+    --fill: #c2d1be;
+    --text: var(--ink);
+    --text-hover: var(--ink);
   }
 
   .note {
