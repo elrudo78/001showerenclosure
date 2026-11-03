@@ -3,15 +3,21 @@ import Base from '../../layouts/Base.astro'
 import Breadcrumbs from '../../components/Breadcrumbs.astro'
 import ProductGrid from '../../components/ProductGrid.astro'
 import InquiryForm from '../../components/InquiryForm.astro'
-import { layouts, layoutUrl, productsIn, products, productUrl } from '../../data/catalog'
+import { layouts, layoutUrl, productsIn, products } from '../../data/catalog'
 import { breadcrumbLd } from '../../data/site'
+
+// An overview, not the full list: four models per layout, then a link to the layout's own page
+// (all its models and the comparison table).
+const PREVIEW = 4
+const groups = layouts.map((l) => {
+  const all = productsIn(l.id)
+  return { layout: l, all, shown: all.slice(0, PREVIEW), compare: all.filter((p) => p.specs).length > 1 }
+})
 
 const crumbs = [
   { name: 'Home', href: '/' },
   { name: 'Products', href: '/products/' },
 ]
-// Highlight the pill for the layout being shown (the section in the address, e.g. #sliding-shower-doors), or "All".
-const activePill = `${layouts.map((l) => `.catalog:has(#${l.slug}:target) .filters a[href="#${l.slug}"]`).join(',')},.catalog:not(:has(.group:target)) .filters a[href="#all"]{background:var(--ink);border-color:var(--ink);color:var(--white)}`
 const jsonLd = [
   breadcrumbLd(crumbs, Astro.site),
   {
@@ -20,8 +26,8 @@ const jsonLd = [
     url: new URL('/products/', Astro.site).href,
     mainEntity: {
       '@type': 'ItemList',
-      numberOfItems: products.length,
-      itemListElement: products.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.name, url: new URL(productUrl(p), Astro.site).href })),
+      numberOfItems: layouts.length,
+      itemListElement: layouts.map((l, i) => ({ '@type': 'ListItem', position: i + 1, name: l.name, url: new URL(layoutUrl(l), Astro.site).href })),
     },
   },
 ]
@@ -34,46 +40,65 @@ const jsonLd = [
 >
   <Breadcrumbs items={crumbs} />
   <section class="wrap intro-block">
-    <h1>Shower enclosures and sliding doors</h1>
-    <p class="lead">
-      {products.length} models, grouped by layout. Every model has a standard size and a range it can be made to, so
-      send us your measurements with the model you like.
-    </p>
-  </section>
+    <div class="intro-text">
+      <h1>Shower enclosures and sliding doors</h1>
+      <p class="lead">
+        {products.length} models in {layouts.length} layouts. Every model has a standard size and a range it can be made
+        to. Open a layout to see all its models and compare their sizes.
+      </p>
+    </div>
 
-  <div class="catalog" id="all">
-    <Fragment set:html={`<style>${activePill}</style>`} />
-    <nav class="filters" aria-label="Show one layout">
-      <ul class="wrap">
-        <li><a href="#all">All <span class="num">{products.length}</span></a></li>
-        {layouts.map((l) => (
+    <nav class="index" aria-label="Layouts">
+      <ol>
+        {groups.map(({ layout: l, all }) => (
           <li>
-            <a href={`#${l.slug}`}>{l.short} <span class="num">{productsIn(l.id).length}</span></a>
+            <a href={`#${l.slug}`}>
+              <span class="i-name">{l.short}</span>
+              <span class="i-tag">{l.tagline}</span>
+              <span class="i-count num">{all.length === 1 ? '1 model' : `${all.length} models`}</span>
+            </a>
           </li>
         ))}
-      </ul>
+      </ol>
     </nav>
+  </section>
 
-    {
-      layouts.map((l) => (
-        <section class="wrap group" id={l.slug} aria-labelledby={`h-${l.slug}`}>
-          <div class="group-head">
-            <h2 id={`h-${l.slug}`}>
-              <a href={layoutUrl(l)}>{l.name}</a>
-            </h2>
-            <p class="intro">{l.intro}</p>
-          </div>
-          <ProductGrid products={productsIn(l.id)} />
-        </section>
-      ))
-    }
-  </div>
+  {
+    groups.map(({ layout: l, all, shown, compare }) => (
+      <section class="wrap group" id={l.slug} aria-labelledby={`h-${l.slug}`}>
+        <div class="group-head">
+          <h2 id={`h-${l.slug}`}>
+            <a href={layoutUrl(l)}>{l.name}</a>
+          </h2>
+          <p class="intro">{l.intro}</p>
+        </div>
+        <ProductGrid products={shown} />
+        {all.length > PREVIEW ? (
+          <p class="more">
+            <a class="button" href={layoutUrl(l)} aria-label={`See all ${all.length} ${l.name}`}>
+              See all {all.length} models
+            </a>
+          </p>
+        ) : (
+          compare && (
+            <p class="more">
+              <a class="button" href={`${layoutUrl(l)}#compare`} aria-label={`Compare the ${all.length} ${l.name}`}>
+                Compare the {all.length} models
+              </a>
+            </p>
+          )
+        )}
+      </section>
+    ))
+  }
 
   <InquiryForm />
 </Base>
 
 <style>
   .intro-block {
+    display: grid;
+    gap: var(--s-48);
     padding-block: var(--s-32) var(--s-48);
   }
 
@@ -81,63 +106,49 @@ const jsonLd = [
     margin-top: var(--s-24);
   }
 
-  /* Layout filter: pills that stay under the header while scrolling. A pill links to its section;
-     while a section is in the address (:target), only that section shows. */
-  .filters {
-    position: sticky;
-    top: var(--header-space);
-    z-index: 10;
-    background: var(--white);
-    box-shadow: 0 1px 0 var(--line);
-    transition: top 280ms cubic-bezier(0.3, 0.7, 0.2, 1);
-  }
-
-  .filters ul {
-    display: flex;
-    gap: var(--s-8);
-    margin: 0 auto;
-    padding-block: var(--s-12);
+  /* Index of layouts: one row each, with the name, a few words and how many models. */
+  .index ol {
+    margin: 0;
+    padding: 0;
     list-style: none;
-    overflow-x: auto;
-    scrollbar-width: none;
+    border-top: 1px solid var(--ink);
   }
 
-  .filters li {
-    flex: none;
+  .index li {
+    border-bottom: 1px solid var(--line);
   }
 
-  .filters a {
-    display: inline-flex;
-    align-items: baseline;
-    gap: var(--s-8);
-    padding: var(--s-8) var(--s-16);
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    font-weight: 560;
+  .index a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--s-4) var(--s-16);
+    padding: var(--s-12) var(--s-8);
+    margin-inline: calc(var(--s-8) * -1);
     text-decoration: none;
-    white-space: nowrap;
-    transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
   }
 
-  .filters a:hover {
-    background: var(--pill);
-    border-color: var(--pill-current);
-    color: var(--ink);
+  .i-name {
+    font-weight: 560;
+    font-stretch: var(--wide);
   }
 
-  .filters .num {
+  .i-tag {
+    grid-column: 1;
+    color: var(--graphite);
     font-size: var(--t-14);
-    font-weight: 400;
-    opacity: 0.75;
   }
 
-  .catalog:has(.group:target) .group:not(:target) {
-    display: none;
+  .i-count {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+    color: var(--graphite);
+    font-size: var(--t-14);
   }
 
   .group {
     padding-block: var(--s-48) var(--section);
-    scroll-margin-top: calc(var(--header-space) + 4rem);
+    scroll-margin-top: calc(var(--header-space) + var(--s-16));
   }
 
   .group-head {
@@ -154,12 +165,33 @@ const jsonLd = [
     text-decoration: none;
   }
 
-  .group-head h2 a:hover {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
+  .more {
+    margin-top: var(--s-32);
+  }
+
+  @media (min-width: 48rem) {
+    .index a {
+      grid-template-columns: 14rem minmax(0, 1fr) auto;
+      align-items: baseline;
+    }
+
+    .i-tag {
+      grid-column: 2;
+    }
+
+    .i-count {
+      grid-column: 3;
+      grid-row: auto;
+    }
   }
 
   @media (min-width: 64rem) {
+    .intro-block {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: start;
+      gap: var(--s-64);
+    }
+
     .group-head {
       grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
       align-items: end;

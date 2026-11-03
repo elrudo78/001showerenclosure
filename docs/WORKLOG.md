@@ -2,6 +2,15 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-03: Third round from the user's review
+
+- Dark theme removed completely (tokens, header button, early script, theme-color pair, plates, logo filter, test); the user prefers the muted light page.
+- FAQ: own page `/faq/` (FAQPage data moved there from Contact), FAQ link in the footer of every page, sitemap and `llms.txt` updated; Contact keeps a one-line link.
+- Products page: filters removed. Now a vertical index of the six layouts (name, tagline from `catalog.ts`, model count), then four models per layout and "See all N models" (or "Compare the N models" where a layout has four or fewer). Its ItemList now lists the six layout pages.
+- Layout pages: "Compare the N models" button (jumps to `#compare`) beside "Request a quote".
+- Text links: light box (3px corners) rising from the bottom on hover, everywhere except cards, buttons, the logo, the homepage drawings and the top bar.
+- Tests: `check:site` passed (56 pages); 10 unit tests; all browser checks; form check; effects check (now covers the products overview, the Compare button and the link hover). Lighthouse home 99, products, pivot layout and FAQ 100 across the board, CLS 0.
+
 ## 2026-11-03: Second round from the user's review
 
 - Compared with the team's draft (lively-frangipane Netlify site). Taken: a WhatsApp field and "how it works" steps. Not taken until the team confirms: OEM/ODM wording and the glass suppliers' certificates. The rest of their copy is generic.

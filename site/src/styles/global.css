@@ -12,13 +12,8 @@
   --line: #d5dbcf;
   --pill: #e4e9df; /* nav hover */
   --pill-current: #d3dbcc; /* nav: the page you are on */
-  --plate: var(--white); /* behind line drawings: light in both themes */
-  --tile: var(--stone); /* behind hardware close-ups */
-  --logo-filter: none;
-  --button-hover: var(--forest);
-  --form-bg: var(--forest);
+  --link-hover: #dce4d5; /* box behind text links on hover */
   --radius: 4px;
-  color-scheme: light;
 
   --font: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
   --wide: 118%;
@@ -48,48 +43,6 @@
   --page: 82.5rem;
   --gutter: 1rem;
   --section: var(--s-64);
-}
-
-/* Dark theme: follows the device setting, unless the visitor picked a theme with the header button
-   (stored as data-theme on <html>). The same values appear twice because CSS cannot share them. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --white: #131a16;
-    --stone: #1a221d;
-    --ink: #e4eae0;
-    --graphite: #a9b5ab;
-    --glass: #a8c2ae;
-    --glass-tint: #263129;
-    --line: #2b3730;
-    --pill: #212b24;
-    --pill-current: #2f3d33;
-    --plate: #e9ede5;
-    --tile: #e9ede5;
-    --logo-filter: invert(1) brightness(1.1);
-  --tile: #e9ede5;
-  --logo-filter: invert(1) brightness(1.1);
-    --button-hover: #cadccd;
-    --form-bg: #1d2922;
-    color-scheme: dark;
-  }
-}
-
-:root[data-theme='dark'] {
-  --white: #131a16;
-  --stone: #1a221d;
-  --ink: #e4eae0;
-  --graphite: #a9b5ab;
-  --glass: #a8c2ae;
-  --glass-tint: #263129;
-  --line: #2b3730;
-  --pill: #212b24;
-  --pill-current: #2f3d33;
-  --plate: #e9ede5;
-  --tile: #e9ede5;
-  --logo-filter: invert(1) brightness(1.1);
-  --button-hover: #cadccd;
-  --form-bg: #1d2922;
-  color-scheme: dark;
 }
 
 @media (min-width: 48rem) {
@@ -175,6 +128,28 @@ a:hover {
   color: var(--glass);
 }
 
+/* Text links: on hover a soft box rises from the bottom, like the button fill. Square with small corners,
+   so it fits tight spaces (the pill shape is kept for the top bar). Cards, buttons, the logo and the
+   homepage layout drawings have their own hover and opt out. */
+a:where(:not(.button, .card, .brand, .skip, .lineup a, .nav a, .menu a)) {
+  padding: 0.1em 0.25em;
+  margin: -0.1em -0.25em;
+  border-radius: 3px;
+  background-image: linear-gradient(var(--link-hover), var(--link-hover));
+  background-repeat: no-repeat;
+  background-position: 50% 100%;
+  background-size: 100% 0%;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition:
+    background-size 220ms cubic-bezier(0.3, 0.7, 0.2, 1),
+    color 160ms ease;
+}
+
+a:where(:not(.button, .card, .brand, .skip, .lineup a, .nav a, .menu a)):hover {
+  background-size: 100% 100%;
+}
+
 :focus-visible {
   outline: 2px solid var(--glass);
   outline-offset: 3px;
@@ -211,7 +186,7 @@ a:hover {
 /* Buttons: on hover the darker colour (--fill) rises from the bottom. Set --bg, --fill, --text, --text-hover to restyle. */
 .button {
   --bg: var(--glass);
-  --fill: var(--button-hover);
+  --fill: var(--forest);
   --text: var(--white);
   --text-hover: var(--white);
   display: inline-flex;

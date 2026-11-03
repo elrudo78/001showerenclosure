@@ -107,28 +107,25 @@ await page.click('.swatch-brushed-gold')
 await wait(page, 600)
 report((await page.$eval('.hw-list li .hw-brushed-gold', (i) => getComputedStyle(i).opacity)) === '1', 'hardware close-ups switch with the finish')
 
-// Layout filter on the Products page
+// Products page: an index, four models per layout and a link to the full layout page
 await page.goto(`${url}products/`, { waitUntil: 'load' })
-await page.click('.filters a[href="#neo-angle-shower-enclosures"]')
-await wait(page)
-const shown = await page.$$eval('.group', (gs) => gs.filter((g) => getComputedStyle(g).display !== 'none').map((g) => g.id))
-report(shown.length === 1 && shown[0] === 'neo-angle-shower-enclosures', `filter shows only the chosen layout (${shown.join(', ')})`)
-await page.click('.filters a[href="#all"]')
-await wait(page)
-report((await page.$$eval('.group', (gs) => gs.filter((g) => getComputedStyle(g).display !== 'none').length)) === 6, '"All" shows every layout again')
+const groups = await page.$$eval('.group', (gs) => gs.map((g) => ({ id: g.id, cards: g.querySelectorAll('.card').length, more: g.querySelector('.more a')?.getAttribute('href') || '' })))
+report(groups.length === 6 && groups.every((g) => g.cards <= 4), `products page shows at most 4 models per layout (${groups.map((g) => g.cards).join(', ')})`)
+report(groups[0].more === '/products/sliding-shower-doors/', 'a long layout links to its full page')
+report((await page.$$('.index li')).length === 6, 'products page has an index of the 6 layouts')
 
-// Theme button: switches, and the choice is remembered on the next page
-await page.goto(url, { waitUntil: 'load' })
-const bg = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor)
-const lightBg = await bg()
-await page.click('[data-theme-toggle]')
-await wait(page, 700)
-const darkBg = await bg()
-await page.goto(`${url}factory/`, { waitUntil: 'load' })
-report(lightBg !== darkBg && (await bg()) === darkBg, `theme button switches to dark and remembers it (${lightBg} to ${darkBg})`)
-await page.click('[data-theme-toggle]')
-await wait(page, 700)
-report((await bg()) === lightBg, 'theme button switches back to light')
+// Layout page: the Compare button jumps to the comparison table
+await page.goto(`${url}products/neo-angle-shower-enclosures/`, { waitUntil: 'load' })
+await page.click('a[href="#compare"]')
+await wait(page, 900)
+const tableTop = await page.$eval('#compare', (c) => Math.round(c.getBoundingClientRect().top))
+report(tableTop >= 0 && tableTop < 200, `Compare button scrolls to the table (top at ${tableTop}px)`)
+
+// Text links: a light box rises behind them on hover
+await page.goto(`${url}faq/`, { waitUntil: 'load' })
+await page.hover('footer a[href="/faq/"]')
+await wait(page, 400)
+report((await page.$eval('footer a[href="/faq/"]', (a) => getComputedStyle(a).backgroundSize)) === '100% 100%', 'text links show the hover box')
 
 // Reduced motion: no transition, no zoom
 const calm = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' })

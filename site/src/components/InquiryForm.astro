@@ -249,8 +249,9 @@ const page = Astro.url.pathname
 
 <style>
   .inquiry {
-    background: var(--form-bg);
-    color: #f5f6f1;
+    background: var(--forest);
+    --link-hover: rgb(255 255 255 / 0.14); /* light text on the dark band */
+    color: var(--white);
   }
 
   .inquiry .intro {
@@ -291,7 +292,7 @@ const page = Astro.url.pathname
     border: 1px solid #82918a;
     border-radius: var(--radius);
     background: #36463c;
-    color: #f5f6f1;
+    color: var(--white);
     font: inherit;
   }
 
@@ -401,15 +402,15 @@ const page = Astro.url.pathname
   }
 
   .done-text strong {
-    color: #f5f6f1;
+    color: var(--white);
     font-weight: 560;
     overflow-wrap: anywhere;
   }
 
   .done .again {
-    --fill: #f5f6f1;
-    --text: #f5f6f1;
-    --text-hover: #1e2420;
+    --fill: var(--white);
+    --text: var(--white);
+    --text-hover: var(--ink);
     margin-top: var(--s-8);
     border-color: #c9d2c4;
   }
@@ -422,10 +423,10 @@ const page = Astro.url.pathname
   }
 
   .submit .button {
-    --bg: #f5f6f1;
+    --bg: var(--white);
     --fill: #c2d1be;
-    --text: #1e2420;
-    --text-hover: #1e2420;
+    --text: var(--ink);
+    --text-hover: var(--ink);
   }
 
   .note {

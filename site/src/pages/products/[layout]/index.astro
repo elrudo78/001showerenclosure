@@ -38,6 +38,10 @@ const jsonLd = [
   <section class="wrap top">
     <h1>{layout.title}</h1>
     <p class="lead">{layout.intro}</p>
+    <p class="actions">
+      {withSpecs.length > 1 && <a class="button" href="#compare">Compare the {withSpecs.length} models</a>}
+      <a class:list={['button', { quiet: withSpecs.length > 1 }]} href="#inquiry">Request a quote</a>
+    </p>
   </section>
 
   <section class="wrap models" aria-labelledby="models-title">
@@ -47,7 +51,7 @@ const jsonLd = [
 
   {
     withSpecs.length > 1 && (
-      <section class="wrap compare" aria-labelledby="compare-title">
+      <section class="wrap compare" id="compare" aria-labelledby="compare-title">
         <h2 id="compare-title">Compare the models</h2>
         <p class="intro">Standard sizes and made-to-measure ranges as printed in our 2025 catalog.</p>
         <div class="scroll" role="region" aria-labelledby="compare-title" tabindex="0">
@@ -92,12 +96,20 @@ const jsonLd = [
     margin-top: var(--s-24);
   }
 
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-12);
+    margin-top: var(--s-32);
+  }
+
   .models {
     padding-bottom: var(--section);
   }
 
   .compare {
     padding-bottom: var(--section);
+    scroll-margin-top: calc(var(--header-space) + var(--s-32));
   }
 
   .scroll {

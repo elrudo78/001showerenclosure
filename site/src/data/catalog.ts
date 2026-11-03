@@ -22,6 +22,8 @@ export interface Layout {
   slug: string
   name: string
   short: string
+  /** A few words for the index on the Products page. */
+  tagline: string
   title: string
   description: string
   intro: string
@@ -33,6 +35,7 @@ export const layouts: Layout[] = [
     slug: 'sliding-shower-doors',
     name: 'Sliding shower doors',
     short: 'Sliding doors',
+    tagline: 'Nothing swings into the room',
     title: 'Sliding shower doors, made to measure',
     description:
       'Glass sliding shower doors from Dulifei: two-panel, three-panel and fixed-plus-sliding designs in 8 mm or 10 mm glass, made to your width and height.',
@@ -44,6 +47,7 @@ export const layouts: Layout[] = [
     slug: 'neo-angle-shower-enclosures',
     name: 'Neo-angle shower enclosures',
     short: 'Neo-angle corners',
+    tagline: 'Diamond corner, door on the angle',
     title: 'Neo-angle corner shower enclosures',
     description:
       'Five-sided neo-angle (diamond) corner shower enclosures from Dulifei with pivot, hinged or sliding doors, 1100 × 1100 mm standard and made to measure.',
@@ -55,6 +59,7 @@ export const layouts: Layout[] = [
     slug: 'pivot-shower-doors',
     name: 'Pivot and hinged shower screens',
     short: 'Pivot and hinged doors',
+    tagline: 'Straight screen, wall to wall',
     title: 'Pivot and hinged shower screens',
     description:
       'Straight glass shower screens with a pivot or hinged door and fixed panels, 1600 × 2600 mm standard, made to measure up to 2800 mm high.',
@@ -66,6 +71,7 @@ export const layouts: Layout[] = [
     slug: 'l-and-t-shape-enclosures',
     name: 'L-shape and T-shape enclosures',
     short: 'L and T shapes',
+    tagline: 'Two sides of a corner, or a room divider',
     title: 'L-shape and T-shape shower enclosures',
     description:
       'Corner and T-shaped glass shower enclosures from Dulifei, including a curved-glass corner model, made to measure up to 3000 mm high.',
@@ -77,6 +83,7 @@ export const layouts: Layout[] = [
     slug: 'panoramic-sliding-systems',
     name: 'Panoramic sliding systems',
     short: 'Panoramic sliding',
+    tagline: 'Tall panels for wide openings',
     title: 'Panoramic sliding glass systems',
     description:
       'Panoramic sliding glass doors from Dulifei with 600 to 1200 mm panels, up to 3000 mm high, in brushed grey, black, rose gold and champagne gold.',
@@ -88,6 +95,7 @@ export const layouts: Layout[] = [
     slug: 'bathroom-doors',
     name: 'Glass bathroom doors',
     short: 'Bathroom doors',
+    tagline: 'A framed glass door for the bathroom',
     title: 'Glass bathroom doors',
     description: 'A framed glass bathroom door with laminated wired glass, 800 mm wide and made up to 2800 mm high.',
     intro: 'A single framed door for the bathroom itself, with laminated glass. It opens inwards or outwards.',

@@ -18,7 +18,8 @@ export const GET: APIRoute = ({ site }) => {
     `- [All products](${abs('/products/')}): the full range by layout`,
     `- [Factory](${abs('/factory/')}): glass, aluminium profiles and packing at the factory in Zhongshan`,
     `- [Projects](${abs('/projects/')}): photos of installed enclosures`,
-    `- [Request a quote](${abs('/contact/')}): inquiry form and common questions`,
+    `- [Request a quote](${abs('/contact/')}): inquiry form`,
+    `- [FAQ](${abs('/faq/')}): common questions about sizes, glass, finishes and ordering`,
     '',
   ]
   for (const l of layouts) {

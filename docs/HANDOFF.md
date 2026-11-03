@@ -77,11 +77,14 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 - Pinned dependency versions.
 - Deadline: the user wants the project finished within a few days.
 
-**Second round (done 2026-11-03), from the user's review of the Netlify preview and the team's draft:** Home link and nav pills; Products page filter pills; sharp DLFC card crops plus a "4 finishes" tag; finish switcher as pill buttons with "Try the frame finishes" and a one-time demo; smooth product opening (Chrome/Edge prepare the next page on hover; pictures not yet loaded fade in instead of flying in empty); optional WhatsApp or phone field (D1 migration `0002_whatsapp.sql`, link in the sales email); "How an order works" (4 factual steps) on Home and Contact; hardware close-ups on DLFC01 and DLFC04 that follow the chosen finish; dark theme with a header button. Kept sage as the theme. Not used: the client's 4 product videos (Chinese captions burned in, or people's faces).
+**Second round (done 2026-11-03), from the user's review of the Netlify preview and the team's draft:** Home link and nav pills; Products page filter pills; sharp DLFC card crops plus a "4 finishes" tag; finish switcher as pill buttons with "Try the frame finishes" and a one-time demo; smooth product opening (Chrome/Edge prepare the next page on hover; pictures not yet loaded fade in instead of flying in empty); optional WhatsApp or phone field (D1 migration `0002_whatsapp.sql`, link in the sales email); "How an order works" (4 factual steps) on Home and Contact; hardware close-ups on DLFC01 and DLFC04 that follow the chosen finish; a dark theme (removed again by the user the same day). Kept sage, light only. Not used: the client's 4 product videos (Chinese captions burned in, or people's faces).
+
+**Third round (done 2026-11-03):** dark theme removed; FAQ moved to its own page `/faq/` with a footer link on every page (Contact links to it); Products page is now an overview (vertical index of layouts with a few words each, four models per layout, "See all N models" to the layout page); "Compare the N models" button on layout pages; hover box on all text links. Waiting for the user's call: the Contact line "The more you send, the faster the quote" and the model counts under the homepage layout drawings.
 
 **Effects (done 2026-11-03):** hover zoom on linked pictures, smooth page changes with the product picture moving into place, hero lines drawing in, header that hides on scroll down and returns on scroll up, buttons that fill on hover. Dropped by the user: DLFC-only card finish swap, photo viewer. Test: `node scripts/effects-check.mjs <url>`.
 
 **Next, agreed but not started (in this order):**
+0. Tomorrow (user): test every size (phone, tablet, laptop, Full HD, 2K, 4K), write a checklist of AI-site mistakes and check against it, plus security and the remaining checks.
 1. Guides and articles (14 topics in `docs/rebuild/SEO-GEO-TRACKING.md`): postponed by the user until the site work is done. Also offered: IndexNow for Bing.
 2. Deploy to Cloudflare once the user has the project accounts (`site/DEPLOY.md`).
 

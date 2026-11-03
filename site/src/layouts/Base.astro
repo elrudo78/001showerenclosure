@@ -38,8 +38,6 @@ const fontFace =`@font-face{font-family:'Archivo';font-style:normal;font-display
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- The visitor's chosen theme, applied before anything is drawn so the page never flashes the other one. -->
-    <script is:inline>try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}catch(e){}</script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -47,8 +45,7 @@ const fontFace =`@font-face{font-family:'Archivo';font-style:normal;font-display
     <link rel="preload" href={archivo} as="font" type="font/woff2" crossorigin />
     <style is:inline set:html={fontFace} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#f5f6f1" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#131a16" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f5f6f1" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Dulifei Shower Enclosures" />
     <meta property="og:title" content={title} />
