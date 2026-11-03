@@ -6,6 +6,7 @@ const disposable = new Set(blocklist)
 export const LIMITS = {
   name: 100,
   email: 254,
+  whatsapp: 40,
   company: 150,
   country: 80,
   layout: 60,
@@ -26,10 +27,11 @@ export const MESSAGES = {
   emailNoMail: (domain) =>
     `This email address cannot receive messages: ${domain} does not accept email. Check for a typo, or use another address.`,
   emailTypo: (suggestion) => `Did you mean ${suggestion}? Check the address and try again.`,
+  phone: 'Enter a number with its country code, for example +44 7700 900123.',
   tooLong: (label, max) => `${label} is too long. Please keep it under ${max} characters.`,
 }
 
-const LABELS = { name: 'Your name', company: 'Company', country: 'Country', layout: 'Layout', sizes: 'Sizes', message: 'Message' }
+const LABELS = { name: 'Your name', whatsapp: 'WhatsApp or phone', company: 'Company', country: 'Country', layout: 'Layout', sizes: 'Sizes', message: 'Message' }
 
 // Big free providers, to catch typos such as gmial.com. Legitimate look-alikes are listed so they are never flagged.
 const POPULAR = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com']
@@ -44,6 +46,13 @@ export function normalise(input) {
   }
   out.email = out.email.toLowerCase()
   return out
+}
+
+/** Optional WhatsApp or phone number: digits with spaces, brackets, dots or dashes, 6 to 15 digits, optional leading +. */
+export function phoneOk(value) {
+  if (!/^\+?[\d\s().-]{6,30}$/.test(value)) return false
+  const digits = value.replace(/\D/g, '').length
+  return digits >= 6 && digits <= 15
 }
 
 /** Edit distance with adjacent swaps counted as one change. */
@@ -127,6 +136,8 @@ export async function checkInquiry(input, { fetchImpl = fetch } = {}) {
   for (const [field, max] of Object.entries(LIMITS)) {
     if (field !== 'email' && data[field].length > max) errors[field] = MESSAGES.tooLong(LABELS[field] || field, max)
   }
+
+  if (data.whatsapp && !errors.whatsapp && !phoneOk(data.whatsapp)) errors.whatsapp = MESSAGES.phone
 
   let mail = 'not-run'
   if (!data.email) errors.email = MESSAGES.emailMissing

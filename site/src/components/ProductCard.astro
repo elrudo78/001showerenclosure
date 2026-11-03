@@ -8,18 +8,30 @@ interface Props {
 }
 const { product, headingLevel = 'h3' } = Astro.props
 const Heading = headingLevel
-const line = product.specs ? `Standard ${product.specs.standard}` : 'Made to your sizes, four frame finishes'
+const line = product.specs ? `Standard ${product.specs.standard}` : 'Made to your sizes'
+// Photos carry fine detail, so they get larger files and higher quality than the line drawings.
+const photo = product.imageIsPhoto
+const finishes = product.finishGallery?.length
 ---
 
 <a class="card" href={productUrl(product)}>
   <span class:list={['frame', { photo: product.imageIsPhoto }]} style={`view-transition-name:product-${product.slug}`}>
     <Image
-      src={product.image}
+      src={product.cardImage ?? product.image}
       alt=""
-      widths={[280, 420, 560]}
+      widths={photo ? [320, 480, 640, 800] : [280, 420, 560]}
+      quality={photo ? 85 : undefined}
       sizes="(min-width: 64rem) 22vw, (min-width: 40rem) 30vw, 46vw"
       class="img"
     />
+    {
+      finishes && (
+        <span class="finish-tag">
+          <span class="dots" aria-hidden="true"><i class="d-black" /><i class="d-gold" /><i class="d-silver" /><i class="d-chrome" /></span>
+          {finishes} finishes
+        </span>
+      )
+    }
   </span>
   <Heading class="name">{product.name}</Heading>
   <span class="line num">{line}</span>
@@ -35,12 +47,13 @@ const line = product.specs ? `Standard ${product.specs.standard}` : 'Made to you
   }
 
   .frame {
+    position: relative;
     display: block;
     aspect-ratio: 4 / 5;
     margin-bottom: var(--s-8);
     border-bottom: 1px solid var(--ink);
     overflow: hidden;
-    background: var(--white);
+    background: var(--plate);
     view-transition-class: product-pic;
   }
 
@@ -63,6 +76,51 @@ const line = product.specs ? `Standard ${product.specs.standard}` : 'Made to you
     .card:hover .img {
       scale: 1.04;
     }
+  }
+
+  /* DLFC models: tells visitors these can be seen in four finishes. */
+  .finish-tag {
+    position: absolute;
+    left: var(--s-8);
+    bottom: var(--s-8);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-8);
+    padding: var(--s-4) var(--s-12) var(--s-4) var(--s-8);
+    border-radius: 999px;
+    background: rgb(245 246 241 / 0.92);
+    color: #1e2420;
+    font-size: var(--t-14);
+    font-weight: 560;
+    line-height: 1.4;
+  }
+
+  .dots {
+    display: inline-flex;
+  }
+
+  .dots i {
+    width: 0.75rem;
+    height: 0.75rem;
+    margin-right: -0.2rem;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1.5px rgb(245 246 241), inset 0 0 0 1px rgb(0 0 0 / 0.15);
+  }
+
+  .d-black {
+    background: linear-gradient(135deg, #3a3c3f, #17181a);
+  }
+
+  .d-gold {
+    background: linear-gradient(135deg, #e3c88f, #b08a4f);
+  }
+
+  .d-silver {
+    background: linear-gradient(135deg, #e4e6e7, #a9adb0);
+  }
+
+  .d-chrome {
+    background: linear-gradient(135deg, #ffffff, #7f878c);
   }
 
   .name {

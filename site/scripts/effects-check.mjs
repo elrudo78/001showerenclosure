@@ -87,6 +87,49 @@ for (const p of paths) {
 }
 report(paths.length > 50 && dupes === 0, `no duplicate transition names on ${paths.length} pages`)
 
+// Finish demo: the hero runs through the finishes once by itself, then rests on black
+{
+  const demo = await browser.newPage({ viewport: { width: 1440, height: 900 } })
+  await demo.goto(url, { waitUntil: 'load' })
+  const seen = new Set()
+  for (let i = 0; i < 30; i++) {
+    seen.add(await demo.$eval('.hero input:checked', (i) => i.value))
+    await wait(demo, 250)
+  }
+  const end = await demo.$eval('.hero input:checked', (i) => i.value)
+  report(seen.size === 4 && end === 'black', `finish demo shows all four finishes once (${[...seen].join(', ')}; ends on ${end})`)
+  await demo.close()
+}
+
+// Hardware close-ups follow the chosen finish
+await page.goto(`${url}products/sliding-shower-doors/dlfc04/`, { waitUntil: 'load' })
+await page.click('.swatch-brushed-gold')
+await wait(page, 600)
+report((await page.$eval('.hw-list li .hw-brushed-gold', (i) => getComputedStyle(i).opacity)) === '1', 'hardware close-ups switch with the finish')
+
+// Layout filter on the Products page
+await page.goto(`${url}products/`, { waitUntil: 'load' })
+await page.click('.filters a[href="#neo-angle-shower-enclosures"]')
+await wait(page)
+const shown = await page.$$eval('.group', (gs) => gs.filter((g) => getComputedStyle(g).display !== 'none').map((g) => g.id))
+report(shown.length === 1 && shown[0] === 'neo-angle-shower-enclosures', `filter shows only the chosen layout (${shown.join(', ')})`)
+await page.click('.filters a[href="#all"]')
+await wait(page)
+report((await page.$$eval('.group', (gs) => gs.filter((g) => getComputedStyle(g).display !== 'none').length)) === 6, '"All" shows every layout again')
+
+// Theme button: switches, and the choice is remembered on the next page
+await page.goto(url, { waitUntil: 'load' })
+const bg = () => page.evaluate(() => getComputedStyle(document.body).backgroundColor)
+const lightBg = await bg()
+await page.click('[data-theme-toggle]')
+await wait(page, 700)
+const darkBg = await bg()
+await page.goto(`${url}factory/`, { waitUntil: 'load' })
+report(lightBg !== darkBg && (await bg()) === darkBg, `theme button switches to dark and remembers it (${lightBg} to ${darkBg})`)
+await page.click('[data-theme-toggle]')
+await wait(page, 700)
+report((await bg()) === lightBg, 'theme button switches back to light')
+
 // Reduced motion: no transition, no zoom
 const calm = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' })
 await calm.addInitScript(watchReveal)

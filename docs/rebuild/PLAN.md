@@ -87,7 +87,11 @@ Decisions with the theme: sage-tinted page (not Sage Garden's beige #F8F7F4, whi
 
 **Spacing.** 4, 8, 12, 16, 24, 32, 48, 64, 96, 128 px. Content width 1320 px, 16 px side margin on phones, 32 px on desktop. Text left-aligned.
 
-**One standout element.** The dimension lines: they draw once when the page loads and repeat as a quiet motif (product pages show real catalog ranges on the same lines). Other motion is small and only answers the visitor: linked pictures grow 4% on hover, buttons fill from the bottom, pages fade across with the product picture moving into place, the header slides away on scroll down and back on scroll up. All of it is off for people who ask for reduced motion (2026-11-03).
+**Dark theme (2026-11-03).** Follows the device setting; a sun/moon button in the header overrides it and is remembered (`data-theme` on `<html>`, set before first paint). Dark tokens: page #131A16, alternate #1A221D, text #E4EAE0, muted #A9B5AB, accent and buttons #A8C2AE with dark text, button hover #CADCCD, lines #2B3730, form band #1D2922. Line drawings and hardware close-ups sit on light plates (#E9EDE5) so black lines stay visible; the logo is inverted. The hero's measuring lines and the inquiry form keep fixed colours, as they sit on the same white photo or dark band in both themes. Claude's recommendation, accepted: keep sage rather than a warm stone-and-brass scheme, which fights the cool grey renders.
+
+**Navigation and controls (2026-11-03).** Home is in the top bar. Nav links get a light sage pill on hover; the current page keeps a filled pill. The Products page has sticky filter pills (All plus six layouts) that show one layout at a time using `:target`, no JavaScript. Finish choices are pill buttons; the chosen one is filled.
+
+**One standout element.** The dimension lines: they draw once when the page loads and repeat as a quiet motif (product pages show real catalog ranges on the same lines). Other motion is small and only answers the visitor: linked pictures grow 4% on hover, buttons fill from the bottom, pages fade across with the product picture moving into place, the header slides away on scroll down and back on scroll up. The hero and DLFC finish switchers run through the four finishes once on load (under 5 seconds, stops at the first touch). All of it is off for people who ask for reduced motion (2026-11-03).
 
 **Avoid.** All-caps labels, a label above every heading, arrows on every link, fade-in on every section, identical rounded cards with soft shadows, em dashes, generic copy.
 

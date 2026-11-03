@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro'
 import Breadcrumbs from '../components/Breadcrumbs.astro'
 import InquiryForm from '../components/InquiryForm.astro'
+import HowItWorks from '../components/HowItWorks.astro'
 import { breadcrumbLd } from '../data/site'
 import { faq } from '../data/faq'
 
@@ -26,7 +27,7 @@ const jsonLd = [
   <Breadcrumbs items={crumbs} />
   <section class="wrap top">
     <h1>Request a quote</h1>
-    <p class="lead">Tell us what you need and our sales team will reply by email. The more you send, the faster the quote.</p>
+    <p class="lead">Tell us what you need and our sales team will reply by email, or on WhatsApp if you leave a number. The more you send, the faster the quote.</p>
     <ul class="send num">
       <li>The opening: width and height in mm</li>
       <li>The layout, or a model code from our range</li>
@@ -35,6 +36,7 @@ const jsonLd = [
     </ul>
   </section>
 
+  <HowItWorks />
   <InquiryForm title="Your inquiry" />
 
   <section class="wrap faq" aria-labelledby="faq-title">

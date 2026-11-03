@@ -38,7 +38,7 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`
       </div>
     </div>
 
-    <figure class="stage">
+    <figure class="stage" data-finish-cycle>
       <div class="frame">
         {finishes.map((f, i) => (
           <Picture
@@ -76,7 +76,7 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`
 
       <figcaption class="finishes">
         <fieldset>
-          <legend>Frame finish, shown on the <a href="/products/sliding-shower-doors/dlfc05/">DLFC05 double sliding door</a></legend>
+          <legend>Try the frame finishes on the <a href="/products/sliding-shower-doors/dlfc05/">DLFC05 double sliding door</a></legend>
           <div class="swatches">
             {finishes.map((f, i) => (
               <label class={`swatch swatch-${f.id}`}>
@@ -91,6 +91,10 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`
     </figure>
   </div>
 </section>
+
+<script>
+  import '../scripts/finish-cycle'
+</script>
 
 <style>
   .hero {
@@ -168,7 +172,7 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`
     width: 100%;
     height: 100%;
     fill: none;
-    stroke: var(--glass);
+    stroke: #3e5547; /* fixed: the lines sit on the same white photo in both themes */
   }
 
   .dims path {
@@ -197,8 +201,8 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`
   .dim-label {
     position: absolute;
     padding: 0 var(--s-8);
-    background: var(--white);
-    color: var(--glass);
+    background: #f5f6f1;
+    color: #3e5547;
     font-size: var(--t-14);
     font-weight: 560;
     line-height: 1.6;
@@ -239,25 +243,35 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`
 
   legend {
     padding: 0;
-    margin-bottom: var(--s-8);
-    color: var(--graphite);
+    margin-bottom: var(--s-12);
+    color: var(--ink);
     font-size: var(--t-14);
+    font-weight: 560;
   }
 
   .swatches {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--s-4) var(--s-16);
+    gap: var(--s-8);
   }
 
+  /* Each finish is a pill button; the chosen one is filled. */
   .swatch {
     position: relative;
     display: inline-flex;
     align-items: center;
     gap: var(--s-8);
     min-height: 2.75rem;
-    padding-right: var(--s-4);
+    padding: 0 var(--s-16) 0 var(--s-8);
+    border: 1px solid var(--line);
+    border-radius: 999px;
     cursor: pointer;
+    transition: background-color 200ms ease, border-color 200ms ease;
+  }
+
+  .swatch:hover {
+    background: var(--pill);
+    border-color: var(--pill-current);
   }
 
   .swatch input {
@@ -272,9 +286,31 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`
     height: 1.5rem;
     border-radius: 50%;
     box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.18);
-    outline: 1px solid transparent;
-    outline-offset: 3px;
-    transition: outline-color 160ms ease;
+  }
+
+  .name {
+    color: var(--ink);
+    font-size: var(--t-14);
+    font-weight: 560;
+    transition: color 200ms ease;
+  }
+
+  .swatch:has(input:checked) {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .swatch:has(input:checked) .chip {
+    box-shadow: 0 0 0 2px var(--white);
+  }
+
+  .swatch input:checked ~ .name {
+    color: var(--white);
+  }
+
+  .swatch:has(input:focus-visible) {
+    outline: 2px solid var(--glass);
+    outline-offset: 2px;
   }
 
   .swatch-black .chip {
@@ -291,24 +327,6 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`
 
   .swatch-chrome .chip {
     background: linear-gradient(135deg, #ffffff, #9aa3a9 45%, #f2f4f5 60%, #7f878c);
-  }
-
-  .name {
-    color: var(--graphite);
-    font-size: var(--t-14);
-  }
-
-  .swatch input:checked ~ .chip {
-    outline-color: var(--ink);
-  }
-
-  .swatch input:checked ~ .name {
-    color: var(--ink);
-    font-weight: 560;
-  }
-
-  .swatch input:focus-visible ~ .chip {
-    outline: 2px solid var(--glass);
   }
 
   @media (min-width: 56rem) {

@@ -95,10 +95,10 @@ export async function handleInquiry(request, env, ctx) {
     }
 
     const saved = await env.DB.prepare(
-      `INSERT INTO inquiries (name, email, company, country, layout, sizes, message, product, page, visitor_country, mail_check, ip_hash)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
+      `INSERT INTO inquiries (name, email, whatsapp, company, country, layout, sizes, message, product, page, visitor_country, mail_check, ip_hash)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
     )
-      .bind(d.name, d.email, d.company, d.country, d.layout, d.sizes, d.message, d.product, d.page, request.cf?.country || null, check.mail, ipHash)
+      .bind(d.name, d.email, d.whatsapp || null, d.company, d.country, d.layout, d.sizes, d.message, d.product, d.page, request.cf?.country || null, check.mail, ipHash)
       .first()
     const id = saved.id
 

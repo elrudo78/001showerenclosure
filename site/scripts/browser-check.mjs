@@ -136,7 +136,7 @@ for (const width of [390, 768, 1440, 1920]) {
     stops.push(
       await page.evaluate(() => {
         const el = document.activeElement
-        const cs = getComputedStyle(el.type === 'radio' ? el.nextElementSibling : el)
+        const cs = getComputedStyle(el.type === 'radio' ? el.closest('label') : el) // finish pills show the ring on the whole pill
         return { tag: el.tagName, text: (el.textContent || el.getAttribute('aria-label') || el.name || '').trim().slice(0, 30), ring: cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0 }
       }),
     )

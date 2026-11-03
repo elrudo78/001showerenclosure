@@ -10,6 +10,8 @@ const crumbs = [
   { name: 'Home', href: '/' },
   { name: 'Products', href: '/products/' },
 ]
+// Highlight the pill for the layout being shown (the section in the address, e.g. #sliding-shower-doors), or "All".
+const activePill = `${layouts.map((l) => `.catalog:has(#${l.slug}:target) .filters a[href="#${l.slug}"]`).join(',')},.catalog:not(:has(.group:target)) .filters a[href="#all"]{background:var(--ink);border-color:var(--ink);color:var(--white)}`
 const jsonLd = [
   breadcrumbLd(crumbs, Astro.site),
   {
@@ -37,30 +39,35 @@ const jsonLd = [
       {products.length} models, grouped by layout. Every model has a standard size and a range it can be made to, so
       send us your measurements with the model you like.
     </p>
-    <nav class="jump" aria-label="Layouts">
-      <ul>
+  </section>
+
+  <div class="catalog" id="all">
+    <Fragment set:html={`<style>${activePill}</style>`} />
+    <nav class="filters" aria-label="Show one layout">
+      <ul class="wrap">
+        <li><a href="#all">All <span class="num">{products.length}</span></a></li>
         {layouts.map((l) => (
           <li>
-            <a href={`#${l.slug}`}>{l.short}</a> <span class="num">{productsIn(l.id).length}</span>
+            <a href={`#${l.slug}`}>{l.short} <span class="num">{productsIn(l.id).length}</span></a>
           </li>
         ))}
       </ul>
     </nav>
-  </section>
 
-  {
-    layouts.map((l) => (
-      <section class="wrap group" id={l.slug} aria-labelledby={`h-${l.slug}`}>
-        <div class="group-head">
-          <h2 id={`h-${l.slug}`}>
-            <a href={layoutUrl(l)}>{l.name}</a>
-          </h2>
-          <p class="intro">{l.intro}</p>
-        </div>
-        <ProductGrid products={productsIn(l.id)} />
-      </section>
-    ))
-  }
+    {
+      layouts.map((l) => (
+        <section class="wrap group" id={l.slug} aria-labelledby={`h-${l.slug}`}>
+          <div class="group-head">
+            <h2 id={`h-${l.slug}`}>
+              <a href={layoutUrl(l)}>{l.name}</a>
+            </h2>
+            <p class="intro">{l.intro}</p>
+          </div>
+          <ProductGrid products={productsIn(l.id)} />
+        </section>
+      ))
+    }
+  </div>
 
   <InquiryForm />
 </Base>
@@ -74,30 +81,63 @@ const jsonLd = [
     margin-top: var(--s-24);
   }
 
-  .jump ul {
+  /* Layout filter: pills that stay under the header while scrolling. A pill links to its section;
+     while a section is in the address (:target), only that section shows. */
+  .filters {
+    position: sticky;
+    top: var(--header-space);
+    z-index: 10;
+    background: var(--white);
+    box-shadow: 0 1px 0 var(--line);
+    transition: top 280ms cubic-bezier(0.3, 0.7, 0.2, 1);
+  }
+
+  .filters ul {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--s-8) var(--s-24);
-    margin: var(--s-32) 0 0;
-    padding: var(--s-16) 0 0;
-    border-top: 1px solid var(--line);
+    gap: var(--s-8);
+    margin: 0 auto;
+    padding-block: var(--s-12);
     list-style: none;
+    overflow-x: auto;
+    scrollbar-width: none;
   }
 
-  .jump a {
-    display: inline-block;
-    padding-block: var(--s-8);
+  .filters li {
+    flex: none;
+  }
+
+  .filters a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--s-8);
+    padding: var(--s-8) var(--s-16);
+    border: 1px solid var(--line);
+    border-radius: 999px;
     font-weight: 560;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
   }
 
-  .jump span {
-    color: var(--graphite);
+  .filters a:hover {
+    background: var(--pill);
+    border-color: var(--pill-current);
+    color: var(--ink);
+  }
+
+  .filters .num {
     font-size: var(--t-14);
+    font-weight: 400;
+    opacity: 0.75;
+  }
+
+  .catalog:has(.group:target) .group:not(:target) {
+    display: none;
   }
 
   .group {
     padding-block: var(--s-48) var(--section);
-    scroll-margin-top: var(--s-16);
+    scroll-margin-top: calc(var(--header-space) + 4rem);
   }
 
   .group-head {

@@ -2,6 +2,17 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-03: Second round from the user's review
+
+- Compared with the team's draft (lively-frangipane Netlify site). Taken: a WhatsApp field and "how it works" steps. Not taken until the team confirms: OEM/ODM wording and the glass suppliers' certificates. The rest of their copy is generic.
+- Fixes the user asked for: Home in the top bar; nav hover and current-page pills; Products page categories as sticky filter pills (CSS `:target`); blurry DLFC thumbnails (cause: whole room shrunk into a small card, heavy compression) fixed with 4:5 crops on the door (`dlfc/card-*.jpg`) and larger, higher-quality photo card files; finish switcher made obvious (pill buttons, "Try the frame finishes", a one-time demo under 5 s, "4 finishes" tag on DLFC cards).
+- Jerky product opening: on Netlify the product picture was not loaded when the page change ran, so it flew in empty and popped. Fix: speculation rules (Chrome/Edge prerender on hover) and a `pagereveal` fallback that lets an unloaded picture fade in. Prerender cannot be tested under Playwright (DevTools disables it); the rules parse (54 candidates).
+- New: optional WhatsApp or phone field end to end (form, check, D1 `0002_whatsapp.sql`, sales email with a wa.me link, unit test); "How an order works" on Home and Contact; DLFC01 and DLFC04 hardware close-ups (client renders, trimmed by `prepare_images.py`) that switch with the finish; dark theme (device setting plus header button, remembered).
+- Theme: recommended keeping sage; dark tokens in `docs/rebuild/PLAN.md`.
+- Product videos reviewed and not used: S68422 has Chinese captions burned in; D15131, S41522 and S89022 show a person.
+- Image tooling: the system Pillow is broken in this container; use a venv (`python3 -m venv`, `pip install pillow pymupdf`). Re-running `prepare_images.py` reproduced every existing image byte for byte.
+- Tests: `check:site` passed; 10 unit tests; all browser checks (focus test now looks at the whole finish pill); form check; effects check extended (finish demo, hardware, filter, theme button). Lighthouse light and dark on home, products, DLFC04 and contact: 99 to 100 performance (one home run 94, three reruns 99 to 100), 100 accessibility, best practices and SEO.
+
 ## 2026-11-03: Subtle effects
 
 - The user chose effects 1, 3, 5, 6 and 7. Dropped by the user: the DLFC-only black-to-gold card swap (would look odd on 5 of 42 products) and a photo viewer for project and factory photos (they are not links and look fine as they are).

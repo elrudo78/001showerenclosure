@@ -5,12 +5,19 @@ const escape = (s) =>
 
 const ROWS = [
   ['Email', 'email'],
+  ['WhatsApp or phone', 'whatsapp'],
   ['Company', 'company'],
   ['Country', 'country'],
   ['Layout', 'layout'],
   ['Sizes', 'sizes'],
   ['Product page', 'product'],
 ]
+
+// The number as written, plus a WhatsApp chat link (wa.me needs digits only, with the country code).
+const whatsappCell = (value) => {
+  const digits = String(value).replace(/\D/g, '')
+  return `${escape(value)} &nbsp;<a href="https://wa.me/${digits}" style="color:#3e5547;">Open in WhatsApp</a>`
+}
 
 export function buildEmail(inquiry, { id, siteUrl = '' }) {
   const subject = `New inquiry #${id}: ${inquiry.name}, ${inquiry.country}`
@@ -37,7 +44,7 @@ export function buildEmail(inquiry, { id, siteUrl = '' }) {
         .map(
           ([label, key]) => `<tr>
         <td style="padding:10px 12px 10px 0;border-bottom:1px solid #d5dbcf;width:120px;vertical-align:top;font-weight:600;">${label}</td>
-        <td style="padding:10px 0;border-bottom:1px solid #d5dbcf;vertical-align:top;color:#3d4145;">${escape(inquiry[key])}</td>
+        <td style="padding:10px 0;border-bottom:1px solid #d5dbcf;vertical-align:top;color:#3d4145;">${key === 'whatsapp' ? whatsappCell(inquiry[key]) : escape(inquiry[key])}</td>
       </tr>`,
         )
         .join('')}

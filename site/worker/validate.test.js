@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { checkInquiry, emailFormatOk, isDisposable, mailCheck, typoSuggestion, MESSAGES } from './validate.js'
+import { checkInquiry, emailFormatOk, isDisposable, mailCheck, phoneOk, typoSuggestion, MESSAGES } from './validate.js'
 import { buildEmail } from './email.js'
 
 // Fake DNS: answers like Cloudflare's DNS-over-HTTPS JSON API.
@@ -83,4 +83,14 @@ test('the sales email escapes what visitors type', () => {
   assert.ok(html.includes('A &amp; B'))
   assert.match(subject, /^New inquiry #7: /)
   assert.ok(text.includes('Quote for 20 sliding doors.'))
+})
+
+test('the optional WhatsApp or phone number is checked only when given', async () => {
+  for (const n of ['+44 7700 900123', '+86 (760) 8888-1234', '0086.760.88881234', '+1 555 010 9999']) assert.equal(phoneOk(n), true, n)
+  for (const n of ['12345', 'call me', '+44 7700 900123 ext 5', '+1234567890123456']) assert.equal(phoneOk(n), false, n)
+  assert.equal((await checkInquiry(good, { fetchImpl: okDns })).ok, true)
+  const bad = await checkInquiry({ ...good, whatsapp: 'call me' }, { fetchImpl: okDns })
+  assert.equal(bad.errors.whatsapp, MESSAGES.phone)
+  const { html } = buildEmail({ ...good, whatsapp: '+44 7700 900123' }, { id: 8 })
+  assert.ok(html.includes('https://wa.me/447700900123'))
 })

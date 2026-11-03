@@ -1,19 +1,21 @@
 ---
 // The same scene in several frame finishes. Radio buttons switch the picture without any JavaScript.
-import { Picture } from 'astro:assets'
+import { Image, Picture } from 'astro:assets'
 import type { ImageMetadata } from 'astro'
 
 interface Props {
   name: string
   items: { finish: string; src: ImageMetadata }[]
+  /** Optional close-ups; each part has one image per finish, in the same order as items. */
+  hardware?: { name: string; images: ImageMetadata[] }[]
   /** Matches the product card, so the picture moves from the card into place on page change. */
   transitionName?: string
 }
-const { name, items, transitionName } = Astro.props
+const { name, items, hardware, transitionName } = Astro.props
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, '-')
 ---
 
-<figure class="gallery">
+<figure class="gallery" data-finish-cycle>
   <div class="stage" style={`aspect-ratio:${items[0].src.width} / ${items[0].src.height}${transitionName ? `;view-transition-name:${transitionName}` : ''}`}>
     {items.map((it, i) => (
       <Picture
@@ -31,7 +33,7 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, '-')
   </div>
   <figcaption>
     <fieldset>
-      <legend>Frame finish</legend>
+      <legend>Try the frame finishes</legend>
       <div class="swatches">
         {items.map((it, i) => (
           <label class={`swatch swatch-${slug(it.finish)}`}>
@@ -42,8 +44,31 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, '-')
         ))}
       </div>
     </fieldset>
+    {
+      hardware && (
+        <div class="hardware">
+          <p class="hw-title">Hardware in the chosen finish</p>
+          <ul class="hw-list" style={`--parts:${hardware.length}`}>
+            {hardware.map((part) => (
+              <li>
+                <span class="hw-pics">
+                  {part.images.map((src, i) => (
+                    <Image src={src} alt="" widths={[160, 240, 320]} sizes="(min-width: 64rem) 9vw, 22vw" class={`hw hw-${slug(items[i].finish)}`} data-index={String(i)} />
+                  ))}
+                </span>
+                <span class="hw-name">{part.name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
   </figcaption>
 </figure>
+
+<script>
+  import '../scripts/finish-cycle'
+</script>
 
 <style>
   .gallery {
@@ -89,6 +114,73 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, '-')
     opacity: 0;
   }
 
+  /* Hardware close-ups follow the chosen finish, the same way as the main picture. */
+  .hardware {
+    margin-top: var(--s-24);
+  }
+
+  .hw-title {
+    margin-bottom: var(--s-12);
+    color: var(--ink);
+    font-size: var(--t-14);
+    font-weight: 560;
+  }
+
+  .hw-list {
+    display: grid;
+    grid-template-columns: repeat(var(--parts), minmax(0, 1fr));
+    gap: var(--s-12);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .hw-list li {
+    display: grid;
+    gap: var(--s-8);
+    align-content: start;
+  }
+
+  .hw-pics {
+    position: relative;
+    display: block;
+    aspect-ratio: 1;
+    border-radius: var(--radius);
+    background: var(--tile);
+  }
+
+  .hw-pics :global(.hw) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 420ms ease;
+  }
+
+  .hw-pics :global(.hw[data-index='0']) {
+    opacity: 1;
+  }
+
+  .gallery:has(input[value='brushed-gold']:checked) :global(.hw-brushed-gold),
+  .gallery:has(input[value='brushed-silver']:checked) :global(.hw-brushed-silver),
+  .gallery:has(input[value='polished-chrome']:checked) :global(.hw-polished-chrome),
+  .gallery:has(input[value='matte-black']:checked) :global(.hw-matte-black) {
+    opacity: 1;
+  }
+
+  .gallery:has(input:not([value='matte-black']):checked) :global(.hw-matte-black) {
+    opacity: 0;
+  }
+
+  .hw-name {
+    color: var(--graphite);
+    font-size: var(--t-14);
+    line-height: 1.35;
+  }
+
   fieldset {
     margin: var(--s-16) 0 0;
     padding: 0;
@@ -97,24 +189,35 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, '-')
 
   legend {
     padding: 0;
-    margin-bottom: var(--s-8);
-    color: var(--graphite);
+    margin-bottom: var(--s-12);
+    color: var(--ink);
     font-size: var(--t-14);
+    font-weight: 560;
   }
 
   .swatches {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--s-4) var(--s-16);
+    gap: var(--s-8);
   }
 
+  /* Each finish is a pill button; the chosen one is filled. */
   .swatch {
     position: relative;
     display: inline-flex;
     align-items: center;
     gap: var(--s-8);
     min-height: 2.75rem;
+    padding: 0 var(--s-16) 0 var(--s-8);
+    border: 1px solid var(--line);
+    border-radius: 999px;
     cursor: pointer;
+    transition: background-color 200ms ease, border-color 200ms ease;
+  }
+
+  .swatch:hover {
+    background: var(--pill);
+    border-color: var(--pill-current);
   }
 
   .swatch input {
@@ -129,8 +232,31 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, '-')
     height: 1.5rem;
     border-radius: 50%;
     box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.18);
-    outline: 1px solid transparent;
-    outline-offset: 3px;
+  }
+
+  .label {
+    color: var(--ink);
+    font-size: var(--t-14);
+    font-weight: 560;
+    transition: color 200ms ease;
+  }
+
+  .swatch:has(input:checked) {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .swatch:has(input:checked) .chip {
+    box-shadow: 0 0 0 2px var(--white);
+  }
+
+  .swatch input:checked ~ .label {
+    color: var(--white);
+  }
+
+  .swatch:has(input:focus-visible) {
+    outline: 2px solid var(--glass);
+    outline-offset: 2px;
   }
 
   .swatch-matte-black .chip {
@@ -149,21 +275,4 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, '-')
     background: linear-gradient(135deg, #ffffff, #9aa3a9 45%, #f2f4f5 60%, #7f878c);
   }
 
-  .label {
-    color: var(--graphite);
-    font-size: var(--t-14);
-  }
-
-  .swatch input:checked ~ .chip {
-    outline-color: var(--ink);
-  }
-
-  .swatch input:checked ~ .label {
-    color: var(--ink);
-    font-weight: 560;
-  }
-
-  .swatch input:focus-visible ~ .chip {
-    outline: 2px solid var(--glass);
-  }
 </style>

@@ -77,6 +77,8 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 - Pinned dependency versions.
 - Deadline: the user wants the project finished within a few days.
 
+**Second round (done 2026-11-03), from the user's review of the Netlify preview and the team's draft:** Home link and nav pills; Products page filter pills; sharp DLFC card crops plus a "4 finishes" tag; finish switcher as pill buttons with "Try the frame finishes" and a one-time demo; smooth product opening (Chrome/Edge prepare the next page on hover; pictures not yet loaded fade in instead of flying in empty); optional WhatsApp or phone field (D1 migration `0002_whatsapp.sql`, link in the sales email); "How an order works" (4 factual steps) on Home and Contact; hardware close-ups on DLFC01 and DLFC04 that follow the chosen finish; dark theme with a header button. Kept sage as the theme. Not used: the client's 4 product videos (Chinese captions burned in, or people's faces).
+
 **Effects (done 2026-11-03):** hover zoom on linked pictures, smooth page changes with the product picture moving into place, hero lines drawing in, header that hides on scroll down and returns on scroll up, buttons that fill on hover. Dropped by the user: DLFC-only card finish swap, photo viewer. Test: `node scripts/effects-check.mjs <url>`.
 
 **Next, agreed but not started (in this order):**
@@ -99,7 +101,7 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 7. Go live.
 8. SEO and GEO: Search Console, sitemap, Organization and Product structured data, llms.txt, per-product content.
 
-**Inputs still needed from the team or client:** contact details to show (phone, WhatsApp, email, address; the catalog cover has a tel/fax but it has not been cleared), the client's domain, and confirmation of hosting.
+**Inputs still needed from the team or client:** contact details to show (phone, WhatsApp, email, address; the catalog cover has a tel/fax but it has not been cleared), the client's domain, the sales inbox, and confirmation of hosting. Also ask: can we say they do OEM/ODM (the team's draft says so, unconfirmed), and do they still use the glass suppliers whose certificates they sent (SGCC, AS/NZS 2208, EN 12150; one expired)? Until answered, neither appears on the site.
 
 ## 8. Client materials
 

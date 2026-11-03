@@ -67,7 +67,7 @@ const description = `${text}`.slice(0, 300)
     <div class="media">
       {
         product.finishGallery ? (
-          <FinishGallery name={product.name} items={product.finishGallery} transitionName={`product-${product.slug}`} />
+          <FinishGallery name={product.name} items={product.finishGallery} hardware={product.hardware} transitionName={`product-${product.slug}`} />
         ) : (
           <div class:list={['studio', { photo: product.imageIsPhoto }]} style={`view-transition-name:product-${product.slug}`}>
             <Image
@@ -153,7 +153,7 @@ const description = `${text}`.slice(0, 300)
     max-height: 80vh;
     margin-inline: auto;
     border-bottom: 1px solid var(--ink);
-    background: var(--white); /* keeps the blended drawing correct while it moves between pages */
+    background: var(--plate); /* keeps the blended drawing correct while it moves between pages */
     view-transition-class: product-pic;
   }
 

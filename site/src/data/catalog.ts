@@ -5,6 +5,10 @@ import type { ImageMetadata } from 'astro'
 
 const studio = import.meta.glob<{ default: ImageMetadata }>('../assets/catalog/*.png', { eager: true })
 const photos = import.meta.glob<{ default: ImageMetadata }>('../assets/{products,dlfc,catalog,hero}/*.jpg', { eager: true })
+const hwFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/dlfc/hw-*.png', { eager: true })
+/** Hardware close-ups, one image per finish in the finish switcher's order (black, gold, silver, chrome). */
+const hw = (code: string, parts: [string, string][]) =>
+  parts.map(([id, name]) => ({ name, images: ['black', 'gold', 'silver', 'chrome'].map((f) => hwFiles[`../assets/dlfc/hw-${code}-${id}-${f}.png`].default) }))
 const img = (path: string): ImageMetadata => {
   const hit = studio[`../assets/${path}`] || photos[`../assets/${path}`]
   if (!hit) throw new Error(`Missing image ${path}`)
@@ -119,10 +123,14 @@ export interface Product {
   layout: LayoutId
   kind: string // short description used in sentences, e.g. "neo-angle enclosure with a pivot door"
   image: ImageMetadata
+  /** Tighter 4:5 crop for product cards, when the main picture is a wide room scene. */
+  cardImage?: ImageMetadata
   imageIsPhoto?: boolean
   photos?: { src: ImageMetadata; alt: string }[]
   specs?: Specs
   finishGallery?: { finish: string; src: ImageMetadata }[]
+  /** Close-ups of the hardware, from the client's renders (names from their file names). */
+  hardware?: { name: string; images: ImageMetadata[] }[]
   catalogPage?: number
   series?: 'DLFC'
 }
@@ -144,10 +152,19 @@ const dlfcFinishes = (slug: string) =>
         { finish: 'Polished chrome', src: img(`dlfc/${slug}-chrome.jpg`) },
       ]
 
+const dlfcHardware: Record<string, [string, string][]> = {
+  dlfc01: [['roller', 'Roller'], ['wall-mount', 'Rail wall mount'], ['end-cap', 'Water bar end cap']],
+  dlfc04: [['roller', '60 mm roller'], ['handle', 'Square tube handle, 13 × 25 mm'], ['floor-guide', 'Floor guide'], ['wall-mount', 'Rail wall mount']],
+}
+
 const dlfc = (n: 1 | 2 | 3 | 4 | 5, kind: string, name: string): Product => {
   const slug = `dlfc0${n}`
   const gallery = dlfcFinishes(slug)
-  return { slug, code: `DLFC0${n}`, name, layout: 'sliding', kind, image: gallery[0].src, imageIsPhoto: true, finishGallery: gallery, series: 'DLFC' }
+  return {
+    slug, code: `DLFC0${n}`, name, layout: 'sliding', kind, image: gallery[0].src, cardImage: img(`dlfc/card-${slug}.jpg`),
+    imageIsPhoto: true, finishGallery: gallery, series: 'DLFC',
+    hardware: dlfcHardware[slug] && hw(slug, dlfcHardware[slug]),
+  }
 }
 
 export const products: Product[] = [

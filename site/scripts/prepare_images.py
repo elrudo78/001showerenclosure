@@ -12,7 +12,7 @@ import glob
 import os
 
 import pymupdf
-from PIL import Image, ImageOps
+from PIL import Image, ImageFilter, ImageOps
 
 ROOT = os.getcwd()
 PUBLIC = os.path.join(ROOT, 'client-materials', 'public-materials')
@@ -116,12 +116,62 @@ dlfc = {
     'dlfc03': {'black': 'C03完成效果/雅黑.png', 'gold': 'C03完成效果/拉丝金.jpg', 'silver': 'C03完成效果/拉丝银.jpg', 'chrome': 'C03完成效果/镜光.jpg'},
     'dlfc04': {'black': 'C04最终效果/雅黑.jpg', 'gold': 'C04最终效果/拉丝金.jpg', 'silver': 'C04最终效果/拉丝银.jpg', 'chrome': 'C04最终效果/镜光.jpg'},
 }
+def crop_frac(im, box):
+    w, h = im.size
+    return im.crop((round(box[0] * w), round(box[1] * h), round(box[2] * w), round(box[3] * h)))
+
+
+# 4:5 product-card crops, tight on the shower door so it reads clearly at card size (fractions of each source).
+dlfc_card = {'dlfc01': (0, 0.08, 0.81, 0.98), 'dlfc02': (0.235, 0, 0.685, 1), 'dlfc03': (0.205, 0, 0.655, 1),
+             'dlfc04': (0.225, 0, 0.675, 1)}
 for code, files in dlfc.items():
     for finish, rel in files.items():
         im = Image.open(os.path.join(DLFC, rel))
         if code == 'dlfc02' and im.width != 3840:
             im = im.resize((3840, round(im.height * 3840 / im.width)), Image.LANCZOS).crop((0, 0, 3840, 2160))
-        save(im, f'dlfc/{code}-{finish}.jpg', f'public-materials/shower Enclosures/DLFEI -C01~C05产品效果图/C01-C05/{rel}')
+        note = f'public-materials/shower Enclosures/DLFEI -C01~C05产品效果图/C01-C05/{rel}'
+        save(im, f'dlfc/{code}-{finish}.jpg', note)
+        if finish == 'black':
+            save(crop_frac(im, dlfc_card[code]), f'dlfc/card-{code}.jpg', note)
+
+# Hardware close-ups for DLFC01 and DLFC04 (the only models with them), every part in all four finishes.
+# Transparent cut-outs: trimmed to the part, centred on a square with the same margin, kept transparent.
+hw_folders = {
+    'dlfc01': {'black': 'C01最终效果/雅黑-配件细节图', 'gold': 'C01最终效果/拉丝金-配件细节图',
+               'silver': 'C01最终效果/拉丝银-配件细节图', 'chrome': 'C01最终效果/镜光-配件细节图'},
+    'dlfc04': {'black': 'C04最终效果/配件：雅黑', 'gold': 'C04最终效果/配件：拉丝金',
+               'silver': 'C04最终效果/配件：拉丝', 'chrome': 'C04最终效果/配件：镜光'},
+}
+# Part id: candidate file names (the client's names differ slightly between finish folders).
+hw_parts = {
+    'dlfc01': {'roller': ['轮子.png'],
+               'wall-mount': ['墙套.png'], 'end-cap': ['挡水堵头.png']},
+    'dlfc04': {'roller': ['60MM方轮.png'], 'handle': ['13X25方管拉手.png'], 'floor-guide': ['下滑块.png'],
+               'wall-mount': ['墙套.png', 'WJ-029墙套.png']},
+}
+for code, folders in hw_folders.items():
+    for finish, folder in folders.items():
+        for part, names in hw_parts[code].items():
+            rel = next(f'{folder}/{n}' for n in names if os.path.exists(os.path.join(DLFC, folder, n)))
+            im = Image.open(os.path.join(DLFC, rel)).convert('RGBA')
+            # Shrinking the mask first removes the stray specks some renders carry, so they do not widen the crop.
+            l, t, r, b = im.getchannel('A').point(lambda a: 255 if a > 96 else 0).filter(ImageFilter.MinFilter(15)).getbbox()
+            im = im.crop((max(0, l - 8), max(0, t - 8), min(im.width, r + 8), min(im.height, b + 8)))
+            side = round(max(im.size) * 1.16)
+            sq = Image.new('RGBA', (side, side), (0, 0, 0, 0))
+            sq.paste(im, ((side - im.width) // 2, (side - im.height) // 2))
+            sq.thumbnail((640, 640), Image.LANCZOS)
+            out = f'dlfc/hw-{code}-{part}-{finish}.png'
+            os.makedirs(os.path.join(OUT, 'dlfc'), exist_ok=True)
+            sq.save(os.path.join(OUT, out), optimize=True)
+            sources.append((out, f'public-materials/shower Enclosures/DLFEI -C01~C05产品效果图/C01-C05/{rel}', sq.size))
+
+# DLFC05 card: from the hero scene (already cropped by hero_box).
+src = review['P0139']['source_path']
+hero_im = ImageOps.exif_transpose(Image.open(os.path.join(PUBLIC, src)))
+w, h = hero_im.size
+hero_im = hero_im.crop((round(hero_box[0] * w), round(hero_box[1] * h), w, h))
+save(crop_frac(hero_im, (0.02, 0.08, 0.65, 0.96)), 'dlfc/card-dlfc05.jpg', f'P0139: public-materials/{src}')
 
 
 # Dulifei 2025 catalog: every page is one 3477 x 2268 image.
