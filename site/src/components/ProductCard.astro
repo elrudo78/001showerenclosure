@@ -47,10 +47,12 @@ const line = product.specs ? `Standard ${product.specs.standard}` : 'Made to you
     width: 100%;
     height: 100%;
     object-fit: contain;
+    mix-blend-mode: multiply; /* the drawing's white background takes the page colour */
   }
 
   .photo .img {
     object-fit: cover;
+    mix-blend-mode: normal;
   }
 
   .name {

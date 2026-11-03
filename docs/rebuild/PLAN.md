@@ -66,16 +66,22 @@ No invented facts: no founding year, staff, factory size, output, export countri
 
 **Direction.** The site should feel like the product: precise aluminium profiles, clear glass, white bathrooms. Calm, technical, photo-first.
 
-**Change from the handoff.** The handoff suggested a brushed-brass accent on warm stone. Warm stone with a gold accent is the most common "luxury" template look, and gold is only one of the four finishes. The accent is now the green you see on the edge of toughened glass (factory photo P0326): it belongs only to this subject, and it reads as glass on a white page.
+**Theme (2026-11-03): sage.** The user chose a theme based on 21st.dev's "Sage Garden" (light), adapted to our photos. It replaced the first version (pure white page, glass-edge green #2E6B60 accent). The page is a sage-tinted off-white instead of bright white; product drawings, which are on white, use `mix-blend-mode: multiply` so their background takes the page colour (no white boxes). Sage Garden's own green (#7C9082) is too light for text (3.1:1), so a deeper sage does the text and button work.
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `--white` | #FFFFFF | Page, matches the catalog renders |
-| `--stone` | #EEEFEC | Alternate bands, image placeholders |
-| `--ink` | #1F2124 | Text, buttons; the matte-black frame |
-| `--graphite` | #5A5E62 | Secondary text (6.4:1 on white) |
-| `--glass` | #2E6B60 | Accent: dimension lines, links, focus, selected finish (6.2:1 on white) |
-| `--glass-tint` | #DDE9E5 | Selected states, quiet highlights |
+| `--white` (page) | #F5F6F1 | Page background, sage-tinted off-white |
+| `--stone` | #E7EBE2 | Soft bands ("What you can specify") |
+| `--ink` | #1E2420 | Text, green-tinted near-black (14.6:1) |
+| `--graphite` | #59625C | Secondary text (5.8:1) |
+| `--glass` | #3E5547 | Deep sage: buttons, links, focus, measuring lines, selected finish (7.5:1) |
+| `--glass-tint` | #D3DBCC | Quiet highlights |
+| `--sage` | #7C9082 | Sage Garden's green, decoration only |
+| `--forest` | #2D3B32 | Dark sections (inquiry form); button hover |
+| `--line` | #D5DBCF | Borders |
+| `--radius` | 4px | Buttons and form fields only; photos and drawings stay square |
+
+Decisions with the theme: sage-tinted page (not Sage Garden's beige #F8F7F4, which with green reads as a common template look); buttons in deep sage; form section in forest green; Archivo kept (no serif: off-white + green + serif is another common template look); 4px corners on buttons and fields.
 
 **Type.** One family, two widths: Archivo expanded (width 115, weight 560) for headings, Archivo normal (width 100, weight 400) for text. Tabular numbers for sizes. Scale 1.25: 14, 17, 21, 26, 33, 41, 52, 65 px. Body 17 px, line height 1.6, lines under 70 characters. Sentence case everywhere.
 

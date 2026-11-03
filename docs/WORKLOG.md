@@ -2,6 +2,15 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-03: Sage theme applied; tools decision; next steps recorded
+
+- The user asked about adding subtle effects and using 21st.dev (paid plan, API key). Agreed: no paid tools, no React components; libraries are inspiration only and effects are rebuilt in plain CSS. The 21st.dev key the user pasted in chat was not used or saved; advised to replace it.
+- Proposed six subtle effects; the user liked them all and parked them until after the theme (list and Claude's picks in HANDOFF section 7, "Next").
+- Theme: the user chose 21st.dev "Sage Garden" (light) as the mood, keeping our photos in mind. Mock-up made with an injected stylesheet (screenshots only), then the user approved all of Claude's picks: sage-tinted page #F5F6F1, deep sage #3E5547 buttons and accents, forest #2D3B32 form section, Archivo kept, 4px corners on buttons and fields. Product drawings use `mix-blend-mode: multiply`, so their white backgrounds take the page colour.
+- Changed: `site/src/styles/global.css` (tokens, buttons), `InquiryForm.astro` (forest section, field colours, corners), `RangeLineup.astro`, `ProductCard.astro`, product page (multiply on drawings), `Base.astro` (theme colour), `worker/email.js` (sales email in the new colours). Tokens documented in `docs/rebuild/PLAN.md`.
+- Tests: `check:site` 55 pages passed; 9 unit tests; 193 browser checks; form check; Lighthouse home, D15131 and contact 100/100/100/100 (one home run read 84, two reruns 100).
+- Guides postponed by the user. The user does not need before/after screenshots for routine changes (saves tokens).
+
 ## 2026-11-02: Preview zip for Netlify; content plan
 
 - Built a preview zip of `site/dist` (55 pages, noindex header added to the copy only) for the user to drag onto Netlify Drop. The inquiry form does not work there (it needs the Cloudflare Worker); everything else does.

@@ -11,6 +11,6 @@ Then read the newest entries of `docs/WORKLOG.md`. Before any design or content 
 
 - After every meaningful step, add a dated entry to `docs/WORKLOG.md`, update `docs/HANDOFF.md` if the state or a decision changed, then commit and push to `claude/kind-noether-o7pgbu`.
 - This repository is public. Never commit `client-materials/`, the Google Drive link, or anyone's names, phone numbers, emails or addresses.
-- The user prefers short, plain-language explanations without jargon.
+- The user prefers short, plain-language explanations without jargon, and is watching token use: skip before/after screenshots and long recaps unless asked.
 - Answers in HANDOFF section 3 came from the user's team, not the client. They override AGENTS.md where the two conflict. The client's own answers (`docs/client-answers-2026-10.md`) override both.
 - Test the way the audit did (`scripts/dev/README.md`) before calling anything done.

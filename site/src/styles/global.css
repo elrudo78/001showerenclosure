@@ -1,12 +1,16 @@
-/* Design tokens: see docs/rebuild/PLAN.md */
+/* Design tokens: the sage theme (2026-11-03), see docs/rebuild/PLAN.md.
+   --white is the page colour (a sage-tinted off-white); product drawings blend into it (mix-blend-mode: multiply). */
 :root {
-  --white: #ffffff;
-  --stone: #eeefec;
-  --ink: #1f2124;
-  --graphite: #5a5e62;
-  --glass: #2e6b60;
-  --glass-tint: #dde9e5;
-  --line: #d5d8d4;
+  --white: #f5f6f1;
+  --stone: #e7ebe2;
+  --ink: #1e2420;
+  --graphite: #59625c;
+  --glass: #3e5547; /* deep sage: buttons, links, focus, measuring lines */
+  --glass-tint: #d3dbcc;
+  --sage: #7c9082; /* Sage Garden's green: decoration only, too light for text */
+  --forest: #2d3b32; /* dark sections */
+  --line: #d5dbcf;
+  --radius: 4px;
 
   --font: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
   --wide: 118%;
@@ -160,8 +164,9 @@ a:hover {
   justify-content: center;
   min-height: 3rem;
   padding: 0 var(--s-24);
-  border: 1px solid var(--ink);
-  background: var(--ink);
+  border: 1px solid var(--glass);
+  border-radius: var(--radius);
+  background: var(--glass);
   color: var(--white);
   font: inherit;
   font-weight: 560;
@@ -172,13 +177,14 @@ a:hover {
 }
 
 .button:hover {
-  background: var(--glass);
-  border-color: var(--glass);
+  background: var(--forest);
+  border-color: var(--forest);
   color: var(--white);
 }
 
 .button.quiet {
   background: transparent;
+  border-color: var(--ink);
   color: var(--ink);
 }
 

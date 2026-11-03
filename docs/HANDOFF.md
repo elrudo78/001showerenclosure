@@ -1,6 +1,6 @@
 # Handoff: Dulifei website (read this first)
 
-Last updated: 2026-10-30. Keep this file current; log every step in `docs/WORKLOG.md`.
+Last updated: 2026-11-03. Keep this file current; log every step in `docs/WORKLOG.md`.
 
 ## 1. Who's who
 
@@ -35,7 +35,7 @@ These override `AGENTS.md` where they conflict (for example, catalog specs from 
 | Our fork (PUBLIC repo) | `elrudo78/001showerenclosure`, work branch `claude/kind-noether-o7pgbu` |
 | Team upstream (public) | `sherry313/01showerenclosure`, `main`; added locally as remote `upstream` |
 | Live site (team's version) | https://01showerenclosure-production.up.railway.app (Railway, React app + `server.mjs` + Resend email form) |
-| Preview of our branch | https://lively-frangipane-4d8b8a.netlify.app (user dragged a build zip onto Netlify Drop, 2026-10-11) |
+| Preview of our branch | Old: https://lively-frangipane-4d8b8a.netlify.app (2026-10-11). New: the user uploaded the full new site zip to Netlify Drop on 2026-11-02 (link not shared yet; the inquiry form does not work there, it needs Cloudflare) |
 | Audit (shared doc) | https://claude.ai/artifact/6Y8PtmhGFz7HZFgTdknP9V, copy in `docs/audit/` |
 
 Our branch = upstream `main` (merged at `d2f062b`) + our commits. None of our changes are live.
@@ -77,9 +77,16 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 - Pinned dependency versions.
 - Deadline: the user wants the project finished within a few days.
 
+**Next, agreed but not started (in this order):**
+1. Subtle effects. The user liked all six; Claude's picks to build first: (1) gentle image zoom on hover for product cards, layout drawings, project and factory photos, with the name turning sage; (2) DLFC cards switch from black to gold on hover; (3) smooth page changes (cross-document View Transitions, no JavaScript); (4) click a project or factory photo to see it large, with arrows and Esc. Optional: (5) sticky header, (6) soft button fill. All CSS-first, off for reduced motion, re-test speed after.
+2. Guides and articles (14 topics in `docs/rebuild/SEO-GEO-TRACKING.md`): postponed by the user until the site work is done. Also offered: IndexNow for Bing.
+3. Deploy to Cloudflare once the user has the project accounts (`site/DEPLOY.md`).
+
+**Tools decision (2026-11-03):** no paid component libraries and no React. 21st.dev, shadcn, Magic UI, Aceternity, React Bits and similar are React + Tailwind; using them would slow the site and look templated. They are used only as inspiration: the user sends a link, Claude rebuilds the effect in plain CSS. No smooth-scroll hijacking (Lenis) and no fade-in-on-scroll everywhere (AOS). The user pasted a 21st.dev API key in chat on 2026-11-03: it was not used or saved anywhere; the user was advised to replace it and, if ever needed, add it as the environment variable `API_KEY_21ST`.
+
 **Pages (kept few):** Home, Products overview, one page per product, Factory and Quality, Projects, Contact. About folds into Home and Factory.
 
-**Design direction:** warm, architectural, photo-first "quiet luxury": stone and marble tones, matte black, a brushed-brass accent taken from the product finishes. Two fonts, self-hosted and actually loaded. One spacing scale. Every product image the same ratio and background. One standout interaction: the finish switcher. Avoid AI-template tells (see `.claude/skills/frontend-design/SKILL.md`): no all-caps label above every heading, no arrow on every link, no fade-in on every section, no em dashes in copy, no generic copy.
+**Design direction (current, 2026-11-03):** sage theme adapted from 21st.dev "Sage Garden": sage-tinted off-white page, deep sage buttons and accents, forest-green form section, Archivo font (wide for headings), 4px corners on buttons and fields. Product drawings blend into the page colour. Full tokens and reasons: `docs/rebuild/PLAN.md`, Design. One standout interaction: the measuring lines and finish switcher in the hero. Avoid AI-template tells (see `.claude/skills/frontend-design/SKILL.md`): no all-caps label above every heading, no arrow on every link, no fade-in on every section, no em dashes in copy, no generic copy.
 
 **Order of work:**
 1. Short written plan (sitemap, content per page, design tokens).

@@ -20,24 +20,24 @@ export function buildEmail(inquiry, { id, siteUrl = '' }) {
 
   const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escape(subject)}</title></head>
-<body style="margin:0;padding:0;background:#eeefec;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#eeefec;padding:24px 12px;">
+<body style="margin:0;padding:0;background:#e7ebe2;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#e7ebe2;padding:24px 12px;">
 <tr><td align="center">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;font-family:Archivo,'Helvetica Neue',Arial,sans-serif;color:#1f2124;">
-  <tr><td style="padding:28px 32px 20px;border-bottom:1px solid #d5d8d4;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;font-family:Archivo,'Helvetica Neue',Arial,sans-serif;color:#1e2420;">
+  <tr><td style="padding:28px 32px 20px;border-bottom:1px solid #d5dbcf;">
     ${logo ? `<img src="${escape(logo)}" width="120" alt="DLIFE" style="display:block;width:120px;height:auto;border:0;">` : `<strong style="font-size:18px;letter-spacing:0.04em;">DLIFE</strong>`}
   </td></tr>
   <tr><td style="padding:28px 32px 8px;">
-    <p style="margin:0 0 6px;font-size:14px;color:#2e6b60;">New website inquiry #${id}</p>
+    <p style="margin:0 0 6px;font-size:14px;color:#3e5547;">New website inquiry #${id}</p>
     <h1 style="margin:0;font-size:24px;line-height:1.25;font-weight:600;">${escape(inquiry.name)}, ${escape(inquiry.country)}</h1>
   </td></tr>
   <tr><td style="padding:16px 32px 8px;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:15px;line-height:1.5;border-top:1px solid #1f2124;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:15px;line-height:1.5;border-top:1px solid #1e2420;">
       ${rows
         .map(
           ([label, key]) => `<tr>
-        <td style="padding:10px 12px 10px 0;border-bottom:1px solid #d5d8d4;width:120px;vertical-align:top;font-weight:600;">${label}</td>
-        <td style="padding:10px 0;border-bottom:1px solid #d5d8d4;vertical-align:top;color:#3d4145;">${escape(inquiry[key])}</td>
+        <td style="padding:10px 12px 10px 0;border-bottom:1px solid #d5dbcf;width:120px;vertical-align:top;font-weight:600;">${label}</td>
+        <td style="padding:10px 0;border-bottom:1px solid #d5dbcf;vertical-align:top;color:#3d4145;">${escape(inquiry[key])}</td>
       </tr>`,
         )
         .join('')}
@@ -45,13 +45,13 @@ export function buildEmail(inquiry, { id, siteUrl = '' }) {
   </td></tr>
   <tr><td style="padding:16px 32px 8px;">
     <p style="margin:0 0 8px;font-weight:600;font-size:15px;">Message</p>
-    <div style="padding:16px;background:#f5f6f4;border-left:3px solid #2e6b60;font-size:15px;line-height:1.6;white-space:pre-wrap;color:#1f2124;">${escape(inquiry.message)}</div>
+    <div style="padding:16px;background:#f5f6f1;border-left:3px solid #3e5547;font-size:15px;line-height:1.6;white-space:pre-wrap;color:#1e2420;">${escape(inquiry.message)}</div>
   </td></tr>
   <tr><td style="padding:24px 32px 32px;">
-    <a href="${replyHref}" style="display:inline-block;background:#1f2124;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;padding:14px 22px;">Reply to ${escape(inquiry.name)}</a>
-    <p style="margin:16px 0 0;font-size:13px;color:#5a5e62;">Or just press Reply: it goes to ${escape(inquiry.email)}.</p>
+    <a href="${replyHref}" style="display:inline-block;background:#1e2420;color:#ffffff;text-decoration:none;font-weight:600;font-size:15px;padding:14px 22px;">Reply to ${escape(inquiry.name)}</a>
+    <p style="margin:16px 0 0;font-size:13px;color:#59625c;">Or just press Reply: it goes to ${escape(inquiry.email)}.</p>
   </td></tr>
-  <tr><td style="padding:16px 32px;background:#1f2124;color:#c9ccce;font-size:12px;line-height:1.5;">
+  <tr><td style="padding:16px 32px;background:#1e2420;color:#c9ccce;font-size:12px;line-height:1.5;">
     Sent by the Dulifei website. This inquiry is also saved in the website's inquiry list as #${id}.
   </td></tr>
 </table>
