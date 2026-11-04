@@ -42,7 +42,8 @@ export function normalise(input) {
   const out = {}
   for (const key of Object.keys(LIMITS)) {
     const value = input[key]
-    out[key] = typeof value === 'string' ? value.trim().replace(/\r\n?/g, '\n') : ''
+    // Control characters (except line breaks) are dropped: they have no use here, and a NUL would cut the saved text short.
+    out[key] = typeof value === 'string' ? value.replace(/\r\n?/g, '\n').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '').trim() : ''
   }
   out.email = out.email.toLowerCase()
   return out
@@ -126,7 +127,7 @@ export async function mailCheck(domain, fetchImpl = fetch, timeoutMs = 2500) {
 }
 
 /** Returns { ok, data, errors, mail } where errors maps a field name to a message. */
-export async function checkInquiry(input, { fetchImpl = fetch } = {}) {
+export async function checkInquiry(input, { fetchImpl = fetch, skipDns = false } = {}) {
   const data = normalise(input)
   const errors = {}
 
@@ -148,7 +149,7 @@ export async function checkInquiry(input, { fetchImpl = fetch } = {}) {
     if (suggestion) errors.email = MESSAGES.emailTypo(suggestion)
     else if (isDisposable(domain)) errors.email = MESSAGES.emailDisposable
     else {
-      mail = await mailCheck(domain, fetchImpl)
+      mail = skipDns ? 'skipped' : await mailCheck(domain, fetchImpl)
       if (mail === 'no-mail') errors.email = MESSAGES.emailNoMail(domain)
     }
   }

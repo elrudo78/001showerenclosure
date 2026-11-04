@@ -2,6 +2,23 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-04: Backend and traffic test of the inquiry Worker
+
+- New `site/scripts/load-check.mjs` (57 live checks) starts the real Worker locally with a fresh database and a fake email service that can fail or hang on demand; Turnstile and the DNS lookup are switched off so it measures our code. New unit tests: `worker/db.test.js`, `worker/handler.test.js` (25 unit tests in all).
+- First run on the existing code found 14 problems. Fixed in `worker/`:
+  - **Rate limit leaked under bursts:** 60 simultaneous requests from one visitor saved 40 (limit 5), because the count and the save were two steps. Now one statement (`saveInquiry` in `worker/db.js`); exactly 5 get through, even when sent together.
+  - A request body of `null` crashed the Worker (500); other non-form JSON gave confusing errors. Now a clean 400.
+  - No size limit: a 5 MB body was fully processed. Now bodies over 64 KB get 413, and an upload with no declared size is cut off as soon as it passes 64 KB.
+  - Forms posted from another website were accepted; now an `Origin` that is not our own site gets 403.
+  - Line breaks in the name went into the email subject; the subject is now one line.
+  - The no-JavaScript error page printed text without escaping it (not exploitable today, since email addresses are strictly checked, but now escaped), and now carries `nosniff` and a strict content-security-policy.
+  - Control characters (a NUL cut saved text short) are removed; line breaks kept.
+  - Email sending had no time limit; a stuck email service would leave a record on "pending" for ever. Now 10 seconds, then `failed` with the reason.
+  - Visitor keys: optional secret `IP_SALT`; keys older than 30 days are blanked (privacy).
+- What held up from the start: 300 inquiries in the same instant (all saved once, every reference number different, every email result recorded); email failures (40% failing, 10% hanging) never lose or hide an inquiry; 3,000 page loads with 100 inquiries at once, no errors; invalid forms always get the right message and save nothing; SQL and HTML typed into the form are stored as plain text and neutralised in the email; emoji, Arabic, Chinese and Cyrillic are kept exactly.
+- Numbers (this machine, not Cloudflare's): about 330 page loads a second with 100 simultaneous visitors (median 280 ms, 99% under 470 ms); a steady 15 inquiries a second with a median reply of 11 ms; 300 at the very same instant all answered within 1.2 s. One inquiry costs about 0.6 ms of our own code (99% under 3 ms; Cloudflare's free plan allows about 10 ms); the Worker is 58 KB gzipped (limit 3 MB) and starts in 24 ms; the site is 1,395 files (limit 20,000), the largest 0.7 MB (limit 25 MB). Static pages never run the Worker, Cloudflare serves them from its own network.
+- Limits to know: the free email plan is 100 a day (failed ones are listed by the SQL in `site/DEPLOY.md`); an uploaded body cut off halfway upsets the *local* test server for the next request on that connection (not the Worker); this test cannot measure Cloudflare's own capacity or the real Turnstile and DNS services (the form check covers those at low volume).
+
 ## 2026-11-04: Screen-size testing
 
 - New `site/scripts/sizes-check.mjs`: 20 screens (phones 320 to 430, phones sideways, tablets, laptops 1280 to 1536, MacBook 1440 at 2x, Full HD, 2K, 4K) times 11 page kinds; checks sideways scroll, anything sticking out, cut-off text, tap targets under 40 px, soft pictures (real file width against screen pixels), header fit, words broken across lines, jump links hidden under the header, 200% text size on a 320 px phone, and every page at seven widths.

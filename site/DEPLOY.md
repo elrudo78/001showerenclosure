@@ -58,6 +58,22 @@ npx wrangler deploy
 - Add the domain to the Turnstile widget's hostnames.
 - Verify the domain in Resend, set `FROM_EMAIL` in `wrangler.jsonc` to an address on it, and change `SALES_EMAIL` to the sales team's inbox. Mainland China note: use an inbox the team can open there (not Gmail).
 
+## Checking inquiries and missed emails
+
+Every inquiry is saved before any email is sent, so nothing is lost if email fails (Resend's free plan allows 100 emails a day; a stuck or refused email is marked `failed` after 10 seconds). To see the latest inquiries, and any whose email did not go out:
+
+```bash
+cd site
+npx wrangler d1 execute dulifei-inquiries --remote --command "SELECT id, created_at, name, email, whatsapp, country, email_status FROM inquiries ORDER BY id DESC LIMIT 20"
+npx wrangler d1 execute dulifei-inquiries --remote --command "SELECT id, created_at, name, email, email_error FROM inquiries WHERE email_status != 'sent' ORDER BY id DESC"
+```
+
+Reference numbers in the sales emails (#41, #42...) are the `id`: a gap in the numbers means an email did not arrive, so check the second query.
+
+Optional secret: `npx wrangler secret put IP_SALT` (any long random text). The visitor key used for the spam limit is then impossible to rebuild from IP addresses. Visitor keys older than 30 days are blanked automatically; the inquiries stay.
+
+`RESEND_URL` and `SKIP_MAIL_DNS` exist only so `scripts/load-check.mjs` can test without real services. Never set them on the live site.
+
 ## Build settings
 
 Set these when building for the web (Cloudflare build variables, or in front of `npm run build`):
@@ -73,6 +89,8 @@ Set these when building for the web (Cloudflare build variables, or in front of 
 `npm run check:site` warns when the build still points at localhost or uses the test spam key.
 
 ## Local testing
+
+Before going live, and after any change to `worker/`: `npm run build && node scripts/load-check.mjs` (about 2 minutes, starts its own Worker and database; see `docs/WORKLOG.md`, 2026-11-04).
 
 ```bash
 npm run worker:dev                      # builds, sets up the local database, runs on http://127.0.0.1:8787

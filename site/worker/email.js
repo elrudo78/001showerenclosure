@@ -20,7 +20,8 @@ const whatsappCell = (value) => {
 }
 
 export function buildEmail(inquiry, { id, siteUrl = '' }) {
-  const subject = `New inquiry #${id}: ${inquiry.name}, ${inquiry.country}`
+  // One line, whatever was typed: a line break in a subject could add email headers.
+  const subject = `New inquiry #${id}: ${inquiry.name}, ${inquiry.country}`.replace(/\s+/g, ' ').slice(0, 200)
   const rows = ROWS.filter(([, key]) => inquiry[key])
   const logo = siteUrl ? `${siteUrl.replace(/\/$/, '')}/logo.png` : ''
   const replyHref = `mailto:${encodeURIComponent(inquiry.email)}?subject=${encodeURIComponent('Your inquiry to Dulifei')}`
@@ -87,9 +88,10 @@ export async function notifySales(inquiry, id, env, fetchImpl = fetch) {
     console.log(`[email skipped: no RESEND_API_KEY or SALES_EMAIL] ${subject}`)
     return { status: 'skipped' }
   }
-  const res = await fetchImpl('https://api.resend.com/emails', {
+  const res = await fetchImpl(env.RESEND_URL || 'https://api.resend.com/emails', { // RESEND_URL is for load tests only
     method: 'POST',
     headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json' },
+    signal: AbortSignal.timeout(10_000), // a stuck email service must not leave the record on "pending" forever
     body: JSON.stringify({
       from: env.FROM_EMAIL || 'Dulifei website <onboarding@resend.dev>',
       to: env.SALES_EMAIL.split(',').map((s) => s.trim()),
