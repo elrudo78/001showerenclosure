@@ -127,6 +127,30 @@ await page.hover('footer a[href="/faq/"]')
 await wait(page, 400)
 report((await page.$eval('footer a[href="/faq/"]', (a) => getComputedStyle(a).backgroundSize)) === '100% 100%', 'text links show the hover box')
 
+// Slow pictures (like a real host): the product picture still moves, opening and going back
+{
+  const slow = await browser.newContext({ viewport: { width: 1440, height: 900 } })
+  await slow.route(/\.(avif|webp|png|jpg)$/, async (r) => { await new Promise((res) => setTimeout(res, 600)); r.continue() })
+  await slow.addInitScript(() => {
+    addEventListener('pagereveal', (e) => {
+      e.viewTransition?.ready.then(() => {
+        const moved = document.documentElement.getAnimations({ subtree: true }).some((a) => String(a.effect?.pseudoElement || '').includes('group(product-'))
+        sessionStorage.setItem('moves', (sessionStorage.getItem('moves') || '') + (moved ? 'y' : 'n'))
+      })
+    })
+  })
+  const sp = await slow.newPage()
+  await sp.goto(`${url}products/neo-angle-shower-enclosures/`, { waitUntil: 'load' })
+  await sp.locator('.card').nth(2).click()
+  await sp.waitForLoadState('load')
+  await wait(sp, 2000)
+  await sp.goBack()
+  await wait(sp, 2000)
+  const moves = await sp.evaluate(() => sessionStorage.getItem('moves'))
+  report(moves === 'yy', `picture moves on a slow connection, opening and going back (${moves})`)
+  await slow.close()
+}
+
 // Reduced motion: no transition, no zoom
 const calm = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' })
 await calm.addInitScript(watchReveal)

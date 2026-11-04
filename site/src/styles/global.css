@@ -259,6 +259,17 @@ a:where(:not(.button, .card, .brand, .skip, .lineup a, .nav a, .menu a)):hover {
   object-fit: cover;
 }
 
+/* New picture not loaded yet: keep the clicked picture fully visible for the whole move. */
+:root.vt-hold-old::view-transition-old(.product-pic) {
+  animation: none;
+  opacity: 1;
+}
+
+:root.vt-hold-old::view-transition-new(.product-pic) {
+  animation: none;
+  opacity: 0;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;

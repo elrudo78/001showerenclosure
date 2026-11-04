@@ -2,6 +2,13 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-04: Picture move fixed for real hosts; two copy changes
+
+- The user saw the product picture move on page change only rarely on Netlify. Cause: the fallback added on 11-03 cancelled the move whenever the new page's picture was not loaded yet at the moment of the change, which on a real host is nearly always (measured: 0 of 6 moves with 600 ms picture delay, 6 of 6 without).
+- Fix (`Base.astro` + `global.css`): if the new picture is not ready, the clicked picture makes the move on its own (class `vt-hold-old`), stays in place until the real picture loads (kept open by a script animation on the group, at most 1.5 s), then cross-fades to it. The moving element on a list page is found from the product we came back from (`navigation.activation.from`). Measured: 6 of 6 moves with the delay. New effects test for the slow case, opening and going back.
+- Contact: removed "The more you send, the faster the quote" (read as pressure, promised a speed we cannot guarantee). Homepage layout drawings: the taglines replace the model counts.
+- Tests: `check:site`, 10 unit tests, browser, form and effects checks all pass; Lighthouse home 99, D15131 and contact 100 across the board.
+
 ## 2026-11-03: Third round from the user's review
 
 - Dark theme removed completely (tokens, header button, early script, theme-color pair, plates, logo filter, test); the user prefers the muted light page.

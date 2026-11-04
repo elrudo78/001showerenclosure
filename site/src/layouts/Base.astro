@@ -60,13 +60,41 @@ const fontFace =`@font-face{font-family:'Archivo';font-style:normal;font-display
     <script type="application/ld+json" set:html={JSON.stringify(graph)} />
     <!-- Chrome and Edge get the next page ready while the pointer rests on a link, so pictures are loaded before the page change. -->
     <script type="speculationrules" is:inline set:html={JSON.stringify(speculation)} />
-    <!-- A product picture that is not loaded yet fades in with the page instead of moving in as an empty box. -->
+    <!-- Product picture moves between pages. If the new page's picture has not loaded yet, the picture that was
+         clicked makes the move on its own, waits in place until the real one has loaded (at most 1.5 s), then
+         cross-fades to it. So the movement always happens and never shows an empty box. -->
     <script is:inline>
-      addEventListener('pagereveal', (e) => {
-        if (!e.viewTransition) return
-        document.querySelectorAll('[style*="view-transition-name:product-"]').forEach((el) => {
-          const img = el.querySelector('img')
-          if (img && !(img.complete && img.naturalWidth)) el.style.viewTransitionName = 'none'
+      addEventListener('pagereveal', function (e) {
+        var vt = e.viewTransition
+        if (!vt) return
+        var root = document.documentElement
+        // The moving picture: on a product page its own; on a list page, the product we came back from.
+        var el = document.querySelector('.studio, .gallery .stage')
+        var from = window.navigation && navigation.activation && navigation.activation.from
+        if (!el && from) {
+          var slug = new URL(from.url).pathname.split('/').filter(Boolean).pop()
+          el = [].find.call(document.querySelectorAll('[style*="view-transition-name"]'), function (x) {
+            return x.style.viewTransitionName === 'product-' + slug
+          })
+        }
+        var img = el && el.querySelector('img')
+        if (!img || (img.complete && img.naturalWidth)) return
+        var name = el.style.viewTransitionName || getComputedStyle(el).viewTransitionName
+        root.classList.add('vt-hold-old')
+        vt.finished.finally(function () { root.classList.remove('vt-hold-old') })
+        vt.ready.then(function () {
+          var pe = function (part) { return '::view-transition-' + part + '(' + name + ')' }
+          var keep = root.animate([{}, {}], { duration: 1500, pseudoElement: pe('group') })
+          var done = false
+          var reveal = function () {
+            if (done) return
+            done = true
+            root.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, easing: 'ease', fill: 'forwards', pseudoElement: pe('new') })
+              .finished.then(function () { keep.cancel() })
+          }
+          if (img.complete) reveal()
+          img.addEventListener('load', reveal, { once: true })
+          img.addEventListener('error', function () { keep.cancel() }, { once: true })
         })
       })
     </script>
