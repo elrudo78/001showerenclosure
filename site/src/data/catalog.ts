@@ -52,7 +52,7 @@ export const layouts: Layout[] = [
     description:
       'Five-sided neo-angle (diamond) corner shower enclosures from Dulifei with pivot, hinged or sliding doors, 1100 × 1100 mm standard and made to measure.',
     intro:
-      'A neo-angle enclosure, also called a diamond enclosure, cuts the corner off a square shower so the door sits on the angle. Most models have a pivot door that opens both ways; some use hinges and open outwards only.',
+      'A neo-angle enclosure, also called a diamond enclosure, cuts the corner off a square shower so the door sits on the angle. Most models have a pivot door that opens both ways. Some use hinges and open outwards only.',
   },
   {
     id: 'pivot',
@@ -204,7 +204,7 @@ export const products: Product[] = [
   p({
     slug: 's68722', code: 'S68722', name: 'S68722 Sliding Shower Door', layout: 'sliding', catalogPage: 10,
     kind: 'two-panel sliding door on a top track',
-    specs: { shapes: ['Straight', 'L-shape', 'T-shape'], door: 'Two sliding panels', glass: '10 mm clear glass', seal: 'Rubber strip; stainless steel magnetic strip optional', standard: '1400 × 2100 mm', custom: 'Width 1200 to 1800 mm, height 2000 to 2200 mm', finishes: F_STD, handle: 'U502 small D-shaped handle' },
+    specs: { shapes: ['Straight', 'L-shape', 'T-shape'], door: 'Two sliding panels', glass: '10 mm clear glass', seal: 'Rubber strip, with a stainless steel magnetic strip as an option', standard: '1400 × 2100 mm', custom: 'Width 1200 to 1800 mm, height 2000 to 2200 mm', finishes: F_STD, handle: 'U502 small D-shaped handle' },
   }),
   p({
     slug: 'c52', code: 'C52', name: 'C52 Sliding Shower Door', layout: 'sliding', catalogPage: 10,
@@ -244,7 +244,7 @@ export const products: Product[] = [
   p({
     slug: 's41922', code: 'S41922', name: 'S41922 Soft-Close Sliding Shower Door', layout: 'sliding', catalogPage: 12,
     kind: 'two-panel sliding door with soft-close',
-    specs: { shapes: ['Straight', 'L-shape'], door: 'Two sliding panels with soft-close', glass: '8 mm clear glass', seal: 'Rubber strip; stainless steel magnetic strip optional', standard: '1400 × 2100 mm', custom: 'Width 1200 to 1800 mm, height 2000 to 2200 mm', finishes: F_STD, handle: 'U502 small D-shaped handle' },
+    specs: { shapes: ['Straight', 'L-shape'], door: 'Two sliding panels with soft-close', glass: '8 mm clear glass', seal: 'Rubber strip, with a stainless steel magnetic strip as an option', standard: '1400 × 2100 mm', custom: 'Width 1200 to 1800 mm, height 2000 to 2200 mm', finishes: F_STD, handle: 'U502 small D-shaped handle' },
   }),
   p({
     slug: 's26632', code: 'S26632', name: 'S26632 Sliding Shower Door', layout: 'sliding', catalogPage: 12,
@@ -355,14 +355,14 @@ export const products: Product[] = [
   }),
   p({
     slug: 'singletrack', code: 'Single track', name: 'Single-Track Panoramic Sliding Door', layout: 'panoramic', catalogPage: 14,
-    kind: 'single-track panoramic sliding door',
+    kind: 'panoramic sliding door that runs on a single track',
     specs: { shapes: ['Straight', 'L-shape'], door: 'Sliding panels on a single track', glass: '8 mm clear glass', seal: 'Rebound stopper optional', standard: 'Panels 600 to 1200 mm wide, 2000 to 2440 mm high', custom: 'Panels 600 to 1200 mm wide, 2000 to 3000 mm high', finishes: F_BRUSHED, handle: 'U904 handle' },
   }),
 
   // Bathroom door
   p({
     slug: 'bathroomdoor', code: 'Bathroom door', name: 'Framed Glass Bathroom Door', layout: 'bathroom-door', catalogPage: 14,
-    kind: 'framed glass bathroom door',
+    kind: 'single framed door for the bathroom itself',
     specs: { shapes: ['Single door'], door: 'Opens outwards or inwards', glass: '4 + 4 mm laminated wired glass', standard: '800 mm wide, 2000 to 2440 mm high', custom: '800 mm wide, 2000 to 2800 mm high', finishes: F_BRUSHED },
   }),
 ]
@@ -372,15 +372,86 @@ export const productUrl = (x: Product) => `/products/${layoutById(x.layout).slug
 export const layoutUrl = (l: Layout) => `/products/${l.slug}/`
 
 /** One factual sentence built from the printed specifications. */
+/** Model codes contain a digit, or are short capital letters (DR, DB, HD, FHL). A few products are known only by their name. */
+export const hasModelCode = (x: Product) => /\d/.test(x.code) || /^[A-Z]{2,4}$/.test(x.code)
+/** What to call a product in a sentence: its model code, or its name when it has no code. */
+export const productLabel = (x: Product) => (hasModelCode(x) ? x.code : x.name)
+
+const finishCount = (n: number) => (n === 1 ? 'one' : ['two', 'three', 'four', 'five', 'six'][n - 2] ?? String(n))
+const lowerFirst = (t: string) => (/^[A-Z]{1,3}\d|^\d/.test(t) ? t : t.charAt(0).toLowerCase() + t.slice(1))
+
 export function summary(x: Product): string {
   if (!x.specs) {
-    return `${x.code} is a ${x.kind}, shown here in four frame finishes. Sizes are made to order: send your measurements and we will quote.`
+    return `${productLabel(x)} is a ${x.kind}, shown here in four frame finishes. Sizes are made to order: send your measurements and we will quote.`
   }
   const s = x.specs
-  const made = s.custom.charAt(0).toLowerCase() + s.custom.slice(1)
   const n = s.finishes.length
-  const count = n === 1 ? 'one' : ['two', 'three', 'four', 'five', 'six'][n - 2] ?? String(n)
-  return `${x.code} is a ${x.kind}. The standard size is ${s.standard}, and it can be made to measure: ${made}. It comes with ${s.glass.toLowerCase()}, in a choice of ${count} frame finish${n === 1 ? '' : 'es'}.`
+  const handle = s.handle ? ` and a ${lowerFirst(s.handle)}` : ''
+  return `${hasModelCode(x) ? x.code : `The ${x.name}`} is a ${x.kind}. The standard size is ${s.standard}, and it can be made to measure: ${lowerFirst(s.custom)}. It comes with ${s.glass.toLowerCase()}${handle}, in a choice of ${finishCount(n)} frame finish${n === 1 ? '' : 'es'}.`
+}
+
+const cut = (t: string, max: number) => {
+  if (t.length <= max) return t
+  const head = t.slice(0, max + 1)
+  return head.slice(0, Math.max(head.lastIndexOf(' '), 0) || max).replace(/[,:;]$/, '')
+}
+
+/** Short description for search results: whole sentences or clauses, never cut in the middle of a word. */
+export function metaDescription(x: Product): string {
+  const first = summary(x).split(/(?<=\.)\s/)[0]
+  const s = x.specs
+  const std = s ? (/^\d/.test(s.standard) ? `Standard size ${s.standard}` : s.standard) : ''
+  const options = s ? [`${first} ${std}, made to measure, in ${finishCount(s.finishes.length)} frame finishes.`, `${first} ${std}, made to measure.`] : [`${first} Made to your sizes, in four frame finishes.`]
+  return options.find((o) => o.length <= 158) ?? cut(first, 155)
+}
+
+/** Page title: name and standard size when they fit in a search result, the name alone otherwise. */
+export function pageTitle(x: Product): string {
+  const size = x.specs && /^\d/.test(x.specs.standard) ? `, ${x.specs.standard}` : ''
+  const withSize = `${x.name}${size} | Dulifei`
+  return withSize.length <= 70 ? withSize : `${x.name} | Dulifei`
+}
+
+export const rangeNoun: Record<LayoutId, string> = {
+  sliding: 'sliding doors',
+  'neo-angle': 'neo-angle enclosures',
+  pivot: 'pivot and hinged screens',
+  'l-t': 'L-shape and T-shape enclosures',
+  panoramic: 'panoramic systems',
+  'bathroom-door': 'bathroom doors',
+}
+
+/**
+ * What sets a model apart from the others in its range, written only from the printed specifications:
+ * a point is made only where this model differs from what most of the others have.
+ */
+export function differences(x: Product): { lead: string; sentences: string[] } | null {
+  if (!x.specs) return null
+  const others = productsIn(x.layout).filter((o) => o.slug !== x.slug && o.specs)
+  if (others.length < 2) return null
+  const majority = (get: (s: Specs) => string | undefined) => {
+    const counts = new Map<string, number>()
+    for (const o of others) {
+      const v = get(o.specs!)
+      if (v) counts.set(v, (counts.get(v) ?? 0) + 1)
+    }
+    const top = [...counts].sort((a, b) => b[1] - a[1])[0]
+    return top && top[1] > others.length / 2 ? top[0] : undefined
+  }
+  const s = x.specs
+  const noun = rangeNoun[x.layout]
+  const out: string[] = []
+  const glass = majority((o) => o.glass)
+  if (glass && glass !== s.glass) out.push(`Its glass is ${s.glass.toLowerCase()}, where most of the others have ${glass.toLowerCase()}.`)
+  const seals = [MAGNETIC, RUBBER]
+  const seal = majority((o) => o.seal)
+  if (seal && s.seal && seal !== s.seal && seals.includes(seal) && seals.includes(s.seal)) out.push(`It has a ${s.seal.toLowerCase()}, where most of the others have a ${seal.toLowerCase()}.`)
+  const opens = (d: string) => (/inwards and outwards/i.test(d) ? 'both ways' : /outwards/i.test(d) ? 'outwards only' : '')
+  const door = majority((o) => opens(o.door))
+  if (door && opens(s.door) && opens(s.door) !== door) out.push(`Its door opens ${opens(s.door)}, where most of the others open ${door}.`)
+  const custom = majority((o) => o.custom)
+  if (custom && custom !== s.custom) out.push(`It can be made to measure in this range: ${lowerFirst(s.custom)}. Most of the others offer ${lowerFirst(custom)}.`)
+  return out.length ? { lead: `Compared with the other ${noun}`, sentences: out } : null
 }
 
 /** The matching choice in the inquiry form's Layout list. */

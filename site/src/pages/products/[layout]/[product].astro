@@ -6,7 +6,7 @@ import ProductGrid from '../../../components/ProductGrid.astro'
 import SpecTable from '../../../components/SpecTable.astro'
 import FinishGallery from '../../../components/FinishGallery.astro'
 import InquiryForm from '../../../components/InquiryForm.astro'
-import { formLayout, layoutById, layoutUrl, products, productsIn, productUrl, summary, type Product } from '../../../data/catalog'
+import { differences, formLayout, hasModelCode, layoutById, layoutUrl, metaDescription, pageTitle, productLabel, products, productsIn, productUrl, rangeNoun, summary, type Product } from '../../../data/catalog'
 import { breadcrumbLd, company } from '../../../data/site'
 
 export function getStaticPaths() {
@@ -28,7 +28,7 @@ const crumbs = [
   { name: 'Home', href: '/' },
   { name: 'Products', href: '/products/' },
   { name: layout.name, href: layoutUrl(layout) },
-  { name: product.code, href: productUrl(product) },
+  { name: productLabel(product), href: productUrl(product) },
 ]
 const props = s
   ? [
@@ -48,8 +48,7 @@ const jsonLd = [
     '@type': 'Product',
     '@id': `${url}#product`,
     name: product.name,
-    sku: product.code,
-    model: product.code,
+    ...(hasModelCode(product) && { sku: product.code, model: product.code }),
     category: layout.name,
     description: text,
     url,
@@ -58,8 +57,9 @@ const jsonLd = [
     additionalProperty: props.map(([name, value]) => ({ '@type': 'PropertyValue', name, value })),
   },
 ]
-const title = `${product.name}${s ? `, ${s.standard.replace(/ mm$/, ' mm')}` : ''} | Dulifei`
-const description = `${text}`.slice(0, 300)
+const title = pageTitle(product)
+const description = metaDescription(product)
+const compared = differences(product)
 ---
 
 <Base title={title} description={description} jsonLd={jsonLd} image={product.finishGallery?.[0].src ?? product.photos?.[0].src ?? product.image} imageAlt={product.name}>
@@ -91,7 +91,7 @@ const description = `${text}`.slice(0, 300)
       <h1>{product.name}</h1>
       <p class="lead">{text}</p>
       <p class="actions">
-        <a class="button" href="#inquiry">Request a quote for {product.code}</a>
+        <a class="button" href="#inquiry">Request a quote for {productLabel(product)}</a>
       </p>
       {
         s ? (
@@ -99,6 +99,11 @@ const description = `${text}`.slice(0, 300)
             <h2 id="specs-title">Specifications</h2>
             <SpecTable specs={s} />
             <p class="note">Need a size outside these ranges? <a href="#inquiry">Ask us</a>.</p>
+            {compared && (
+              <p class="compared">
+                <strong>{compared.lead}:</strong> {compared.sentences.join(' ')}
+              </p>
+            )}
           </section>
         ) : (
           <section aria-labelledby="specs-title" class="spec-block">
@@ -132,7 +137,7 @@ const description = `${text}`.slice(0, 300)
     related.length > 0 && (
       <section class="wrap related" aria-labelledby="related-title">
         <div class="related-head">
-          <h2 id="related-title">More {layout.name.toLowerCase()}</h2>
+          <h2 id="related-title">More {rangeNoun[product.layout]}</h2>
           <a href={layoutUrl(layout)}>See all</a>
         </div>
         <ProductGrid products={related} />
@@ -140,7 +145,7 @@ const description = `${text}`.slice(0, 300)
     )
   }
 
-  <InquiryForm product={product.name} layout={formLayout[product.layout]} title={`Ask about ${product.code}`} />
+  <InquiryForm product={product.name} layout={formLayout[product.layout]} title={`Ask about ${productLabel(product)}`} />
 </Base>
 
 <style>
@@ -194,6 +199,17 @@ const description = `${text}`.slice(0, 300)
   .spec-block h2 {
     font-size: var(--t-21);
     margin-bottom: var(--s-16);
+  }
+
+  .compared {
+    margin-top: var(--s-16);
+    max-width: 40em;
+    color: var(--graphite);
+  }
+
+  .compared strong {
+    color: var(--ink);
+    font-weight: 560;
   }
 
   .note {

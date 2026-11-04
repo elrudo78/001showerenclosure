@@ -11,6 +11,8 @@
     "build": "astro build && node scripts/finish-headers.mjs",
     "preview": "astro preview",
     "check:site": "node scripts/check-built-site.mjs",
+    "check:all": "node scripts/check-all.mjs",
+    "check:quick": "node scripts/check-all.mjs --quick",
     "test": "node --test worker/*.test.js",
     "worker:dev": "npm run build && wrangler d1 migrations apply dulifei-inquiries --local && wrangler dev",
     "deploy": "npm run build && wrangler d1 migrations apply dulifei-inquiries --remote && wrangler deploy"

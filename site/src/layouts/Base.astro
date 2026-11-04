@@ -58,11 +58,11 @@ const fontFace =`@font-face{font-family:'Archivo';font-style:normal;font-display
     {bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
     <link rel="alternate" type="text/plain" href="/llms.txt" title="Site summary for AI tools" />
     <script type="application/ld+json" set:html={JSON.stringify(graph)} />
-    <!-- Chrome and Edge get the next page ready while the pointer rests on a link, so pictures are loaded before the page change. -->
+    {/* Chrome and Edge get the next page ready while the pointer rests on a link, so pictures are loaded before the page change. */}
     <script type="speculationrules" is:inline set:html={JSON.stringify(speculation)} />
-    <!-- Product picture moves between pages. If the new page's picture has not loaded yet, the picture that was
+    {/* Product picture moves between pages. If the new page's picture has not loaded yet, the picture that was
          clicked makes the move on its own, waits in place until the real one has loaded (at most 1.5 s), then
-         cross-fades to it. So the movement always happens and never shows an empty box. -->
+         cross-fades to it. So the movement always happens and never shows an empty box. */}
     <script is:inline>
       addEventListener('pagereveal', function (e) {
         var vt = e.viewTransition

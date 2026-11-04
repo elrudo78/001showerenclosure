@@ -97,10 +97,7 @@ const page = Astro.url.pathname
           <path d="M14 24.5l7 7 13-14" pathLength="1" />
         </svg>
         <h3 class="done-title" tabindex="-1">Thank you, your inquiry is in</h3>
-        <p class="done-text">
-          We have saved it and passed it to our sales team, who will reply to <strong class="done-email"></strong>.
-          Your reference number is <strong class="done-id"></strong>.
-        </p>
+        <p class="done-text"></p>{/* written after sending, so the page source never holds a half-empty sentence */}
         <button class="button quiet again" type="button">Send another inquiry</button>
       </div>
     </div>
@@ -203,8 +200,15 @@ const page = Astro.url.pathname
         const res = await fetch(form.action, { method: 'POST', body, headers: { accept: 'application/json' } })
         const out = await res.json().catch(() => ({ ok: false, errors: {} }))
         if (out.ok) {
-          done.querySelector('.done-email')!.textContent = String(out.email || body.get('email'))
-          done.querySelector('.done-id')!.textContent = `#${out.id}`
+          // Built from text nodes, never as HTML, because the email address is whatever the visitor typed.
+          const bold = (cls: string, text: string) => Object.assign(document.createElement('strong'), { className: cls, textContent: text })
+          done.querySelector('.done-text')!.replaceChildren(
+            'We have saved it and passed it to our sales team, who will reply to ',
+            bold('done-email', String(out.email || body.get('email'))),
+            '. Your reference number is ',
+            bold('done-id', `#${out.id}`),
+            '.',
+          )
           form.hidden = true
           done.hidden = false
           done.querySelector<HTMLElement>('.done-title')!.focus()

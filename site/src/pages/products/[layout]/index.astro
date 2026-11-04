@@ -3,7 +3,7 @@ import Base from '../../../layouts/Base.astro'
 import Breadcrumbs from '../../../components/Breadcrumbs.astro'
 import ProductGrid from '../../../components/ProductGrid.astro'
 import InquiryForm from '../../../components/InquiryForm.astro'
-import { formLayout, layouts, layoutUrl, productsIn, productUrl, type Layout } from '../../../data/catalog'
+import { formLayout, layouts, layoutUrl, productsIn, productUrl, rangeNoun, type Layout } from '../../../data/catalog'
 import { breadcrumbLd } from '../../../data/site'
 
 export function getStaticPaths() {
@@ -84,7 +84,7 @@ const jsonLd = [
     )
   }
 
-  <InquiryForm layout={formLayout[layout.id]} title={`Ask about ${layout.name.toLowerCase()}`} />
+  <InquiryForm layout={formLayout[layout.id]} title={`Ask about ${rangeNoun[layout.id]}`} />
 </Base>
 
 <style>

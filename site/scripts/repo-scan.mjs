@@ -44,8 +44,13 @@ for (const [kind, pattern] of Object.entries(secretPatterns)) {
     // Case matters for key formats (so "task-based-asynchronous-pattern" is not mistaken for a key); links and "key = ..." are matched either way.
     out = run('git', ['-C', top, 'grep', '-I', '-n', ...(/Drive|Docs|assigned in text/.test(kind) ? ['-i'] : []), '-E', '-e', pattern, ...revs])
   } catch {} // git grep exits with 1 when nothing matches
-  for (const line of out.split('\n').filter(Boolean)) {
-    const [, path, no] = line.match(/^[0-9a-f]{40}:(.+?):(\d+):/) || []
+  // The files as they are now, committed or not (untracked files that are not ignored too), as well as every past commit.
+  let now = ''
+  try {
+    now = run('git', ['-C', top, 'grep', '-I', '-n', '--untracked', ...(/Drive|Docs|assigned in text/.test(kind) ? ['-i'] : []), '-E', '-e', pattern])
+  } catch {}
+  for (const line of (out + '\n' + now).split('\n').filter(Boolean)) {
+    const [, path, no] = line.match(/^(?:[0-9a-f]{40}:)?(.+?):(\d+):/) || []
     if (path) found.set(`${kind}|${path}|${no}`, 1)
   }
 }
@@ -53,7 +58,7 @@ for (const key of found.keys()) {
   const [kind, path, no] = key.split('|')
   check(false, `${kind} found in ${path}:${no} (some commit)`)
 }
-console.log(`     ${revs.length} commits scanned for ${Object.keys(secretPatterns).length} kinds of secret: ${found.size === 0 ? 'none found' : found.size + ' found'}`)
+console.log(`     ${revs.length} commits and the files as they are now scanned for ${Object.keys(secretPatterns).length} kinds of secret: ${found.size === 0 ? 'none found' : found.size + ' found'}`)
 
 // ---------------------------------------------------------------------------------------------------------------
 section('2. Personal details in the files (email addresses and phone numbers)')
@@ -68,8 +73,12 @@ for (const [kind, pattern] of Object.entries({ email: '[A-Za-z0-9._%+-]+@[A-Za-z
   try {
     out = run('git', ['-C', top, 'grep', '-I', '-n', '-o', '-E', '-e', pattern, ...revs])
   } catch {}
-  for (const line of out.split('\n').filter(Boolean)) {
-    const m = line.match(/^[0-9a-f]{40}:(.+?):(\d+):(.+)$/)
+  let now = ''
+  try {
+    now = run('git', ['-C', top, 'grep', '-I', '-n', '-o', '--untracked', '-E', '-e', pattern])
+  } catch {}
+  for (const line of (out + '\n' + now).split('\n').filter(Boolean)) {
+    const m = line.match(/^(?:[0-9a-f]{40}:)?(.+?):(\d+):(.+)$/)
     if (!m) continue
     const [, path, no, hit] = m
     if (path.startsWith('docs/asset-review/') && /\.csv$/.test(path)) continue // file listings, checked by hand: personal details were removed

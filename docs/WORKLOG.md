@@ -2,6 +2,14 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-04: Does it look machine-made?
+
+- New `site/scripts/copy-check.mjs` (989 checks) and `docs/rebuild/AI-TELLS-CHECKLIST.md`: 138 filler and marketing phrases, dashes, exclamation marks, emoji, semicolons, Title Case headings, heading order, titles and descriptions (length, uniqueness), picture descriptions, repeated sentences, thin and near-duplicate pages, keyword stuffing, leftovers in the code, and design clichés in the styles. Also `site/scripts/check-all.mjs` (`npm run check:all` or `check:quick`): builds, starts the site, runs every check in order, prints one table.
+- Real findings fixed: developer comments visible in every page's source; the hidden thank-you panel left a broken sentence in the page source of all 56 pages (now written only after sending, from text nodes); the home page claimed profiles are "measured and drilled" (unsupported by the photo notes; now says only what the photos show); products without a model code were called by their name as if it were a code ("Bathroom door is a framed glass bathroom door", "Ask about Bathroom door"; now `productLabel`/`hasModelCode` in `catalog.ts`); "Ask about l-shape and t-shape" lowercased wrongly (`rangeNoun`); search-result titles up to 95 characters and descriptions up to 300, cut mid-word (now 70 and 163 at most, `pageTitle` and `metaDescription`); three semicolons; "very".
+- Near-identical pages: six neo-angle models were 17% their own wording. Each summary now includes the model's own handle, and each page has a "Compared with the other ..." note generated only from specs that really differ (`differences()` in `catalog.ts`: glass, seal, door opening, size range). Lowest page 23%, median 49%, most similar pair 58% (D15331 and DR, whose printed specs differ only in finishes and handle).
+- I read all the hand-written copy as a visitor would; apart from the above it is plain, specific and factual.
+- Design clichés: none found (no purple gradients, frosted glass, gradient text, blobs, uppercase labels or default fonts; one font, one palette, no scroll-triggered fades).
+
 ## 2026-11-04: Security
 
 - New `site/scripts/security-check.mjs` (4,361 checks), `site/scripts/repo-scan.mjs` (all 38 commits on every branch) and `docs/SECURITY.md` (what is protected, a launch checklist for the dashboards, limits, what to do if something goes wrong).
