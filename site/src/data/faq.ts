@@ -2,7 +2,7 @@
 export const faq = [
   {
     q: 'Do you make shower enclosures to custom sizes?',
-    a: 'Yes. Every model has a standard size and a made-to-measure range printed in our catalog. For example, the D15131 neo-angle enclosure is 1100 × 1100 × 2300 mm as standard and can be made from 900 to 1200 mm on each side and up to 2800 mm high. Send us your measurements and we will match them to a model.',
+    a: 'Yes. Every model has a standard size and a made-to-measure range. For example, the D15131 neo-angle enclosure is 1100 × 1100 × 2300 mm as standard and can be made from 900 to 1200 mm on each side and up to 2800 mm high. Send us your measurements and we will match them to a model.',
   },
   {
     q: 'What glass do your shower enclosures use?',

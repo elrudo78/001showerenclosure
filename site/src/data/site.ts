@@ -10,6 +10,21 @@ export const company = {
   countryName: 'China',
 }
 
+/**
+ * Ways to reach the company. Empty until the team or client confirms them (see docs/HANDOFF.md, section 7).
+ * Anything filled in appears on the Contact page, in the footer and in the Organization data for search and AI tools.
+ */
+export const contact = {
+  email: '', // e.g. 'sales@example.com'
+  whatsapp: '', // with country code, e.g. '+86 760 0000 0000'
+  phone: '',
+  address: '', // one line, as it should appear on the site
+  social: [] as { name: string; url: string }[], // e.g. { name: 'YouTube', url: 'https://www.youtube.com/@...' }
+}
+
+export const whatsappUrl = (n: string) => `https://wa.me/${n.replace(/\D/g, '')}`
+export const hasContact = () => Boolean(contact.email || contact.whatsapp || contact.phone || contact.address || contact.social.length)
+
 export const absolute = (path: string, site?: URL) => new URL(path, site).href
 
 export function organizationLd(site?: URL) {
@@ -22,6 +37,9 @@ export function organizationLd(site?: URL) {
     logo: absolute('/logo.png', site),
     description: company.description,
     address: { '@type': 'PostalAddress', addressLocality: company.locality, addressRegion: company.region, addressCountry: company.country },
+    ...(contact.email && { email: contact.email }),
+    ...((contact.phone || contact.whatsapp) && { telephone: contact.phone || contact.whatsapp }),
+    ...(contact.social.length && { sameAs: contact.social.map((s) => s.url) }),
   }
 }
 

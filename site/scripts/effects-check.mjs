@@ -121,6 +121,14 @@ await wait(page, 900)
 const tableTop = await page.$eval('#compare', (c) => Math.round(c.getBoundingClientRect().top))
 report(tableTop >= 0 && tableTop < 200, `Compare button scrolls to the table (top at ${tableTop}px)`)
 
+// Large layout headings: colour and arrow on hover, no box behind big text
+await page.goto(`${url}products/`, { waitUntil: 'load' })
+await page.hover('.title-link')
+await wait(page, 400)
+report((await page.$eval('.title-link', (a) => getComputedStyle(a).backgroundImage)) === 'none', 'big heading links have no hover box')
+await page.goto(`${url}products/sliding-shower-doors/`, { waitUntil: 'load' })
+report((await page.$eval('a[href="#compare"]', (a) => a.textContent.trim())) === 'Compare models', 'Compare button shows no model count')
+
 // Text links: a light box rises behind them on hover
 await page.goto(`${url}faq/`, { waitUntil: 'load' })
 await page.hover('footer a[href="/faq/"]')

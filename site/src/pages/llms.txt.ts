@@ -11,7 +11,7 @@ export const GET: APIRoute = ({ site }) => {
     '',
     `> ${company.description}`,
     '',
-    'Products are grouped by layout. Each product page lists the standard size, the made-to-measure range, glass, seal, frame finishes and handle as printed in the 2025 catalog. Buyers request quotes through the inquiry form; the sales team replies by email.',
+    'Products are grouped by layout. Each product page lists the standard size, the made-to-measure range, glass, seal, frame finishes and handle for that model. Buyers request quotes through the inquiry form; the sales team replies by email.',
     '',
     '## Main pages',
     '',

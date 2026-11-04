@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import logo from '../assets/brand-logo.png'
+import { contact } from '../data/site'
 
 const year = new Date().getFullYear()
 ---
@@ -20,6 +21,15 @@ const year = new Date().getFullYear()
         <li><a href="/contact/">Contact</a></li>
         <li><a href="/faq/">FAQ</a></li>
       </ul>
+      {
+        contact.social.length > 0 && (
+          <ul class="social" aria-label="Social accounts">
+            {contact.social.map((s) => (
+              <li><a href={s.url} rel="noopener me">{s.name}</a></li>
+            ))}
+          </ul>
+        )
+      }
     </nav>
 
     <p class="legal">© {year} Dulifei</p>
@@ -61,6 +71,10 @@ const year = new Date().getFullYear()
   a {
     display: inline-block;
     padding-block: var(--s-8);
+  }
+
+  .social {
+    margin-top: var(--s-8);
   }
 
   .legal {

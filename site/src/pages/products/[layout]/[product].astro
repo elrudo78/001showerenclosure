@@ -96,7 +96,7 @@ const description = `${text}`.slice(0, 300)
           <section aria-labelledby="specs-title" class="spec-block">
             <h2 id="specs-title">Specifications</h2>
             <SpecTable specs={s} />
-            <p class="note">From our 2025 catalog{product.catalogPage ? `, page ${product.catalogPage}` : ''}. Sizes outside these ranges: ask us.</p>
+            <p class="note">Need a size outside these ranges? <a href="#inquiry">Ask us</a>.</p>
           </section>
         ) : (
           <section aria-labelledby="specs-title" class="spec-block">
@@ -131,7 +131,7 @@ const description = `${text}`.slice(0, 300)
       <section class="wrap related" aria-labelledby="related-title">
         <div class="related-head">
           <h2 id="related-title">More {layout.name.toLowerCase()}</h2>
-          <a href={layoutUrl(layout)}>All {productsIn(product.layout).length} models</a>
+          <a href={layoutUrl(layout)}>See all</a>
         </div>
         <ProductGrid products={related} />
       </section>

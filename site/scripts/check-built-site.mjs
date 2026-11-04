@@ -51,6 +51,8 @@ for (const file of pages.sort()) {
   if ((html.match(/<h1[\s>]/g) || []).length !== 1) fail(page, 'not exactly one <h1>')
   if (/[㐀-鿿豈-﫿]/.test(html)) fail(page, 'Chinese characters in HTML')
   if (/—/.test(body)) fail(page, 'em dash in text')
+  // The specs come from the client's catalog, but the site speaks for itself: no "from our catalog" lines (user's decision 2026-11-04).
+  if (/\bcatalog(ue)?\b/i.test(body)) fail(page, 'mentions the catalog in visible text')
   for (const img of html.match(/<img\b[^>]*>/g) || []) {
     if (!/\balt(="[^"]*"|[\s>\/])/.test(img)) fail(page, `image without alt: ${img.slice(0, 80)}`)
     if (!/\bwidth="\d+"/.test(img) || !/\bheight="\d+"/.test(img)) fail(page, `image without width/height: ${img.slice(0, 80)}`)

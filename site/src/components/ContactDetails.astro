@@ -1,0 +1,91 @@
+---
+// Direct contact details (email, WhatsApp, phone, address, social accounts). Renders nothing until they are
+// filled in in src/data/site.ts, so nothing unconfirmed ever appears on the site.
+import { contact, hasContact, whatsappUrl } from '../data/site'
+---
+
+{
+  hasContact() && (
+    <section class="wrap direct" aria-labelledby="direct-title">
+      <h2 id="direct-title">Other ways to reach us</h2>
+      <dl class="list">
+        {contact.whatsapp && (
+          <div class="row">
+            <dt>WhatsApp</dt>
+            <dd><a href={whatsappUrl(contact.whatsapp)} rel="noopener">{contact.whatsapp}</a></dd>
+          </div>
+        )}
+        {contact.email && (
+          <div class="row">
+            <dt>Email</dt>
+            <dd><a href={`mailto:${contact.email}`}>{contact.email}</a></dd>
+          </div>
+        )}
+        {contact.phone && (
+          <div class="row">
+            <dt>Phone</dt>
+            <dd><a href={`tel:${contact.phone.replace(/[^\d+]/g, '')}`}>{contact.phone}</a></dd>
+          </div>
+        )}
+        {contact.address && (
+          <div class="row">
+            <dt>Address</dt>
+            <dd>{contact.address}</dd>
+          </div>
+        )}
+        {contact.social.length > 0 && (
+          <div class="row">
+            <dt>Follow us</dt>
+            <dd class="social">
+              {contact.social.map((s) => (
+                <a href={s.url} rel="noopener me">{s.name}</a>
+              ))}
+            </dd>
+          </div>
+        )}
+      </dl>
+    </section>
+  )
+}
+
+<style>
+  .direct {
+    padding-block: var(--section) 0;
+  }
+
+  .list {
+    margin: var(--s-32) 0 0;
+    max-width: 44rem;
+    border-top: 1px solid var(--ink);
+  }
+
+  .row {
+    display: grid;
+    gap: var(--s-4);
+    padding: var(--s-16) 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  dt {
+    color: var(--graphite);
+    font-size: var(--t-14);
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 560;
+  }
+
+  .social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-8) var(--s-24);
+  }
+
+  @media (min-width: 40rem) {
+    .row {
+      grid-template-columns: 10rem minmax(0, 1fr);
+      align-items: baseline;
+    }
+  }
+</style>

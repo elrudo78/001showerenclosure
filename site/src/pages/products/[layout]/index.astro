@@ -39,7 +39,7 @@ const jsonLd = [
     <h1>{layout.title}</h1>
     <p class="lead">{layout.intro}</p>
     <p class="actions">
-      {withSpecs.length > 1 && <a class="button" href="#compare">Compare the {withSpecs.length} models</a>}
+      {withSpecs.length > 1 && <a class="button" href="#compare">Compare models</a>}
       <a class:list={['button', { quiet: withSpecs.length > 1 }]} href="#inquiry">Request a quote</a>
     </p>
   </section>
@@ -53,7 +53,7 @@ const jsonLd = [
     withSpecs.length > 1 && (
       <section class="wrap compare" id="compare" aria-labelledby="compare-title">
         <h2 id="compare-title">Compare the models</h2>
-        <p class="intro">Standard sizes and made-to-measure ranges as printed in our 2025 catalog.</p>
+        <p class="intro">Standard sizes and the range each model can be made to.</p>
         <div class="scroll" role="region" aria-labelledby="compare-title" tabindex="0">
           <table class="num">
             <thead>

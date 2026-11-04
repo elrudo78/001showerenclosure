@@ -87,7 +87,7 @@ const arrowRight = 'M5 12h14M13 6l6 6-6 6'
       <section class="wrap group" id={l.slug} aria-labelledby={`h-${l.slug}`}>
         <div class="group-head">
           <h2 id={`h-${l.slug}`}>
-            <a href={layoutUrl(l)}>
+            <a class="title-link" href={layoutUrl(l)}>
               {l.name}
               <svg class="go" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d={arrowRight} fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
             </a>
@@ -215,7 +215,7 @@ const arrowRight = 'M5 12h14M13 6l6 6-6 6'
   }
 
   .group-head h2 {
-    font-size: clamp(var(--t-33), 1.4rem + 2.4vw, var(--t-52));
+    font-size: clamp(var(--t-26), 1.2rem + 1.9vw, 2.75rem);
   }
 
   .group-head h2 a {

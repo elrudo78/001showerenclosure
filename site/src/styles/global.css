@@ -72,6 +72,13 @@ html {
   scrollbar-color: var(--sage) var(--stone);
 }
 
+/* Jump links (Request a quote, Compare models, Jump to a layout) glide down instead of jumping. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 body {
   margin: 0;
   background: var(--white);
@@ -133,8 +140,9 @@ a:hover {
 
 /* Text links: on hover a soft box rises from the bottom, like the button fill. Square with small corners,
    so it fits tight spaces (the pill shape is kept for the top bar). Cards, buttons, the logo and the
-   homepage layout drawings have their own hover and opt out. */
-a:where(:not(.button, .card, .brand, .skip, .lineup a, .nav a, .menu a)) {
+   homepage layout drawings have their own hover and opt out, and so do large heading links
+   (.title-link: colour and arrow only, a box behind big text looks heavy). */
+a:where(:not(.button, .card, .brand, .skip, .title-link, .lineup a, .nav a, .menu a)) {
   padding: 0.1em 0.25em;
   margin: -0.1em -0.25em;
   border-radius: 3px;
@@ -149,7 +157,7 @@ a:where(:not(.button, .card, .brand, .skip, .lineup a, .nav a, .menu a)) {
     color 160ms ease;
 }
 
-a:where(:not(.button, .card, .brand, .skip, .lineup a, .nav a, .menu a)):hover {
+a:where(:not(.button, .card, .brand, .skip, .title-link, .lineup a, .nav a, .menu a)):hover {
   background-size: 100% 100%;
 }
 

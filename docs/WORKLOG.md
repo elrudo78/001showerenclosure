@@ -2,6 +2,16 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-04: Catalog wording out, counts out, smooth jumps, contact spots
+
+- Homepage: no line under the layout drawings.
+- Products page: layout headings slightly smaller (26 to 44 px); no hover box behind them (`.title-link` opts out of the link box; colour and arrow only).
+- Removed every visible "from our 2025 catalog" line (product spec note now "Need a size outside these ranges? Ask us.", comparison intro, homepage scene caption, "Catalog finishes", FAQ, `llms.txt`). The figures are unchanged and still come from the catalog; `check:site` now fails if "catalog" appears in visible text.
+- Model counts gone from layout pages ("Compare models"; it said 15 on sliding doors because DLFC models have no printed specs) and product pages ("See all").
+- Jump links glide: `scroll-behavior: smooth` (off for reduced motion), no JavaScript.
+- Contact: `contact` in `site/src/data/site.ts` (email, WhatsApp, phone, address, social accounts). Empty until supplied; once filled it shows "Other ways to reach us" on Contact, social links in the footer, and email, telephone and `sameAs` in the Organization data. Tested with sample values, then emptied again.
+- Tests: all checks pass (effects test: no box on big headings, no count on Compare). Lighthouse home 99, products and contact 100 across the board.
+
 ## 2026-11-04: Products page layout, scrollbar
 
 - From the user's review: the index beside the heading had no breathing room and did not look clickable; the layout headings were small and crowded by their descriptions.
