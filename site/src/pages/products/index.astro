@@ -1,14 +1,30 @@
 ---
+import { Image } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
 import Base from '../../layouts/Base.astro'
 import Breadcrumbs from '../../components/Breadcrumbs.astro'
 import ProductGrid from '../../components/ProductGrid.astro'
 import InquiryForm from '../../components/InquiryForm.astro'
-import { layouts, layoutUrl, productsIn, products } from '../../data/catalog'
+import { layouts, layoutUrl, productsIn, products, type LayoutId } from '../../data/catalog'
 import { breadcrumbLd } from '../../data/site'
+import sliding from '../../assets/catalog/s26132.png'
+import neoAngle from '../../assets/catalog/d15131.png'
+import pivot from '../../assets/catalog/s93021.png'
+import lShape from '../../assets/catalog/l99131.png'
+import panoramic from '../../assets/catalog/s890.png'
+import bathroomDoor from '../../assets/catalog/bathroomdoor.png'
 
 // An overview, not the full list: four models per layout, then a link to the layout's own page
 // (all its models and the comparison table).
 const PREVIEW = 4
+const drawing: Record<LayoutId, ImageMetadata> = {
+  sliding,
+  'neo-angle': neoAngle,
+  pivot,
+  'l-t': lShape,
+  panoramic,
+  'bathroom-door': bathroomDoor,
+}
 const groups = layouts.map((l) => {
   const all = productsIn(l.id)
   return { layout: l, all, shown: all.slice(0, PREVIEW), compare: all.filter((p) => p.specs).length > 1 }
@@ -31,6 +47,8 @@ const jsonLd = [
     },
   },
 ]
+const arrowDown = 'M12 5v14M6 13l6 6 6-6'
+const arrowRight = 'M5 12h14M13 6l6 6-6 6'
 ---
 
 <Base
@@ -40,26 +58,27 @@ const jsonLd = [
 >
   <Breadcrumbs items={crumbs} />
   <section class="wrap intro-block">
-    <div class="intro-text">
-      <h1>Shower enclosures and sliding doors</h1>
-      <p class="lead">
-        {products.length} models in {layouts.length} layouts. Every model has a standard size and a range it can be made
-        to. Open a layout to see all its models and compare their sizes.
-      </p>
-    </div>
+    <h1>Shower enclosures and sliding doors</h1>
+    <p class="lead">
+      {products.length} models in {layouts.length} layouts. Every model has a standard size and a range it can be made to.
+      Open a layout to see all its models and compare their sizes.
+    </p>
 
-    <nav class="index" aria-label="Layouts">
-      <ol>
-        {groups.map(({ layout: l, all }) => (
+    <nav class="index" aria-labelledby="index-title">
+      <p class="index-title" id="index-title">Jump to a layout</p>
+      <ul>
+        {groups.map(({ layout: l }) => (
           <li>
             <a href={`#${l.slug}`}>
-              <span class="i-name">{l.short}</span>
-              <span class="i-tag">{l.tagline}</span>
-              <span class="i-count num">{all.length === 1 ? '1 model' : `${all.length} models`}</span>
+              <Image src={drawing[l.id]} alt="" widths={[120, 180, 240]} sizes="(min-width: 64rem) 9rem, 28vw" class="i-pic" />
+              <span class="i-name">
+                {l.short}
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d={arrowDown} fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </span>
             </a>
           </li>
         ))}
-      </ol>
+      </ul>
     </nav>
   </section>
 
@@ -68,26 +87,18 @@ const jsonLd = [
       <section class="wrap group" id={l.slug} aria-labelledby={`h-${l.slug}`}>
         <div class="group-head">
           <h2 id={`h-${l.slug}`}>
-            <a href={layoutUrl(l)}>{l.name}</a>
+            <a href={layoutUrl(l)}>
+              {l.name}
+              <svg class="go" width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d={arrowRight} fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </a>
           </h2>
-          <p class="intro">{l.intro}</p>
+          {all.length > 1 && (
+            <a class="button quiet" href={layoutUrl(l)} aria-label={`See all ${l.name}${compare ? ' and compare them' : ''}`}>
+              {compare ? 'See all and compare' : 'See all'}
+            </a>
+          )}
         </div>
         <ProductGrid products={shown} />
-        {all.length > PREVIEW ? (
-          <p class="more">
-            <a class="button" href={layoutUrl(l)} aria-label={`See all ${all.length} ${l.name}`}>
-              See all {all.length} models
-            </a>
-          </p>
-        ) : (
-          compare && (
-            <p class="more">
-              <a class="button" href={`${layoutUrl(l)}#compare`} aria-label={`Compare the ${all.length} ${l.name}`}>
-                Compare the {all.length} models
-              </a>
-            </p>
-          )
-        )}
       </section>
     ))
   }
@@ -97,105 +108,169 @@ const jsonLd = [
 
 <style>
   .intro-block {
-    display: grid;
-    gap: var(--s-48);
-    padding-block: var(--s-32) var(--s-48);
+    padding-block: var(--s-32) var(--s-64);
+  }
+
+  .intro-block h1 {
+    max-width: 14em;
   }
 
   .intro-block .lead {
     margin-top: var(--s-24);
   }
 
-  /* Index of layouts: one row each, with the name, a few words and how many models. */
-  .index ol {
+  /* Index: one box per layout, with its drawing, so it reads as a set of buttons before any hover. */
+  .index {
+    margin-top: var(--s-64);
+  }
+
+  .index-title {
+    margin-bottom: var(--s-16);
+    color: var(--graphite);
+    font-size: var(--t-14);
+    font-weight: 560;
+  }
+
+  .index ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-12);
     margin: 0;
     padding: 0;
     list-style: none;
-    border-top: 1px solid var(--ink);
-  }
-
-  .index li {
-    border-bottom: 1px solid var(--line);
   }
 
   .index a {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: var(--s-4) var(--s-16);
-    padding: var(--s-12) var(--s-8);
-    margin-inline: calc(var(--s-8) * -1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0;
+    padding: var(--s-12) var(--s-12) var(--s-16);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
     text-decoration: none;
+    transition:
+      background-size 220ms cubic-bezier(0.3, 0.7, 0.2, 1),
+      border-color 200ms ease,
+      color 160ms ease;
+  }
+
+  .index a:hover {
+    border-color: var(--ink);
+  }
+
+  .i-pic {
+    width: 100%;
+    max-width: 7rem;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    margin: 0 auto var(--s-12);
+    object-fit: contain;
+    mix-blend-mode: multiply;
   }
 
   .i-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-8);
+    margin-top: auto;
     font-weight: 560;
     font-stretch: var(--wide);
+    line-height: 1.25;
   }
 
-  .i-tag {
-    grid-column: 1;
-    color: var(--graphite);
-    font-size: var(--t-14);
+  .i-name svg {
+    flex: none;
+    color: var(--glass);
+    transition: translate 200ms ease;
   }
 
-  .i-count {
-    grid-column: 2;
-    grid-row: 1 / span 2;
-    align-self: center;
-    color: var(--graphite);
-    font-size: var(--t-14);
+  .index a:hover .i-name svg {
+    translate: 0 3px;
   }
 
+  /* One block per layout: a large heading that links to the layout page, its button, four models. */
   .group {
-    padding-block: var(--s-48) var(--section);
+    padding-bottom: var(--section);
     scroll-margin-top: calc(var(--header-space) + var(--s-16));
   }
 
-  .group-head {
-    display: grid;
-    gap: var(--s-16);
-    margin-bottom: var(--s-48);
+  /* Divider above each layout, as wide as the content. */
+  .group::before {
+    content: '';
+    display: block;
+    height: 1px;
+    margin-bottom: var(--section);
+    background: var(--line);
   }
 
-  .group-head .intro {
-    margin: 0;
+  .group-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-16) var(--s-32);
+    margin-bottom: var(--s-32);
+  }
+
+  .group-head h2 {
+    font-size: clamp(var(--t-33), 1.4rem + 2.4vw, var(--t-52));
   }
 
   .group-head h2 a {
     text-decoration: none;
   }
 
-  .more {
-    margin-top: var(--s-32);
+  .go {
+    display: inline-block;
+    width: 0.7em;
+    height: 0.7em;
+    margin-left: 0.15em;
+    color: var(--glass);
+    vertical-align: -0.02em;
+    transition: translate 200ms ease;
   }
 
-  @media (min-width: 48rem) {
+  .group-head h2 a:hover .go {
+    translate: 4px 0;
+  }
+
+  /* Phones: compact rows, small drawing beside the name. */
+  @media (max-width: 39.99rem) {
+    .index ul {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-8);
+    }
+
     .index a {
-      grid-template-columns: 14rem minmax(0, 1fr) auto;
-      align-items: baseline;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--s-8);
+      padding: var(--s-8) var(--s-12) var(--s-8) var(--s-8);
     }
 
-    .i-tag {
-      grid-column: 2;
+    .i-pic {
+      max-width: 2.5rem;
+      margin: 0;
     }
 
-    .i-count {
-      grid-column: 3;
-      grid-row: auto;
+    .i-name {
+      flex: 1;
+      margin-top: 0;
+      font-size: var(--t-14);
+    }
+  }
+
+  @media (min-width: 40rem) {
+    .index ul {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
   @media (min-width: 64rem) {
-    .intro-block {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-      align-items: start;
-      gap: var(--s-64);
-    }
-
-    .group-head {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-      align-items: end;
-      gap: var(--s-64);
+    .index ul {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
     }
   }
 </style>

@@ -109,9 +109,9 @@ report((await page.$eval('.hw-list li .hw-brushed-gold', (i) => getComputedStyle
 
 // Products page: an index, four models per layout and a link to the full layout page
 await page.goto(`${url}products/`, { waitUntil: 'load' })
-const groups = await page.$$eval('.group', (gs) => gs.map((g) => ({ id: g.id, cards: g.querySelectorAll('.card').length, more: g.querySelector('.more a')?.getAttribute('href') || '' })))
+const groups = await page.$$eval('.group', (gs) => gs.map((g) => ({ id: g.id, cards: g.querySelectorAll('.card').length, more: g.querySelector('.group-head a.button')?.getAttribute('href') || '' })))
 report(groups.length === 6 && groups.every((g) => g.cards <= 4), `products page shows at most 4 models per layout (${groups.map((g) => g.cards).join(', ')})`)
-report(groups[0].more === '/products/sliding-shower-doors/', 'a long layout links to its full page')
+report(groups[0].more === '/products/sliding-shower-doors/', 'each layout has a See all button to its full page')
 report((await page.$$('.index li')).length === 6, 'products page has an index of the 6 layouts')
 
 // Layout page: the Compare button jumps to the comparison table

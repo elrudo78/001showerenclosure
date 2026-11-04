@@ -2,6 +2,13 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-04: Products page layout, scrollbar
+
+- From the user's review: the index beside the heading had no breathing room and did not look clickable; the layout headings were small and crowded by their descriptions.
+- Now: heading and intro full width; "Jump to a layout" index below it as six bordered boxes with each layout's drawing, name and a down arrow (counts and taglines removed; on phones one compact row each); a content-wide divider and a section of space before each layout; large layout headings (33 to 52 px) linking to the layout page with an arrow; "See all and compare" (or "See all") button in place of the description; four models below.
+- Scrollbar: thin, sage on stone (`scrollbar-width`, `scrollbar-color`).
+- Tests: all checks pass (effects test updated for the new button); Lighthouse products page 100 across the board.
+
 ## 2026-11-04: Picture move fixed for real hosts; two copy changes
 
 - The user saw the product picture move on page change only rarely on Netlify. Cause: the fallback added on 11-03 cancelled the move whenever the new page's picture was not loaded yet at the moment of the change, which on a real host is nearly always (measured: 0 of 6 moves with 600 ms picture delay, 6 of 6 without).

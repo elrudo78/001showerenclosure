@@ -67,6 +67,9 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* Thin scrollbar in the theme colours (sage on the stone colour). */
+  scrollbar-width: thin;
+  scrollbar-color: var(--sage) var(--stone);
 }
 
 body {
