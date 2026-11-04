@@ -2,6 +2,16 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-04: Security
+
+- New `site/scripts/security-check.mjs` (4,361 checks), `site/scripts/repo-scan.mjs` (all 38 commits on every branch) and `docs/SECURITY.md` (what is protected, a launch checklist for the dashboards, limits, what to do if something goes wrong).
+- Added: a strict **Content-Security-Policy**, built at the end of `npm run build` (`scripts/finish-headers.mjs`) from the exact inline scripts of that build, so it cannot go stale; only Cloudflare's spam check and Web Analytics are allowed from outside. More headers in `public/_headers` (HSTS one year, cross-origin-opener-policy, wider permissions-policy). The real-browser test proves injected scripts, `onclick` handlers, string-built code and scripts or images from other sites are refused, and that nothing of ours is blocked (desktop and phone).
+- The test caught a mistake of mine: the first policy blocked the page-preparation hint (speculation rules) on every page, which would have silently turned off the smooth product opening in Chrome. Its fingerprint is now listed too.
+- Worker: the spam check now has a 5 second limit; an IPv6 /64 block counts as one visitor for the rate limit (`worker/visitor.js`); unit tests for the spam check (no token, rejected token, accepted token, Cloudflare unreachable) and the limits.
+- Dependencies: `npm audit` found 2 high (the image tool `sharp`, and `undici` inside the build tools and local test server) and 2 moderate; none run for visitors. Fixed without touching Astro: `sharp` 0.35.5, `wrangler` 4.157.0, locked `undici` refreshed; now 0 vulnerabilities. All suites re-run on a clean `npm ci`.
+- Repository: **`.gitignore` protected the three subfolders of `client-materials/` but not the folder itself**, so a new file dropped straight into it (for example a note with the Drive link) could have been committed. Now the whole folder, `private-materials/`, keys, `.dev.vars*` and `.wrangler/` are ignored. Scan result: no keys, tokens, personal details, client files or Drive link in any commit (the Drive folder id, the user's email and any `drive.google.com` link: 0 matches).
+- Not testable from here (listed in `docs/SECURITY.md` for launch): Cloudflare account and token settings, real Turnstile keys, email authentication (SPF, DKIM, DMARC), Cloudflare firewall rules, GitHub secret scanning, and the privacy notice, which needs the client's company name and contact address.
+
 ## 2026-11-04: Backend and traffic test of the inquiry Worker
 
 - New `site/scripts/load-check.mjs` (57 live checks) starts the real Worker locally with a fresh database and a fake email service that can fail or hang on demand; Turnstile and the DNS lookup are switched off so it measures our code. New unit tests: `worker/db.test.js`, `worker/handler.test.js` (25 unit tests in all).

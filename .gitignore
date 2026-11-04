@@ -7,6 +7,12 @@ vite.config.d.ts
 .env
 .env.*
 !.env.example
-client-materials/private-materials/
-client-materials/reference/
-client-materials/public-materials/
+# The client's files and anything else placed in that folder (the repository is public): never committed.
+client-materials/
+private-materials/
+# Keys and local settings.
+*.pem
+*.key
+.dev.vars
+.dev.vars.*
+.wrangler/

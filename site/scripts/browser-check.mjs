@@ -42,7 +42,8 @@ for (const path of paths)
 for (const width of [390, 768, 1440, 1920]) {
   const page = await browser.newPage({ viewport: { width, height: 900 } })
   const errors = []
-  page.on('console', (m) => m.type() === 'error' && !/challenges\.cloudflare\.com|turnstile/i.test(m.text()) && errors.push(m.text()))
+  // Errors about the spam check's own network traffic are ignored, but a blocked script (Content Security Policy) never is.
+  page.on('console', (m) => m.type() === 'error' && (/Content Security Policy/i.test(m.text()) || !/challenges\.cloudflare\.com|turnstile/i.test(m.text())) && errors.push(m.text()))
   page.on('pageerror', (e) => errors.push(String(e)))
   // The spam check keeps a connection open, so wait for load rather than network idle.
   await page.goto(url + path, { waitUntil: 'load' })

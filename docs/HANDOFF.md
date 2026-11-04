@@ -42,7 +42,7 @@ Our branch = upstream `main` (merged at `d2f062b`) + our commits. None of our ch
 
 ## 5. Current state of our branch
 
-**New site:** `site/` (Astro + Cloudflare Worker). Build with `cd site && npm ci && npm run build`. Checks: `npm test` (inquiry checks), `npm run check:site` (raw HTML), `node scripts/browser-check.mjs <url> <out dir>` and `node scripts/form-check.mjs <url> <out dir>` and `node scripts/effects-check.mjs <url>` and `node scripts/sizes-check.mjs <url> <out dir>` (about 10 minutes: 20 screen sizes from a 320 px phone to 4K, all pages) against `npm run worker:dev`. Backend: `npm run build && node scripts/load-check.mjs` (starts its own Worker, about 2 minutes; 57 checks of bursts, failures and hostile requests). Going live: `site/DEPLOY.md`.
+**New site:** `site/` (Astro + Cloudflare Worker). Build with `cd site && npm ci && npm run build`. Checks: `npm test` (inquiry checks), `npm run check:site` (raw HTML), `node scripts/browser-check.mjs <url> <out dir>` and `node scripts/form-check.mjs <url> <out dir>` and `node scripts/effects-check.mjs <url>` and `node scripts/sizes-check.mjs <url> <out dir>` (about 10 minutes: 20 screen sizes from a 320 px phone to 4K, all pages) against `npm run worker:dev`. Backend: `npm run build && node scripts/load-check.mjs` (starts its own Worker, about 2 minutes; 57 checks of bursts, failures and hostile requests). Security: `node scripts/security-check.mjs <url>` and `node scripts/repo-scan.mjs`; launch checklist in `docs/SECURITY.md`. Going live: `site/DEPLOY.md`.
 
 **Old app (team's, untouched until the switch):**
 
@@ -84,7 +84,7 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 **Effects (done 2026-11-03):** hover zoom on linked pictures, smooth page changes with the product picture moving into place, hero lines drawing in, header that hides on scroll down and returns on scroll up, buttons that fill on hover. Dropped by the user: DLFC-only card finish swap, photo viewer. Test: `node scripts/effects-check.mjs <url>`.
 
 **Next, agreed but not started (in this order):**
-0. Testing, one step at a time (user's order): screen sizes DONE 2026-11-04 (see WORKLOG); backend and traffic test DONE 2026-11-04 (see WORKLOG); next security (headers, form abuse, secrets, dependencies), then the checklist of common AI-site mistakes. Known limit: the D15131 room photo and drawing come from files only 710 and 748 px wide (the client's folder has nothing sharper); ask them for a bigger photo.
+0. Testing, one step at a time (user's order): screen sizes DONE 2026-11-04 (see WORKLOG); backend and traffic test DONE 2026-11-04 and security DONE 2026-11-04 (see WORKLOG and `docs/SECURITY.md`); next the checklist of common AI-site mistakes. Known limit: the D15131 room photo and drawing come from files only 710 and 748 px wide (the client's folder has nothing sharper); ask them for a bigger photo.
 1. Guides and articles (14 topics in `docs/rebuild/SEO-GEO-TRACKING.md`): postponed by the user until the site work is done. Also offered: IndexNow for Bing.
 2. Deploy to Cloudflare once the user has the project accounts (`site/DEPLOY.md`).
 

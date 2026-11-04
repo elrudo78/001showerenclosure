@@ -8,20 +8,20 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/finish-headers.mjs",
     "preview": "astro preview",
     "check:site": "node scripts/check-built-site.mjs",
     "test": "node --test worker/*.test.js",
-    "worker:dev": "astro build && wrangler d1 migrations apply dulifei-inquiries --local && wrangler dev",
-    "deploy": "astro build && wrangler d1 migrations apply dulifei-inquiries --remote && wrangler deploy"
+    "worker:dev": "npm run build && wrangler d1 migrations apply dulifei-inquiries --local && wrangler dev",
+    "deploy": "npm run build && wrangler d1 migrations apply dulifei-inquiries --remote && wrangler deploy"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "5.2.8",
     "astro": "7.3.5",
-    "sharp": "0.35.4"
+    "sharp": "0.35.5"
   },
   "devDependencies": {
     "disposable-email-domains-js": "1.26.0",
-    "wrangler": "4.149.0"
+    "wrangler": "4.157.0"
   }
 }

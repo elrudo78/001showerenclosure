@@ -3,6 +3,7 @@
 import { checkInquiry, normalise } from './validate.js'
 import { notifySales } from './email.js'
 import { saveInquiry, purgeOldIpHashes } from './db.js'
+import { visitorKey } from './visitor.js'
 
 // Nothing a real visitor sends comes near this (the longest message is 5,000 characters).
 const MAX_BODY = 64 * 1024
@@ -107,7 +108,8 @@ async function verifyPerson(token, ip, secret) {
   body.append('response', token)
   if (ip) body.append('remoteip', ip)
   try {
-    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body })
+    // 5 seconds at most. If Cloudflare cannot answer, the inquiry is refused (never let a bot through by default).
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body, signal: AbortSignal.timeout(5000) })
     const out = await res.json()
     return out.success === true
   } catch {
@@ -147,7 +149,8 @@ export async function handleInquiry(request, env, ctx) {
 
   try {
     // The visitor key is a hash, never the address itself. IP_SALT (a secret) makes it impossible to rebuild from addresses.
-    const ipHash = ip ? await hash(`${ip}|${env.IP_SALT || 'dulifei'}`) : null
+    const key = visitorKey(ip)
+    const ipHash = key ? await hash(`${key}|${env.IP_SALT || 'dulifei'}`) : null
     const id = await saveInquiry(env.DB, d, { visitorCountry: request.cf?.country || null, mailCheck: check.mail, ipHash })
     if (id === null) return fail(429, { form: MESSAGES.rate })
 

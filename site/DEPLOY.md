@@ -58,6 +58,8 @@ npx wrangler deploy
 - Add the domain to the Turnstile widget's hostnames.
 - Verify the domain in Resend, set `FROM_EMAIL` in `wrangler.jsonc` to an address on it, and change `SALES_EMAIL` to the sales team's inbox. Mainland China note: use an inbox the team can open there (not Gmail).
 
+**Before going live, also do the security list in `docs/SECURITY.md`** (two-step login, real Turnstile keys, email authentication for the domain, Cloudflare settings, privacy notice).
+
 ## Checking inquiries and missed emails
 
 Every inquiry is saved before any email is sent, so nothing is lost if email fails (Resend's free plan allows 100 emails a day; a stuck or refused email is marked `failed` after 10 seconds). To see the latest inquiries, and any whose email did not go out:

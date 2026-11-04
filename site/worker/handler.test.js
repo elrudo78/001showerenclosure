@@ -81,3 +81,68 @@ test('other methods and unknown /api addresses', async () => {
   }
   assert.equal((await worker.fetch(new Request('https://example.com/api/nothing'), env(), ctx)).status, 404)
 })
+
+// --- the spam check (Turnstile): its answer is asked of Cloudflare, here replaced by a stand-in -------------------
+async function withSiteverify(answer, fn) {
+  const real = globalThis.fetch
+  const calls = []
+  globalThis.fetch = async (url, init) => {
+    calls.push({ url: String(url), body: init?.body, signal: init?.signal })
+    if (answer === 'throw') throw new Error('network down')
+    return new Response(JSON.stringify(answer), { status: 200 })
+  }
+  try {
+    return await fn(calls)
+  } finally {
+    globalThis.fetch = real
+  }
+}
+const withCheck = () => ({ ...env(), TURNSTILE_SECRET: 'secret-123' })
+
+test('spam check: no token means refused, and Cloudflare is not even asked', async () => {
+  await withSiteverify({ success: true }, async (calls) => {
+    const res = await send(JSON.stringify(good), { e: withCheck() })
+    assert.equal(res.status, 400)
+    assert.equal(calls.length, 0)
+  })
+})
+
+test('spam check: a token Cloudflare rejects is refused and nothing is saved', async () => {
+  await withSiteverify({ success: false, 'error-codes': ['invalid-input-response'] }, async () => {
+    const e = withCheck()
+    const res = await send(JSON.stringify({ ...good, 'cf-turnstile-response': 'bad' }), { e })
+    assert.equal(res.status, 400)
+    assert.equal(rows(e), 0)
+  })
+})
+
+test('spam check: a token Cloudflare accepts goes through, and Cloudflare is sent the secret, token and address', async () => {
+  await withSiteverify({ success: true }, async (calls) => {
+    const e = withCheck()
+    const res = await send(JSON.stringify({ ...good, 'cf-turnstile-response': 'tok-1' }), { e })
+    assert.equal(res.status, 200)
+    assert.equal(calls.length, 1)
+    assert.match(calls[0].url, /challenges\.cloudflare\.com\/turnstile\/v0\/siteverify/)
+    assert.equal(calls[0].body.get('secret'), 'secret-123')
+    assert.equal(calls[0].body.get('response'), 'tok-1')
+    assert.equal(calls[0].body.get('remoteip'), '203.0.113.1')
+    assert.ok(calls[0].signal, 'the check has a time limit')
+  })
+})
+
+test('spam check: if Cloudflare cannot be reached the inquiry is refused, not let through', async () => {
+  await withSiteverify('throw', async () => {
+    const e = withCheck()
+    const res = await send(JSON.stringify({ ...good, 'cf-turnstile-response': 'tok' }), { e })
+    assert.equal(res.status, 400)
+    assert.equal(rows(e), 0)
+  })
+})
+
+test('visitors on the same IPv6 /64 share one limit', async () => {
+  const e = env()
+  const rs = []
+  for (let i = 0; i < 8; i++) rs.push(await send(JSON.stringify({ ...good, email: `v${i}@example.com` }), { e, headers: { 'cf-connecting-ip': `2001:db8:1:2:${i}:${i}:${i}:${i}` } }))
+  assert.equal(rs.filter((r) => r.status === 200).length, 5)
+  assert.equal(rs.filter((r) => r.status === 429).length, 3)
+})
