@@ -88,6 +88,7 @@ body {
   line-height: 1.6;
   font-kerning: normal;
   -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word; /* a very long word wraps instead of pushing the page wider */
 }
 
 img,
@@ -101,6 +102,7 @@ h1,
 h2,
 h3 {
   margin: 0;
+  overflow-wrap: anywhere; /* only breaks a word that cannot fit on its own line */
   font-stretch: var(--wide);
   font-weight: 600;
   line-height: 1.12;

@@ -9,7 +9,7 @@ const year = new Date().getFullYear()
 <footer class="site-footer">
   <div class="wrap grid">
     <div class="brand">
-      <Image src={logo} alt="DLIFE" width={150} height={36} densities={[1, 2]} class="logo" />
+      <Image src={logo} alt="DLIFE" width={150} height={36} densities={[1, 2, 3]} class="logo" />
       <p>Glass shower enclosures and sliding doors, made to order in Zhongshan, Guangdong, China.</p>
     </div>
 
@@ -45,6 +45,7 @@ const year = new Date().getFullYear()
 
   .grid {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--s-32);
   }
 
@@ -70,7 +71,7 @@ const year = new Date().getFullYear()
 
   a {
     display: inline-block;
-    padding-block: var(--s-8);
+    padding-block: var(--s-12); /* a comfortable tap height (about 46px) */
   }
 
   .social {

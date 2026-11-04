@@ -53,7 +53,7 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, '-')
               <li>
                 <span class="hw-pics">
                   {part.images.map((src, i) => (
-                    <Image src={src} alt="" widths={[160, 240, 320]} sizes="(min-width: 64rem) 9vw, 22vw" class={`hw hw-${slug(items[i].finish)}`} data-index={String(i)} />
+                    <Image src={src} alt="" widths={[160, 240, 320, 480, 640]} sizes="(min-width: 64rem) 9vw, 22vw" class={`hw hw-${slug(items[i].finish)}`} data-index={String(i)} />
                   ))}
                 </span>
                 <span class="hw-name">{part.name}</span>
@@ -137,6 +137,7 @@ const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, '-')
 
   .hw-list li {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--s-8);
     align-content: start;
   }

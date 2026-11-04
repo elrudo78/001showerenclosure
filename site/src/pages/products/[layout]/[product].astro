@@ -17,6 +17,8 @@ const { product } = Astro.props as { product: Product }
 const layout = layoutById(product.layout)
 const s = product.specs
 const text = summary(product)
+// How wide the room photos are shown, so each screen gets a file with enough pixels (one photo spans the page, two sit side by side).
+const photoSizes = product.photos?.length === 1 ? '(min-width: 82.5rem) 1320px, 100vw' : '(min-width: 82.5rem) 650px, (min-width: 64rem) 47vw, 100vw'
 const others = productsIn(product.layout).filter((p) => p.slug !== product.slug)
 // The next models after this one, wrapping round to the start; each shown once.
 const start = Math.max(0, others.findIndex((p) => p.slug > product.slug))
@@ -73,7 +75,7 @@ const description = `${text}`.slice(0, 300)
             <Image
               src={product.image}
               alt={`${product.name}: ${product.kind}`}
-              widths={[360, 540, 720, 960]}
+              widths={[360, 540, 720, 960, 1280]}
               sizes="(min-width: 64rem) 40vw, 100vw"
               loading="eager"
               fetchpriority="high"
@@ -118,7 +120,7 @@ const description = `${text}`.slice(0, 300)
         <ul>
           {product.photos.map((ph) => (
             <li style={`max-width:${ph.src.width}px`}>
-              <Picture src={ph.src} formats={['avif', 'webp']} widths={[480, 760, 1080, 1520]} sizes="(min-width: 64rem) 66vw, 100vw" alt={ph.alt} class="photo-img" />
+              <Picture src={ph.src} formats={['avif', 'webp']} widths={[480, 760, 1080, 1520, 2000, 2640]} sizes={photoSizes} alt={ph.alt} class="photo-img" />
             </li>
           ))}
         </ul>
@@ -144,6 +146,7 @@ const description = `${text}`.slice(0, 300)
 <style>
   .product {
     display: grid;
+    grid-template-columns: minmax(0, 1fr); /* a long word can never widen the page */
     gap: var(--s-32);
     padding-block: var(--s-24) var(--section);
   }
@@ -205,6 +208,7 @@ const description = `${text}`.slice(0, 300)
 
   .photos ul {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--s-24);
     margin: var(--s-32) 0 0;
     padding: 0;

@@ -170,6 +170,8 @@ const arrowRight = 'M5 12h14M13 6l6 6-6 6'
   }
 
   .i-name {
+    min-width: 0;
+    overflow-wrap: anywhere;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -220,6 +222,12 @@ const arrowRight = 'M5 12h14M13 6l6 6-6 6'
 
   .group-head h2 a {
     text-decoration: none;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.14em;
+  }
+
+  .group-head h2 a:hover {
+    text-decoration-line: underline;
   }
 
   .go {
@@ -268,7 +276,7 @@ const arrowRight = 'M5 12h14M13 6l6 6-6 6'
     }
   }
 
-  @media (min-width: 64rem) {
+  @media (min-width: 80rem) {
     .index ul {
       grid-template-columns: repeat(6, minmax(0, 1fr));
     }

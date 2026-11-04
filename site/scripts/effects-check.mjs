@@ -126,6 +126,7 @@ await page.goto(`${url}products/`, { waitUntil: 'load' })
 await page.hover('.title-link')
 await wait(page, 400)
 report((await page.$eval('.title-link', (a) => getComputedStyle(a).backgroundImage)) === 'none', 'big heading links have no hover box')
+report((await page.$eval('.title-link', (a) => getComputedStyle(a).textDecorationLine)) === 'underline', 'big heading links get an underline on hover')
 await page.goto(`${url}products/sliding-shower-doors/`, { waitUntil: 'load' })
 report((await page.$eval('a[href="#compare"]', (a) => a.textContent.trim())) === 'Compare models', 'Compare button shows no model count')
 

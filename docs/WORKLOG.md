@@ -2,6 +2,15 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-04: Screen-size testing
+
+- New `site/scripts/sizes-check.mjs`: 20 screens (phones 320 to 430, phones sideways, tablets, laptops 1280 to 1536, MacBook 1440 at 2x, Full HD, 2K, 4K) times 11 page kinds; checks sideways scroll, anything sticking out, cut-off text, tap targets under 40 px, soft pictures (real file width against screen pixels), header fit, words broken across lines, jump links hidden under the header, 200% text size on a 320 px phone, and every page at seven widths.
+- Real problems found and fixed: footer links too short to tap (38 px, now about 46 px); the logo was soft on 3x phones (added a 3x file); product photos and the tablet and laptop studio image offered too few sizes (added 1280, 2000 and 2640 px candidates and accurate `sizes`); hardware close-ups sized up to 640 px; single-column grids that a long word could widen (`minmax(0, 1fr)` on 15 of them); the Products index put six boxes on a row at 1024 px, which broke "Panoramic" (now six only from 1280 px).
+- My own regression, caught by the side-by-side view and then by a new broken-word check: letting headings break long words split "measurements" in the home heading. The heading now sizes itself to its column (`container-type`, `cqi`), so the word always fits; `check` now fails on any word broken across lines in headings, lead text, buttons and index names.
+- Hover on the big layout headings: colour, sliding arrow and a 2 px underline (no box).
+- Accepted limits: the D15131 room photo (710 px) and drawing (748 px) are as sharp as the client's files allow; on a phone held sideways at 3x the hero is 65% sharp (threshold 60% there).
+- Result of the last full run: 2,496 checks, only the accepted picture limits left. Other suites pass; Lighthouse home 99, products and DLFC04 100.
+
 ## 2026-11-04: Catalog wording out, counts out, smooth jumps, contact spots
 
 - Homepage: no line under the layout drawings.

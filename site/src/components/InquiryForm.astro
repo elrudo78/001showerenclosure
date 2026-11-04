@@ -260,11 +260,13 @@ const page = Astro.url.pathname
 
   .grid {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--s-48);
   }
 
   .form {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--s-24);
   }
 

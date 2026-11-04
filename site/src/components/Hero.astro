@@ -103,10 +103,12 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`
 
   .grid {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--s-32);
   }
 
   .copy {
+    container-type: inline-size; /* lets the heading size itself to this column, so "measurements" always fits */
     display: flex;
     flex-direction: column;
     gap: var(--s-24);
@@ -114,6 +116,7 @@ const pct = (v: number, of: number) => `${((v / of) * 100).toFixed(2)}%`
 
   h1 {
     max-width: 11em;
+    font-size: clamp(1.75rem, 11.2cqi, 4.0625rem);
   }
 
   .actions {
