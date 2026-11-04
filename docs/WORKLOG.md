@@ -7,7 +7,7 @@ Newest first. After each meaningful step, add an entry: date, what changed and w
 - From the user's review: the index beside the heading had no breathing room and did not look clickable; the layout headings were small and crowded by their descriptions.
 - Now: heading and intro full width; "Jump to a layout" index below it as six bordered boxes with each layout's drawing, name and a down arrow (counts and taglines removed; on phones one compact row each); a content-wide divider and a section of space before each layout; large layout headings (33 to 52 px) linking to the layout page with an arrow; "See all and compare" (or "See all") button in place of the description; four models below.
 - Scrollbar: thin, sage on stone (`scrollbar-width`, `scrollbar-color`).
-- Tests: all checks pass (effects test updated for the new button); Lighthouse products page 100 across the board.
+- Tests: all checks pass (effects test updated for the new button); Lighthouse products page 99 performance, 100 accessibility, best practices and SEO.
 
 ## 2026-11-04: Picture move fixed for real hosts; two copy changes
 
