@@ -95,17 +95,31 @@ for (const width of [390, 768, 1440, 1920]) {
   await page.close()
 }
 
-// Mobile menu opens and closes.
-{
-  const page = await browser.newPage({ viewport: { width: 390, height: 844 } })
+// Mobile and tablet menu: a panel from the right that leaves the page visible, closed by the cross, Escape or a press outside it.
+for (const width of [390, 768]) {
+  const page = await browser.newPage({ viewport: { width, height: 844 } })
   await page.goto(url, { waitUntil: 'networkidle' })
+  const isOpen = () => page.isVisible('#menu a[href="/products/"]')
   await page.click('.bar > .menu-button')
-  await page.waitForTimeout(200)
-  report(await page.isVisible('#menu a[href="/products/"]'), 'mobile menu opens')
-  await page.screenshot({ path: `${out}/menu-390.png` })
+  await page.waitForTimeout(600)
+  report(await isOpen(), `${width}px: menu opens`)
+  const box = await page.$eval('#menu', (el) => { const r = el.getBoundingClientRect(); return { left: r.left, width: r.width, right: r.right } })
+  report(box.right === width && box.width < width * 0.7 && box.width >= 240, `${width}px: menu is a side panel on the right (${Math.round(box.width)} px wide)`)
+  report((await page.$eval('body', (el) => getComputedStyle(el).overflow)) === 'hidden', `${width}px: page behind does not scroll while the menu is open`)
+  if (width === 390) await page.screenshot({ path: `${out}/menu-390.png` })
+  await page.mouse.click(20, 400)
+  await page.waitForTimeout(600)
+  report(!(await isOpen()), `${width}px: pressing outside the panel closes it`)
+  await page.click('.bar > .menu-button')
+  await page.waitForTimeout(500)
+  await page.click('.menu-top .menu-button')
+  await page.waitForTimeout(600)
+  report(!(await isOpen()), `${width}px: the cross closes it`)
+  await page.click('.bar > .menu-button')
+  await page.waitForTimeout(500)
   await page.keyboard.press('Escape')
-  await page.waitForTimeout(200)
-  report(!(await page.isVisible('#menu a[href="/products/"]')), 'Escape closes the mobile menu')
+  await page.waitForTimeout(600)
+  report(!(await isOpen()), `${width}px: Escape closes it`)
   await page.close()
 }
 

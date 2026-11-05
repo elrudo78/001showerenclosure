@@ -143,6 +143,13 @@ const current = (href: string) => (href === '/' ? path === '/' : path.startsWith
     color: var(--glass);
   }
 
+  /* The quote button may use two lines inside the narrow panel. */
+  .menu > .button {
+    padding-block: var(--s-12);
+    text-align: center;
+    text-wrap: balance;
+  }
+
   .quote {
     min-height: 2.75rem;
   }
@@ -159,22 +166,63 @@ const current = (href: string) => (href === '/' ? path === '/' : path.startsWith
     cursor: pointer;
   }
 
+  /* A panel that slides in from the right and leaves the page visible (dimmed) on the left.
+     Pressing the dimmed part, the cross or Escape closes it. */
   .menu {
-    inset: 0;
-    width: 100%;
+    inset: 0 0 0 auto;
+    width: clamp(15rem, 36vw, 22rem);
     height: 100%;
     max-width: none;
     max-height: none;
     margin: 0;
-    padding: var(--s-16) var(--gutter) var(--s-32);
+    padding: var(--s-16) var(--s-24) var(--s-32);
     border: 0;
+    border-left: 1px solid var(--line);
     background: var(--white);
     color: var(--ink);
+    overflow-y: auto;
+    translate: 100% 0;
+    transition: translate 360ms cubic-bezier(0.3, 0.7, 0.2, 1), overlay 360ms allow-discrete, display 360ms allow-discrete;
   }
 
   .menu:popover-open {
     display: flex;
     flex-direction: column;
+    translate: 0 0;
+  }
+
+  @starting-style {
+    .menu:popover-open {
+      translate: 100% 0;
+    }
+  }
+
+  .menu::backdrop {
+    background: rgb(45 59 50 / 0.45);
+    opacity: 0;
+    transition: opacity 360ms ease, overlay 360ms allow-discrete, display 360ms allow-discrete;
+  }
+
+  .menu:popover-open::backdrop {
+    opacity: 1;
+  }
+
+  @starting-style {
+    .menu:popover-open::backdrop {
+      opacity: 0;
+    }
+  }
+
+  /* The page behind stays put while the panel is open. */
+  :global(body:has(#menu:popover-open)) {
+    overflow: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .menu,
+    .menu::backdrop {
+      transition-duration: 1ms;
+    }
   }
 
   .menu-top {
@@ -193,7 +241,7 @@ const current = (href: string) => (href === '/' ? path === '/' : path.startsWith
   }
 
   .menu ul {
-    margin: var(--s-32) 0;
+    margin: var(--s-24) 0 var(--s-32);
     padding: 0;
     list-style: none;
   }
@@ -202,7 +250,7 @@ const current = (href: string) => (href === '/' ? path === '/' : path.startsWith
     display: block;
     padding: var(--s-12) 0;
     border-bottom: 1px solid var(--line);
-    font-size: var(--t-26);
+    font-size: var(--t-21);
     font-stretch: var(--wide);
     font-weight: 560;
     text-decoration: none;

@@ -2,6 +2,12 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-05: Menu on phones and tablets slides in from the right
+
+- The menu used to cover the whole screen at once. It is now a side panel that slides in from the right (15 to 22 rem wide: 240 px on a 390 px phone, 276 px on a 768 px tablet), with the page dimmed behind it. It closes with the cross, Escape or a press on the dimmed part, and slides out again. Quote button may use two lines. The page behind does not scroll while it is open. With "reduce motion" on, it appears and goes at once. `site/src/components/Header.astro` (CSS only; the menu was already a popover).
+- `site/scripts/browser-check.mjs` now checks the panel at 390 and 768 px: opens, is a right-hand panel, locks the page behind, closes three ways. All pass; `check:site` and `copy-check` still pass.
+- Side note for the team: the logo file reads "DLIFE LONDON" while the client is in Zhongshan. To confirm with the client that this is their real logo.
+
 ## 2026-11-04: Does it look machine-made?
 
 - New `site/scripts/copy-check.mjs` (989 checks) and `docs/rebuild/AI-TELLS-CHECKLIST.md`: 138 filler and marketing phrases, dashes, exclamation marks, emoji, semicolons, Title Case headings, heading order, titles and descriptions (length, uniqueness), picture descriptions, repeated sentences, thin and near-duplicate pages, keyword stuffing, leftovers in the code, and design clichés in the styles. Also `site/scripts/check-all.mjs` (`npm run check:all` or `check:quick`): builds, starts the site, runs every check in order, prints one table.
