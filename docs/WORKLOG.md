@@ -2,6 +2,12 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-10 (later): Search Console verified
+
+- A project Google account (made from the company address) verified `dlifei.com` as a domain property in Google Search Console through a DNS TXT record (`google-site-verification=...` at the root, added with the Cloudflare API). A look-alike copy (capital I for lowercase l) was added at first in case the string had been misread; the user had copy-pasted it, so the look-alike was deleted. **Keep the remaining record in DNS for good**: removing it can lose the ownership proof, and it lets the client become owner later.
+- Sitemap: for a domain property Google needs the full address (`https://dlifei.com/sitemap.xml`), not the file name. The file is valid (55 pages, real address, `application/xml`, listed in `robots.txt`).
+- Next: Bing Webmaster Tools by import from Search Console; check Search Console after a day; check that Web Analytics gets visits.
+
 ## 2026-11-10: form-band link hover fixed, reply procedure, plans for Search Console and the private repository
 
 - Bug (found by the user): on the dark green form band, a hovered link such as "Privacy notice" went dark sage on dark green and the text vanished. Cause: the page-wide hover colour (`a:hover`, deep sage) was meant for the light page. Fix in `site/src/components/InquiryForm.astro`: links on the band stay white on hover (`:global`, so links made by script are covered too). The band is the only dark area with links (the dark finish pills have none).
