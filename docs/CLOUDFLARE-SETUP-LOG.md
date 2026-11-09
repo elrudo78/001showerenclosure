@@ -12,7 +12,7 @@ Written 2026-11-09, for the user and for any later reviewer (the user plans to h
 | Site (live) | https://dlifei.com and https://www.dlifei.com (custom domains of the Worker `dulifei-website`, set in `site/wrangler.jsonc`): the built pages and `POST /api/inquiry`. Live since 2026-11-09. The workers.dev address is off. Not connected to any git repository. | Cloudflare account |
 | Database | D1 `dulifei-inquiries`, both migrations applied (id in `site/wrangler.jsonc`). | Cloudflare account |
 | Spam check | Turnstile widget "Dulifei website", hostnames: the workers.dev address, `dlifei.com`, `www.dlifei.com`. | Cloudflare account |
-| Sending email | Resend (free plan), sender is Resend's test sender for now, so it only delivers to the Resend account's own address. | Resend account |
+| Sending email | Resend (free plan), domain `updates.dlifei.com` verified (region Japan, chosen by Resend, fine for mail to a team in China; receiving off). Sender `website@updates.dlifei.com`, recipient the sales alias. | Resend account, Cloudflare DNS |
 | First end-to-end test | The user sent a real inquiry from the live test address: saved as inquiry 1, `email_status = sent`, no error, email arrived (2026-11-09). | D1, Resend |
 
 ## 2. Credentials and settings: what, where, why
@@ -23,7 +23,7 @@ Written 2026-11-09, for the user and for any later reviewer (the user plans to h
 | Cloudflare account id | Environment variable `CLOUDFLARE_ACCOUNT_ID`, same place. | Not a secret. Tells wrangler which account to use without a login prompt. |
 | Resend API key | Worker secret `RESEND_API_KEY`, added by the user in the Cloudflare dashboard (Worker, Settings, Variables and Secrets, type Secret). | Chosen so the key never passes through the chat or the Claude machine. |
 | Turnstile secret | Worker secret `TURNSTILE_SECRET`. The widget's first secret was discarded (it was written to a private temporary file that was deleted); a new one was made with the API's rotate call and piped straight into `wrangler secret put` without being printed. | The key pair must match the site key built into the pages. |
-| Test inbox | Worker secret `SALES_EMAIL`, set to the admin alias for the test (Resend's test sender only reaches the Resend account's own address). Changes to the sales alias at launch. | Keeps real sales mail out of the test. |
+| Recipient | Worker secret `SALES_EMAIL`, now the public sales alias (it was the admin alias while only Resend's test sender could be used). | Where inquiries arrive. |
 | Visitor-key salt | Worker secret `IP_SALT`, random, generated and set in one step, never shown. | Makes the stored visitor key impossible to rebuild from IP addresses. |
 | Turnstile site key | In the build (`PUBLIC_TURNSTILE_SITEKEY`) and in `docs/HANDOFF.md`. | Public by design. |
 | Not stored anywhere | Namecheap login, Cloudflare login, Resend login. | Only the user has them. |
@@ -40,7 +40,7 @@ Written 2026-11-09, for the user and for any later reviewer (the user plans to h
 ## 4. Other decisions
 
 - **Domain move first, DNS records checked.** The scan missed the Private Email signature record (`privateemail._domainkey`); it was added by hand from Namecheap's own DKIM display. Proxying (orange cloud) was switched off for the mail, autodiscover and autoconfig names and the old site names, because proxying breaks webmail and mail-app setup.
-- **Resend sending domain.** At launch it will be the subdomain `updates` of the domain, not the bare domain, because the old setup already uses the names `send` and `rsend` there, and a separate subdomain keeps sales mail away from the mailbox's reputation.
+- **Resend sending domain.** It is the subdomain `updates` of the domain, not the bare domain, because the old setup already uses the names `send` and `rsend` there, and a separate subdomain keeps sales mail away from the mailbox's reputation.
 - **AI crawler setting in Cloudflare.** Left at "Allow" for search, training and agents, matching the project's aim of being found and quoted by AI tools. The training setting is the client's business choice.
 - **No repository connection on Cloudflare.** Deploys are made with `wrangler deploy` from the build output; updates are redeployed by hand.
 

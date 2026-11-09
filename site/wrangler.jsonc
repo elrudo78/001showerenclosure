@@ -29,8 +29,8 @@
     }
   ],
   "vars": {
-    // Until the client's domain is verified in Resend, only Resend's test sender works.
-    "FROM_EMAIL": "Dulifei website <onboarding@resend.dev>",
+    // Sending address on the verified subdomain updates.dlifei.com (Resend).
+    "FROM_EMAIL": "Dulifei website <website@updates.dlifei.com>",
     "SITE_URL": "https://dlifei.com"
   },
   "observability": { "enabled": true }

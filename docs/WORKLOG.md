@@ -2,6 +2,13 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-10 (early): sender and sales address switched, DMARC, live checks, roadmap
+
+- Resend verified `updates.dlifei.com` (SPF CNAMEs and DKIM in Cloudflare DNS; receiving left off, no MX). `FROM_EMAIL` is now `website@updates.dlifei.com` (`site/wrangler.jsonc`) and `SALES_EMAIL` is the sales alias (secret). Redeployed. The first real test from the live domain is for the user to send (the form needs a person for the spam check): it will be number 205602.
+- DMARC added at the root: `v=DMARC1; p=none; rua=<the dmarc alias>`. The alias is for the user to create. Monitor only for now.
+- The user created the www redirect rule (wildcard pattern, 301), switched on Always Use HTTPS, Bot Fight Mode and Web Analytics. Tested: http to https, www to the bare domain with the query kept, no loop, apex 200. The Web Analytics script was not in the page yet when checked (the automatic setup can take a while); check again, and if still missing use `PUBLIC_CF_ANALYTICS_TOKEN`.
+- Live security checks passed (see `docs/SECURITY.md`, launch status). New `docs/ROADMAP.md`: phases A to E, owners, open decisions.
+
 ## 2026-11-09 (night, later): dlifei.com is live on the new site
 
 - The user added the permission Zone, DNS, Edit to the same token (no new value). With it: deleted the three old records, one at a time after checking each by name and content: the old email-setup TXT `resend._domainkey` (root), the root CNAME to the old Railway site, and the `www` A record to a Namecheap parking address. Nothing else was touched (2 MX, SPF, `privateemail._domainkey`, mail, autoconfig, autodiscover and the autodiscover SRV stay).

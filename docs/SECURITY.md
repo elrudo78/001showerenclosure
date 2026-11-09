@@ -41,6 +41,26 @@ Privacy (needs the client's input)
 12. A privacy notice page. The site collects name, email, optional phone or WhatsApp, company, country, message, the page it was sent from, the visitor's country (from Cloudflare) and a hashed visitor key blanked after 30 days; Cloudflare and Resend process some of it. The notice must name the company and a contact address, so it cannot be written until the client supplies them. A draft can be prepared on request, for the client to check with whoever advises them.
 13. Deleting someone's data on request: `npx wrangler d1 execute dulifei-inquiries --remote --command "DELETE FROM inquiries WHERE email = 'person@example.com'"`. Agree with the client how long inquiries are kept.
 
+### Launch status (2026-11-09, night)
+
+| # | State | Note |
+| --- | --- | --- |
+| 1 | To confirm | The user thinks 2-step login is on in Cloudflare and Resend; Namecheap and GitHub not confirmed. |
+| 2 | Partly | Token has an expiry (2026-12-09) and is in the user's environment settings as a plain variable (see `docs/CLOUDFLARE-SETUP-LOG.md`). Roll it after launch. |
+| 3 | Done | Real Turnstile keys, `TURNSTILE_SECRET`, `SALES_EMAIL`, `IP_SALT` set with wrangler, `RESEND_API_KEY` added by the user in the dashboard. |
+| 4 | Done | Only four secrets exist on the Worker; the two test settings are not set. |
+| 5 | To confirm | The user was advised to replace the 21st.dev key. |
+| 6 | Done | Resend verified `updates.dlifei.com` (SPF, DKIM); Private Email has SPF and DKIM; DMARC added (monitor only, reports to the `dmarc` alias, which the user still has to create). |
+| 7 | Partly | Always Use HTTPS is on (tested: http redirects to https). The user switched on SSL/TLS settings in the dashboard; exact modes not verified. DNSSEC and CAA not done. |
+| 8 | Done (reported by the user) | Bot Fight Mode on. |
+| 9 | Not done | The form limits itself (5 per visitor per 10 minutes); the extra Cloudflare rule is a second layer. |
+| 10 | Done | HSTS one year, as built. |
+| 11 | Open | The repository is public; moving to a private repository is planned. Secret scanning for private repositories needs a paid plan, so `node site/scripts/repo-scan.mjs` stays the check. |
+| 12 | Interim | `/privacy/` is live; the company's legal name and a retention period are still to be added. |
+| 13 | Documented | Command above. |
+
+Live checks on 2026-11-09 (https://dlifei.com): every sensitive path returns 404 (headers and redirects files, source maps, `package.json`, `.env`, `.dev.vars`, `wrangler.jsonc`, `worker/`, `migrations/`, `.git`, `node_modules`); security headers present; the browser blocks an injected inline script, an onclick handler, code from a string, a script and an image from another site, and framing; `browser-check` passes. `security-check.mjs` speaks plain http for its path tests, so against https its path section reports false failures (it is a test artefact: http now redirects to https); use the curl list above for the live site.
+
 ## Limits to know
 
 - Styles may be inline (the page builder writes them into each page), so the policy cannot forbid inline styles. Scripts, the thing that matters, are locked down.
