@@ -65,7 +65,7 @@ section('2. Personal details in the files (email addresses and phone numbers)')
 const emailOk = /@(example\.[a-z.]+|(mail\.)?company\.(com|pt)|domain\.com|resend\.dev|users\.noreply\.github\.com|anthropic\.com|sentry\.io|[a-z]\.(co|z|y))$/i
 // Made-up numbers used as examples and in tests (digits only): the UK range reserved for TV dramas, all-zero and 555-01xx numbers.
 // Made-up addresses used only as test inputs (some must be on real providers, to test typo and throwaway-address detection).
-const fixtures = new Set(['ana@mailinator.com', 'ana@gmial.com', 'ana@gmail.com', 'ana@hotmail.com', 'ana@yahoo.com', 'ana@live.com', 'ana@hotmial.com', 'ana@yahooo.com', 'ana@mail.com', 'ana@outlook.com', 'ana@icloud.com', 'ana@gmx.com', 'ana@aol.com', 'ana@ymail.com', 'ana@nothere.example', 'ana@-company.pt', 'b@gmial.com', 'b@gmail.com', 'a.b+c@sub.example.co.uk', 'sales@dlifei.com'])
+const fixtures = new Set(['ana@mailinator.com', 'ana@gmial.com', 'ana@gmail.com', 'ana@hotmail.com', 'ana@yahoo.com', 'ana@live.com', 'ana@hotmial.com', 'ana@yahooo.com', 'ana@mail.com', 'ana@outlook.com', 'ana@icloud.com', 'ana@gmx.com', 'ana@aol.com', 'ana@ymail.com', 'ana@nothere.example', 'ana@-company.pt', 'b@gmial.com', 'b@gmail.com', 'a.b+c@sub.example.co.uk', 'sales@dlifei.com', 'website@updates.dlifei.com'])
 const phoneOk = ['447700900123', '8676000000000', '351912345678', '34600000000', '8676088881234', '15550109999', '123456789012345']
 const personal = new Map()
 for (const [kind, pattern] of Object.entries({ email: '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}', phone: '\\+[0-9]{1,3}[ .-]?\\(?[0-9]{2,4}\\)?[ .-]?[0-9]{3,4}[ .-]?[0-9]{3,4}' })) {
