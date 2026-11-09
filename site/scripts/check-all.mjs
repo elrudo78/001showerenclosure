@@ -41,6 +41,7 @@ run('3. built pages: titles, links, text rules', 'node', ['scripts/check-built-s
 run('4. every page type at 4 widths, menu, keyboard', 'node', ['scripts/browser-check.mjs', URL_, out])
 run('5. inquiry form in a browser (real spam check)', 'node', ['scripts/form-check.mjs', URL_, out])
 run('6. effects: zoom, header, transitions, filters', 'node', ['scripts/effects-check.mjs', URL_])
+run('6b. link hover contrast, including the dark form band', 'node', ['scripts/hover-check.mjs', URL_])
 run(`7. screen sizes${quick ? ' (4 sizes)' : ' (20 sizes, 4K to 320 px)'}`, 'node', ['scripts/sizes-check.mjs', URL_, out], quick ? { ONLY_SIZES: 'phone 390,tablet 768,MacBook 1440,4K 3840' } : {})
 run('8. security: headers, hidden files, scripts blocked', 'node', ['scripts/security-check.mjs', URL_])
 run('9. does it read as machine-made?', 'node', ['scripts/copy-check.mjs'])

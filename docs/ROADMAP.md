@@ -14,13 +14,14 @@ As of 2026-11-09 (night). The new site is live at https://dlifei.com. This file 
 | --- | --- | --- |
 | A1 | Send one real inquiry from dlifei.com (it will be number 205602) and confirm the email arrives in the sales inbox, from the new sender. | User |
 | A2 | Create the alias `dmarc` at Namecheap so the DMARC reports have somewhere to go. | User |
-| A3 | Google Search Console: add the domain, send us the verification text, we add it to DNS, then submit the sitemap. Bing Webmaster Tools: import from Search Console. | User and Claude |
+| A3 | Make a project Google account from the company address (sign-up, "use my existing email"), turn on 2-step login, then use it for Google Search Console: add the domain, send us the verification text, we add it to DNS, then submit the sitemap. Bing Webmaster Tools: sign in with the same account and import from Search Console. At handover, add the client's Google account as Owner in Search Console (Settings, Users and permissions) and remove ours; the DNS verification record stays, so ownership can always be re-proven. | User and Claude |
 | A4 | Check that Web Analytics receives visits (the automatic setup may not add the script; if not, use the site token with `PUBLIC_CF_ANALYTICS_TOKEN`). | Claude |
 | A5 | Delete the old Railway project and the old Resend domain. | Team |
 | A6 | Delete the test inquiry (id 1) from the database. | Claude |
 | A7 | Roll the Cloudflare token (it expires 2026-12-09 anyway), and set Namecheap auto-renew for the email (ends 2027-09-29) and check it for the domain. | User |
 | A8 | Turn on 2-step login on Namecheap, Cloudflare, Resend and GitHub, and confirm it. | User |
 | A9 | Remove the workers.dev name from the spam-check widget's hostnames. | Claude |
+| A10 | Private repository: user creates an empty private repository (not a fork, no README); Claude attaches it and pushes this branch as `main`, checks it, then the user deletes the old public repository. No pull request is needed. | User and Claude |
 
 ## Phase B: get found (weeks 1 to 12)
 

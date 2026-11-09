@@ -60,6 +60,10 @@ npx wrangler deploy
 
 **Before going live, also do the security list in `docs/SECURITY.md`** (two-step login, real Turnstile keys, email authentication for the domain, Cloudflare settings, privacy notice).
 
+## Replying to inquiries
+
+The inquiry email arrives at the sales address with Reply-To set to the buyer, so pressing Reply in Namecheap Private Email writes straight to the buyer. In the new message choose `sales` (the alias) as the From address, so the buyer sees the company address, and keep the reference number from the subject in your reply. Do not create a Resend "inbox": Resend only sends the website's notification emails; replies are written in the normal mailbox. The notification comes from the sending subdomain (`updates`), the replies from the main domain, and both have their own SPF and DKIM.
+
 ## Checking inquiries and missed emails
 
 Every inquiry is saved before any email is sent, so nothing is lost if email fails (Resend's free plan allows 100 emails a day; a stuck or refused email is marked `failed` after 10 seconds). To see the latest inquiries, and any whose email did not go out:

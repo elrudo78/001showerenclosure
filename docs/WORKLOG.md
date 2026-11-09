@@ -2,6 +2,13 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-10: form-band link hover fixed, reply procedure, plans for Search Console and the private repository
+
+- Bug (found by the user): on the dark green form band, a hovered link such as "Privacy notice" went dark sage on dark green and the text vanished. Cause: the page-wide hover colour (`a:hover`, deep sage) was meant for the light page. Fix in `site/src/components/InquiryForm.astro`: links on the band stay white on hover (`:global`, so links made by script are covered too). The band is the only dark area with links (the dark finish pills have none).
+- New `site/scripts/hover-check.mjs` (also step 6b of `check-all`): hovers links on every page type at 390 and 1440 px, reads real colours through a canvas, and fails below contrast 4.5. It failed on the live site before the fix (contrast 1.06 on the privacy link) and reports 176 hovers, 0 problems after. Deployed.
+- The first live test inquiries from dlifei.com arrived at the sales address from `website@updates.dlifei.com` (no longer Resend's test sender). Replying is done in Private Email with the sales alias as From; Reply-To already points at the buyer. A Resend "inbox" is not needed (it would add receiving on the sending subdomain). Written in `site/DEPLOY.md`, section "Replying to inquiries".
+- Decided (to be done with the user): Search Console and Bing with a project Google account made from the company address (not a personal one); at handover the client is added as Owner. The private repository: no pull request in the old repository; push this branch as `main` of a new private non-fork repository, then delete the old one after checking.
+
 ## 2026-11-10 (early): sender and sales address switched, DMARC, live checks, roadmap
 
 - Resend verified `updates.dlifei.com` (SPF CNAMEs and DKIM in Cloudflare DNS; receiving left off, no MX). `FROM_EMAIL` is now `website@updates.dlifei.com` (`site/wrangler.jsonc`) and `SALES_EMAIL` is the sales alias (secret). Redeployed. The first real test from the live domain is for the user to send (the form needs a person for the spam check): it will be number 205602.

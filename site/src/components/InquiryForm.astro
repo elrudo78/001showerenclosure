@@ -262,6 +262,11 @@ const page = Astro.url.pathname
     color: #c9d2c4;
   }
 
+  /* The page-wide link hover colour is deep sage, which disappears on this dark band: keep links light. */
+  .inquiry :global(a:hover) {
+    color: var(--white);
+  }
+
   .grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
