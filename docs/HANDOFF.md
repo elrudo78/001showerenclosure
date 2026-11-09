@@ -1,6 +1,6 @@
 # Handoff: Dulifei website (read this first)
 
-Last updated: 2026-11-03. Keep this file current; log every step in `docs/WORKLOG.md`.
+Last updated: 2026-11-09. Keep this file current; log every step in `docs/WORKLOG.md`.
 
 ## 1. Who's who
 
@@ -128,3 +128,16 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 - See `scripts/dev/README.md` for: re-downloading materials, headless browser testing through the agent proxy (SPKI pin, read from the environment), Lighthouse, and known gotchas (smooth scrolling in tests, `pkill` killing its own shell).
 - Design skills are vendored in `.claude/skills/` (reviewed, pinned; README there). `AGENTS.md` and section 3 above override any skill.
 - Commit and push after each meaningful step to `claude/kind-noether-o7pgbu`. Never commit `client-materials/`, the Drive link, or personal names and contacts.
+
+## 10. Cloudflare state and what to do next (2026-11-09)
+
+**Done:** dlifei.com is on Cloudflare (free plan), nameservers switched at Namecheap, mail records copied and set to DNS only. Private Email (Namecheap) works on the domain with four role aliases (sales, info, admin, website). workers.dev address: `dulifei-website.dlifei.workers.dev`. D1 database `dulifei-inquiries` exists remotely with both migrations (id in `site/wrangler.jsonc`). Turnstile widget "Dulifei website" exists (site key `0x4AAAAAAF5zva-lRRJHeSNs`, public; hostnames: the workers.dev address, dlifei.com, www.dlifei.com). Its secret was NOT saved anywhere: rotate it through the API (`POST /accounts/<id>/challenges/widgets/<sitekey>/rotate_secret`) and pipe it straight into `npx wrangler secret put TURNSTILE_SECRET`, never printing it.
+
+**Why the first deploy failed:** the sandbox's credential proxy overwrites the Authorization header, and Cloudflare's asset upload needs its own one-time key in that header (401). Fix chosen by the user (2026-11-09): remove the Cloudflare entry under Network secrets and give the session the token as the plain environment variables `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, then start a new session. Token expires 2026-12-09; roll it after the deploy. The site must NOT be connected to a git repo on Cloudflare (the repo is public and the site may move to the client).
+
+**Next steps, in order:**
+1. Check the variables are there (`npx wrangler whoami`), and that the zone `dlifei.com` is active.
+2. Rotate and set `TURNSTILE_SECRET` (above). `npx wrangler secret put SALES_EMAIL` with the Resend account's own address for the test (Resend's test sender only delivers there). The user adds `RESEND_API_KEY` in the Cloudflare dashboard (Worker, Settings, Variables and Secrets, type Secret); it never passes through chat or the sandbox.
+3. `cd site && SITE_URL=https://dulifei-website.dlifei.workers.dev PUBLIC_TURNSTILE_SITEKEY=0x4AAAAAAF5zva-lRRJHeSNs npm run build && npx wrangler deploy`. Check the pages, then send a real test inquiry and see the email arrive.
+4. At launch (the user's team has agreed the old Railway site can go): delete the old Railway record and the `www` parking record in Cloudflare DNS; attach dlifei.com and www to the Worker (www redirects to the bare domain); rebuild with `SITE_URL=https://dlifei.com`; add the domain to Resend as the subdomain `updates.dlifei.com` (the names `send` and `rsend` were used by an old setup) and set `FROM_EMAIL` to an address there; change `SALES_EMAIL` to the sales address (add the Chinese team's own address, comma-separated, if Namecheap webmail is hard to reach in China); add a DMARC record after mail works; fill `contact` in `site/src/data/site.ts` (sales address; phone, WhatsApp and social accounts still unknown); privacy notice (needs the company's legal name and a privacy contact); the checklist in `docs/SECURITY.md`; Search Console and Bing.
+5. Roll the API token after the deploy; set Namecheap Private Email to auto-renew (it ends 2027-09-29).
