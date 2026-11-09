@@ -2,6 +2,13 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-09: Cloudflare set up, first deploy blocked by the sandbox
+
+- dlifei.com added to Cloudflare (free plan); nameservers switched at Namecheap (they already answer publicly). Mail records (2 MX, SPF, DKIM `privateemail._domainkey`) copied; mail and webmail records set to "DNS only". The old Railway record and `www` parking record are still there: delete them at launch.
+- Done through the API token: workers.dev address `dulifei-website.dlifei.workers.dev`, D1 database `dulifei-inquiries` created with both migrations applied (its id is in `site/wrangler.jsonc`), Turnstile widget "Dulifei website" (hostnames: the workers.dev address, dlifei.com, www.dlifei.com; its secret was saved to a private temporary file, never printed).
+- `wrangler deploy` fails at the file upload (401). Checked by hand: the sandbox's secure credential proxy replaces the Authorization header with the saved token, but Cloudflare's asset upload needs its own one-time key in that header. So deploys cannot run from this sandbox with a proxy-held token. Options: Cloudflare builds from GitHub (Workers Builds), or the token as a plain environment variable (the original DEPLOY.md way; the token is then visible inside the sandbox).
+- Aliases made at Namecheap: sales@, info@, admin@, website@. Sales emails will go to sales@ at launch; for the test, Resend's test sender can only reach the Resend account's own address (admin@).
+
 ## 2026-11-05: Menu on phones and tablets slides in from the right
 
 - The menu used to cover the whole screen at once. It is now a side panel that slides in from the right (15 to 22 rem wide: 240 px on a 390 px phone, 276 px on a 768 px tablet), with the page dimmed behind it. It closes with the cross, Escape or a press on the dimmed part, and slides out again. Quote button may use two lines. The page behind does not scroll while it is open. With "reduce motion" on, it appears and goes at once. `site/src/components/Header.astro` (CSS only; the menu was already a popover).

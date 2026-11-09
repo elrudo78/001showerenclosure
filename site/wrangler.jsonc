@@ -19,8 +19,7 @@
     {
       "binding": "DB",
       "database_name": "dulifei-inquiries",
-      // Replace with the id printed by `npx wrangler d1 create dulifei-inquiries`.
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "2d7a2ffd-c786-4374-88c8-05d0ad33daa0",
       "migrations_dir": "migrations"
     }
   ],
