@@ -135,6 +135,8 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 
 **Why the first deploy failed:** the sandbox's credential proxy overwrites the Authorization header, and Cloudflare's asset upload needs its own one-time key in that header (401). Fix chosen by the user (2026-11-09): remove the Cloudflare entry under Network secrets and give the session the token as the plain environment variables `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, then start a new session. Token expires 2026-12-09; roll it after the deploy. The site must NOT be connected to a git repo on Cloudflare (the repo is public and the site may move to the client).
 
+**Status (later on 2026-11-09):** steps 1 to 3 below are done except `RESEND_API_KEY` (the user adds it in the dashboard) and the real test inquiry. The test site is live at the workers.dev address.
+
 **Next steps, in order:**
 1. Check the variables are there (`npx wrangler whoami`), and that the zone `dlifei.com` is active.
 2. Rotate and set `TURNSTILE_SECRET` (above). `npx wrangler secret put SALES_EMAIL` with the Resend account's own address for the test (Resend's test sender only delivers there). The user adds `RESEND_API_KEY` in the Cloudflare dashboard (Worker, Settings, Variables and Secrets, type Secret); it never passes through chat or the sandbox.

@@ -2,6 +2,13 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-09 (later): first deploy done
+
+- The token now comes as a plain environment variable; `wrangler deploy` works. Test site: https://dulifei-website.dlifei.workers.dev (built with `SITE_URL` set to that address and the real Turnstile site key). Pages, sitemap, robots, llms.txt, 404 and security headers answer correctly; `browser-check` passes against it.
+- Secrets set with `wrangler secret put`, never printed: `TURNSTILE_SECRET` (rotated, since the first one was discarded), `SALES_EMAIL` (the test inbox), `IP_SALT`. Still missing: `RESEND_API_KEY`, which the user adds in the Cloudflare dashboard. Until then inquiries are saved but no email goes out (marked `skipped`).
+- Zone `dlifei.com` still shows "pending" in Cloudflare although the nameservers answer; the token cannot trigger the check (no zone permission), Cloudflare re-checks by itself.
+- To do at launch: turn off the workers.dev address (`workers_dev = false`) or it stays reachable and indexable beside the real domain.
+
 ## 2026-11-09: Cloudflare set up, first deploy blocked by the sandbox
 
 - dlifei.com added to Cloudflare (free plan); nameservers switched at Namecheap (they already answer publicly). Mail records (2 MX, SPF, DKIM `privateemail._domainkey`) copied; mail and webmail records set to "DNS only". The old Railway record and `www` parking record are still there: delete them at launch.
