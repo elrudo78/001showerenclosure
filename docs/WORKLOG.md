@@ -2,6 +2,12 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-09 (night): reference numbers start at 205602
+
+- A reference number of 1, 2, 3 looks new. New migration `site/migrations/0003_reference_numbers.sql` sets the inquiry counter to 205601, so the next inquiry is **205602**. Applied to the live database (2026-11-09); the code needed no change. Inquiry 1 (the user's test) keeps its number. Test inquiries use up numbers too.
+- Numbers are not contiguous by design; a gap still means "an email may not have arrived" only after 205602. New unit test (36 in all).
+- Starting number record: first real number 205602, set 2026-11-09. If the database is ever rebuilt, migration 0003 sets the same start.
+
 ## 2026-11-09 (evening): end-to-end test passed; full record written
 
 - The user sent a real inquiry from the test address after adding the Resend key in the Cloudflare dashboard. Database: inquiry 1, `email_status = sent`, no error; the email arrived.

@@ -44,6 +44,8 @@ Written 2026-11-09, for the user and for any later reviewer (the user plans to h
 - **AI crawler setting in Cloudflare.** Left at "Allow" for search, training and agents, matching the project's aim of being found and quoted by AI tools. The training setting is the client's business choice.
 - **No repository connection on Cloudflare.** Deploys are made with `wrangler deploy` from the build output; updates are redeployed by hand.
 
+- **Reference numbers.** The inquiry id is the reference number shown to buyers and in the sales email. Migration 0003 starts it at 205602 (first real number; set 2026-11-09), so the site does not look new. Inquiry 1 was the user's test.
+
 ## 5. Not done yet
 
 - Domain still shows "pending" in Cloudflare; the token cannot trigger the check (no zone permission). Cloudflare re-checks by itself, or the user presses "Check nameservers now".

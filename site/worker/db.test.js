@@ -24,6 +24,15 @@ test('saving returns a reference number, and the 6th from one visitor is refused
   assert.equal(rowCount(db, "ip_hash = 'aaa'"), RATE_LIMIT.count)
 })
 
+test('reference numbers have six digits and start at 205602, then count up', async () => {
+  const db = makeDb()
+  const first = await saveInquiry(db, inquiry(1), { ipHash: 'a1' })
+  const second = await saveInquiry(db, inquiry(2), { ipHash: 'a2' })
+  assert.equal(first, 205602)
+  assert.equal(second, 205603)
+  assert.match(String(first), /^\d{6}$/)
+})
+
 test('another visitor is not affected, and a visitor with no key is never blocked', async () => {
   const db = makeDb()
   for (let i = 0; i < 5; i++) await saveInquiry(db, inquiry(i), { ipHash: 'aaa' })

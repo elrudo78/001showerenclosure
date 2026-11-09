@@ -70,7 +70,7 @@ npx wrangler d1 execute dulifei-inquiries --remote --command "SELECT id, created
 npx wrangler d1 execute dulifei-inquiries --remote --command "SELECT id, created_at, name, email, email_error FROM inquiries WHERE email_status != 'sent' ORDER BY id DESC"
 ```
 
-Reference numbers in the sales emails (#41, #42...) are the `id`: a gap in the numbers means an email did not arrive, so check the second query.
+Reference numbers in the sales emails (#205602, #205603...) are the `id` (the counter starts at 205602, set by migration `0003_reference_numbers.sql`; inquiry 1 was a test): a gap in the numbers means an email did not arrive, so check the second query.
 
 Optional secret: `npx wrangler secret put IP_SALT` (any long random text). The visitor key used for the spam limit is then impossible to rebuild from IP addresses. Visitor keys older than 30 days are blanked automatically; the inquiries stay.
 
