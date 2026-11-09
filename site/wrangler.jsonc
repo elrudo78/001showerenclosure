@@ -8,6 +8,11 @@
   "name": "dulifei-website",
   "main": "worker/index.js",
   "compatibility_date": "2026-10-01",
+  // The real domain (both names). Attached as custom domains: Cloudflare adds the DNS records itself.
+  "routes": [
+    { "pattern": "dlifei.com", "custom_domain": true },
+    { "pattern": "www.dlifei.com", "custom_domain": true }
+  ],
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
@@ -26,7 +31,7 @@
   "vars": {
     // Until the client's domain is verified in Resend, only Resend's test sender works.
     "FROM_EMAIL": "Dulifei website <onboarding@resend.dev>",
-    "SITE_URL": ""
+    "SITE_URL": "https://dlifei.com"
   },
   "observability": { "enabled": true }
 }

@@ -8,8 +8,8 @@ Written 2026-11-09, for the user and for any later reviewer (the user plans to h
 | --- | --- | --- |
 | Domain `dlifei.com` | Registered at Namecheap. Nameservers point to Cloudflare (free plan). Cloudflare still showed "pending" a few hours later, although the nameservers answer; it re-checks on its own. | Namecheap, Cloudflare |
 | Email | Namecheap Private Email on the same domain, mail records copied into Cloudflare DNS and set to "DNS only" (grey cloud). Four role aliases exist: sales, info, admin, website. | Namecheap, Cloudflare DNS |
-| Old records | The root name still points to the team's old Railway site and `www` to a Namecheap parking address. Both are kept until launch, then deleted. | Cloudflare DNS |
-| Site (test) | https://dulifei-website.dlifei.workers.dev, one Worker with the built pages and `POST /api/inquiry`. Not connected to any git repository. | Cloudflare account |
+| Old records | Deleted on 2026-11-09 (the root pointer to the old Railway site, the `www` parking record and the old email-setup TXT). The team deletes the old Railway project and the old Resend domain on their side. | Cloudflare DNS |
+| Site (live) | https://dlifei.com and https://www.dlifei.com (custom domains of the Worker `dulifei-website`, set in `site/wrangler.jsonc`): the built pages and `POST /api/inquiry`. Live since 2026-11-09. The workers.dev address is off. Not connected to any git repository. | Cloudflare account |
 | Database | D1 `dulifei-inquiries`, both migrations applied (id in `site/wrangler.jsonc`). | Cloudflare account |
 | Spam check | Turnstile widget "Dulifei website", hostnames: the workers.dev address, `dlifei.com`, `www.dlifei.com`. | Cloudflare account |
 | Sending email | Resend (free plan), sender is Resend's test sender for now, so it only delivers to the Resend account's own address. | Resend account |
@@ -19,7 +19,7 @@ Written 2026-11-09, for the user and for any later reviewer (the user plans to h
 
 | Item | Where it is kept | Why there |
 | --- | --- | --- |
-| Cloudflare API token | Environment variable `CLOUDFLARE_API_TOKEN` in the user's personal cloud environment settings (the Default environment). Created with the template "Edit Cloudflare Workers" plus D1 Edit and Turnstile Edit. Expires 2026-12-09. | Needed so Claude can deploy. See section 3 for why it is a plain variable and not a protected network secret. |
+| Cloudflare API token (also has Zone DNS Edit since 2026-11-09, added by editing the token, same value) | Environment variable `CLOUDFLARE_API_TOKEN` in the user's personal cloud environment settings (the Default environment). Created with the template "Edit Cloudflare Workers" plus D1 Edit and Turnstile Edit. Expires 2026-12-09. | Needed so Claude can deploy. See section 3 for why it is a plain variable and not a protected network secret. |
 | Cloudflare account id | Environment variable `CLOUDFLARE_ACCOUNT_ID`, same place. | Not a secret. Tells wrangler which account to use without a login prompt. |
 | Resend API key | Worker secret `RESEND_API_KEY`, added by the user in the Cloudflare dashboard (Worker, Settings, Variables and Secrets, type Secret). | Chosen so the key never passes through the chat or the Claude machine. |
 | Turnstile secret | Worker secret `TURNSTILE_SECRET`. The widget's first secret was discarded (it was written to a private temporary file that was deleted); a new one was made with the API's rotate call and piped straight into `wrangler secret put` without being printed. | The key pair must match the site key built into the pages. |
@@ -49,7 +49,10 @@ Written 2026-11-09, for the user and for any later reviewer (the user plans to h
 ## 5. Not done yet
 
 - Domain still shows "pending" in Cloudflare; the token cannot trigger the check (no zone permission). Cloudflare re-checks by itself, or the user presses "Check nameservers now".
-- Launch: delete the two old DNS records, attach the domain and `www` to the Worker, rebuild with the real address, verify the sending subdomain in Resend, switch `SALES_EMAIL` to the sales alias, add a DMARC record after mail works, turn off the workers.dev address, delete the test inquiry from the database.
+- Verify the sending subdomain `updates` in Resend (region chosen by Resend: Japan, fine for mail to a team in China), then set `FROM_EMAIL` to an address on it and switch `SALES_EMAIL` to the sales alias (and the Chinese team's own address if needed). Resend's "receiving" option is not needed and should stay off.
+- In the Cloudflare dashboard: Always Use HTTPS, minimum TLS 1.2, Bot Fight Mode, a redirect rule from `www` to the bare domain, Web Analytics (items 7 to 9 of `docs/SECURITY.md`). The token has no zone-settings permission.
+- Add a DMARC record (Resend offers one for the sending subdomain; the root needs its own with a mailbox for reports).
+- Remove the workers.dev name from the Turnstile widget's hostnames. Delete the test inquiry (id 1) from the database.
 - Contact details, social accounts, privacy notice, the logo question, and the items in `docs/HANDOFF.md` section 7 ("Inputs still needed").
 - Roll the token after launch; Private Email auto-renew (ends 2027-09-29).
 

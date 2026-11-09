@@ -10,4 +10,5 @@ export const routes = (): string[] => [
   '/projects/',
   '/contact/',
   '/faq/',
+  '/privacy/',
 ]

@@ -38,7 +38,7 @@ These override `AGENTS.md` where they conflict (for example, catalog specs from 
 | Preview of our branch | Old: https://lively-frangipane-4d8b8a.netlify.app (2026-10-11). New: the user uploaded the full new site zip to Netlify Drop on 2026-11-02 (link not shared yet; the inquiry form does not work there, it needs Cloudflare) |
 | Audit (shared doc) | https://claude.ai/artifact/6Y8PtmhGFz7HZFgTdknP9V, copy in `docs/audit/` |
 
-Our branch = upstream `main` (merged at `d2f062b`) + our commits. None of our changes are live.
+Our branch = upstream `main` (merged at `d2f062b`) + our commits. The new site is live at https://dlifei.com since 2026-11-09 (see section 10).
 
 ## 5. Current state of our branch
 
@@ -137,7 +137,9 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 
 **Full record of this setup: `docs/CLOUDFLARE-SETUP-LOG.md`.** The end-to-end test passed (inquiry saved, email sent and received).
 
-**Status (later on 2026-11-09):** steps 1 to 3 below are done except `RESEND_API_KEY` (the user adds it in the dashboard) and the real test inquiry. The test site is live at the workers.dev address.
+**Status (night of 2026-11-09): dlifei.com IS LIVE on the new site** (both names; old Railway pointers deleted; workers.dev off; `/privacy/` interim notice added; reference numbers start at 205602). See WORKLOG 2026-11-09 for details and the open list. Still to do: verify `updates.dlifei.com` in Resend then switch `FROM_EMAIL` and `SALES_EMAIL`; dashboard switches (Always Use HTTPS, Bot Fight Mode, www redirect, Web Analytics); DMARC; contact details beyond the sales address; legal name in the privacy notice; Search Console and Bing; roll the token; private repository.
+
+**Earlier status (2026-11-09):** steps 1 to 3 below are done except `RESEND_API_KEY` (the user adds it in the dashboard) and the real test inquiry. The test site is live at the workers.dev address.
 
 **Next steps, in order:**
 1. Check the variables are there (`npx wrangler whoami`), and that the zone `dlifei.com` is active.

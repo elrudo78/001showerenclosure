@@ -1,0 +1,115 @@
+---
+import Base from '../layouts/Base.astro'
+import Breadcrumbs from '../components/Breadcrumbs.astro'
+import { breadcrumbLd, contact } from '../data/site'
+
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Privacy notice', href: '/privacy/' },
+]
+const jsonLd = [breadcrumbLd(crumbs, Astro.site)]
+---
+
+<Base
+  title="Privacy notice | Dulifei"
+  description="What Dulifei collects when you send an inquiry through this website, why, who handles it for us, how long we keep it and how to ask us to delete it."
+  jsonLd={jsonLd}
+>
+  <Breadcrumbs items={crumbs} />
+  <section class="wrap privacy" aria-labelledby="privacy-title">
+    <h1 id="privacy-title">Privacy notice</h1>
+    <p class="lead">This page explains what Dulifei does with the details you send through this website. It is short because we collect only what the form asks for.</p>
+
+    <div class="body">
+      <h2>Who we are</h2>
+      <p>
+        Dulifei (DLIFE) makes glass shower enclosures and sliding doors to order in Zhongshan, Guangdong, China. For anything on this page, write to
+        {contact.email ? <a href={`mailto:${contact.email}`}>{contact.email}</a> : 'our sales team through the contact page'}.
+      </p>
+
+      <h2>What we collect</h2>
+      <p>When you send an inquiry, we receive what you type into the form:</p>
+      <ul>
+        <li>your name, email address and country</li>
+        <li>your message, and the layout and sizes you ask about, if you fill them in</li>
+        <li>the name of your business and a phone or WhatsApp number, if you add them</li>
+      </ul>
+      <p>
+        We also record the page you sent the inquiry from, your country as seen by our hosting provider, and whether your email address can receive mail.
+        To stop abuse, such as a flood of inquiries in a few minutes, we keep a coded visitor key made from your internet address. The key cannot be turned
+        back into your address, and it is erased after 30 days.
+      </p>
+
+      <h2>Why we use it</h2>
+      <p>
+        We use your details to answer your inquiry and prepare a quote. We do not sell them, we do not use them for anything else, and we do not send
+        marketing email unless you ask for it.
+      </p>
+
+      <h2>Who handles it for us</h2>
+      <p>
+        Two services run the inquiry form for us. Cloudflare hosts this website, keeps the list of inquiries and runs the spam check. Resend sends the
+        email that carries your inquiry to our sales team. They handle your details only to provide those services, and their servers may be in other
+        countries than yours.
+      </p>
+
+      <h2>How long we keep it</h2>
+      <p>We keep an inquiry for as long as we need it to answer you and to follow up on your project. You can ask us to delete it sooner.</p>
+
+      <h2>Cookies</h2>
+      <p>
+        We do not set advertising or tracking cookies. The spam check, which is provided by Cloudflare, runs small tests in your browser to tell people
+        from automated programs.
+      </p>
+
+      <h2>Your rights</h2>
+      <p>
+        You can ask us to show you the details we hold about you, to correct them or to delete them. Write to
+        {contact.email ? <a href={`mailto:${contact.email}`}>{contact.email}</a> : 'us through the contact page'}
+        from the address you used in the form, and we will reply by email.
+      </p>
+
+      <h2>Changes</h2>
+      <p class="date">Last updated 9 November 2026. If this page changes, the date changes with it.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .privacy {
+    padding-block: var(--s-32) var(--section);
+  }
+
+  .lead {
+    margin-top: var(--s-24);
+  }
+
+  .body {
+    margin-top: var(--s-48);
+    max-width: 44rem;
+    border-top: 1px solid var(--ink);
+  }
+
+  h2 {
+    margin-top: var(--s-32);
+    font-size: var(--t-21);
+  }
+
+  .body p,
+  .body ul {
+    margin-top: var(--s-12);
+    color: var(--graphite);
+  }
+
+  .body ul {
+    padding-left: 1.25rem;
+  }
+
+  .body li + li {
+    margin-top: var(--s-4);
+  }
+
+  .date {
+    font-size: var(--t-14);
+  }
+</style>

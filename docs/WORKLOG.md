@@ -2,6 +2,14 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-09 (night, later): dlifei.com is live on the new site
+
+- The user added the permission Zone, DNS, Edit to the same token (no new value). With it: deleted the three old records, one at a time after checking each by name and content: the old email-setup TXT `resend._domainkey` (root), the root CNAME to the old Railway site, and the `www` A record to a Namecheap parking address. Nothing else was touched (2 MX, SPF, `privateemail._domainkey`, mail, autoconfig, autodiscover and the autodiscover SRV stay).
+- `site/wrangler.jsonc`: `routes` attach `dlifei.com` and `www.dlifei.com` as custom domains (Cloudflare creates their DNS records); `SITE_URL` var set to `https://dlifei.com`. Built with that address and the real Turnstile site key, deployed. Both names answer 200 over https, the canonical link is `https://dlifei.com/`, the 404 page works, security headers present. The workers.dev address now answers 404 (wrangler turned it off once routes were set).
+- New page `/privacy/` (interim privacy notice, plain language, written only from what the site really does: fields collected, visitor key erased after 30 days, Cloudflare and Resend as handlers, no sale of data, no tracking cookies of our own, rights by email). It does not name the company's legal name (not received yet): add it when it arrives, and have the client or their adviser check the text. Footer link and a link in the form note. `contact.email` is now the public sales address (`site/src/data/site.ts`); `repo-scan` allows exactly that address.
+- Checks after the changes: unit tests 36/36, `check:site` ok, `copy-check` 1003 checks ok (three wording fixes on the new page), `repo-scan` clean, `npm audit` 0.
+- Known and open: HTTP does not redirect to HTTPS yet (the "Always Use HTTPS" switch is in the Cloudflare dashboard, SSL/TLS, Edge Certificates; the token has no zone-settings permission); `www` serves the same page (canonical points to the bare domain; a redirect rule can be added in the dashboard); Resend still uses its test sender and the test inbox until `updates.dlifei.com` is verified; the old Railway project and old Resend account are for the team to delete.
+
 ## 2026-11-09 (night): reference numbers start at 205602
 
 - A reference number of 1, 2, 3 looks new. New migration `site/migrations/0003_reference_numbers.sql` sets the inquiry counter to 205601, so the next inquiry is **205602**. Applied to the live database (2026-11-09); the code needed no change. Inquiry 1 (the user's test) keeps its number. Test inquiries use up numbers too.

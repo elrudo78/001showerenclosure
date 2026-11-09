@@ -15,7 +15,7 @@ export const company = {
  * Anything filled in appears on the Contact page, in the footer and in the Organization data for search and AI tools.
  */
 export const contact = {
-  email: '', // e.g. 'sales@example.com'
+  email: 'sales@dlifei.com', // the public sales address (an alias at Namecheap Private Email)
   whatsapp: '', // with country code, e.g. '+86 760 0000 0000'
   phone: '',
   address: '', // one line, as it should appear on the site
