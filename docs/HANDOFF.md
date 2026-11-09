@@ -135,6 +135,8 @@ The user judged the current site unprofessional, so we will **rebuild rather tha
 
 **Why the first deploy failed:** the sandbox's credential proxy overwrites the Authorization header, and Cloudflare's asset upload needs its own one-time key in that header (401). Fix chosen by the user (2026-11-09): remove the Cloudflare entry under Network secrets and give the session the token as the plain environment variables `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, then start a new session. Token expires 2026-12-09; roll it after the deploy. The site must NOT be connected to a git repo on Cloudflare (the repo is public and the site may move to the client).
 
+**Full record of this setup: `docs/CLOUDFLARE-SETUP-LOG.md`.** The end-to-end test passed (inquiry saved, email sent and received).
+
 **Status (later on 2026-11-09):** steps 1 to 3 below are done except `RESEND_API_KEY` (the user adds it in the dashboard) and the real test inquiry. The test site is live at the workers.dev address.
 
 **Next steps, in order:**

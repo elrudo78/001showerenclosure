@@ -2,6 +2,12 @@
 
 Newest first. After each meaningful step, add an entry: date, what changed and why, files, commit. Keep entries short; put lasting decisions in `docs/HANDOFF.md`.
 
+## 2026-11-09 (evening): end-to-end test passed; full record written
+
+- The user sent a real inquiry from the test address after adding the Resend key in the Cloudflare dashboard. Database: inquiry 1, `email_status = sent`, no error; the email arrived.
+- New `docs/CLOUDFLARE-SETUP-LOG.md`: what exists, which credential lives where and why, the network-secret to environment-variable change and the reason (the sandbox proxy overwrites the Authorization header that Cloudflare's file upload needs), accepted trade-offs, what is not done, questions for a reviewer, how to roll access.
+- The test inquiry (id 1) is real data from the user: delete it before launch.
+
 ## 2026-11-09 (later): first deploy done
 
 - The token now comes as a plain environment variable; `wrangler deploy` works. Test site: https://dulifei-website.dlifei.workers.dev (built with `SITE_URL` set to that address and the real Turnstile site key). Pages, sitemap, robots, llms.txt, 404 and security headers answer correctly; `browser-check` passes against it.
